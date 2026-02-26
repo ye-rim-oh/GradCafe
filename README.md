@@ -27,14 +27,15 @@ Rscript -e "shiny::runApp('app.R')" # Launch the Shiny dashboard
 
 ## Files
 
-| File                               | Description                                                         |
-| ---------------------------------- | ------------------------------------------------------------------- |
-| `scrape_all_years.R`               | Unified scraper for all years (2020-2026) using the same parser     |
-| `app.R`                            | Shiny dashboard app with Timeline, Trends, Subfields, and Data tabs |
-| `app_functions.R`                  | Helper functions and data loading for the Shiny app                 |
-| `scraped_2020_2026_combined.Rdata` | Pre-scraped combined dataset                                        |
-| `unique_schools.csv`               | List of unique normalized institution names (for reference)         |
-| `README.md`                        | This file                                                           |
+| File                                 | Description                                                         |
+| ------------------------------------ | ------------------------------------------------------------------- |
+| `scrape_all_years.R`                 | Unified scraper for all years (2020-2026) using the same parser     |
+| `app.R`                              | Shiny dashboard app with Timeline, Trends, Subfields, and Data tabs |
+| `app_functions.R`                    | Helper functions and data loading for the Shiny app                 |
+| `scraped_2020_2026_combined.Rdata`   | Pre-scraped combined dataset                                        |
+| `unique_schools.csv`                 | List of unique normalized institution names (for reference)         |
+| `[sample] PhD Admission Analysis.md` | Sample English text report summarizing trends                       |
+| `README.md`                          | This file                                                           |
 
 ## Code Details
 
@@ -106,7 +107,7 @@ Interactive dashboard with:
 
 ### Sample Analysis Report
 
-A sample text report (`sample_yearly_comprehensive_trend_analysis_en.md`) is included to demonstrate how the scraped data can be used to generate a comprehensive yearly trend document summarizing acceptance rates, nationality distributions, and subfield popularity.
+A sample text report (`[sample] PhD Admission Analysis.md`) is included to demonstrate how the scraped data can be used to generate a comprehensive yearly trend document summarizing acceptance rates, nationality distributions, and subfield popularity.
 
 ## Dependencies
 
@@ -145,4 +146,3 @@ All admission data is sourced from **[The GradCafe](https://www.thegradcafe.com/
 ## 🕰️ Legacy Versions (Before 2026 Upgrade)
 
 The original structure, scripts, and initial forks of this project have been archived into the `legacy_code/` directory to keep the root directory clean. If you are looking for the pre-2026 versions of the R scripts (`Scraping.R`, `Cleaning.R`, `Functions.R`, `app.R` or their `_v2` counterparts), you can find them all safely backed up there.
-

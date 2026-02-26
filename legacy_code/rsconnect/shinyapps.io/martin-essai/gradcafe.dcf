@@ -1,0 +1,10 @@
+name: gradcafe
+title:
+username:
+account: martin-essai
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2189692
+bundleId: 3988704
+url: https://martin-essai.shinyapps.io/gradcafe/
+when: 1607977152.35822

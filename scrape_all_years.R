@@ -1,6 +1,6 @@
 
-# 01_scrape_all_years.R -- Scrape 2020-2026 from GradCafe (Unified)
-# Single script that scrapes ALL years with the same parser
+# scrape_all_years.R -- Scrape 2020-2025 from GradCafe (New Site Structure)
+# Reuses the same parser as scrape_2026.R for structural consistency
 # Each result = 3 TRs: main data / badges / notes
 
 library(rvest)
@@ -15,14 +15,14 @@ max_pages <- 50
 base_url <- "https://www.thegradcafe.com/survey/index.php"
 ua <- user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-# All years in one go
-target_years <- 2020:2026
+# Years to scrape (2020-2025); 2026 is already scraped separately
+target_years <- 2020:2025
 
-# Season codes: F20 = Fall 2020, ..., F26 = Fall 2026
+# Season codes: F20 = Fall 2020, F21 = Fall 2021, etc.
 season_codes <- paste0("F", substr(target_years, 3, 4))
 names(season_codes) <- target_years
 
-# --- Parse one page ---
+# --- Parse one page (identical to scrape_2026.R) ---
 parse_page <- function(page, target_year) {
   all_trs <- html_nodes(page, "tbody tr")
   if (length(all_trs) == 0) return(NULL)
@@ -265,7 +265,7 @@ normalize_institution <- function(school) {
 # =====================================================================
 # MAIN EXECUTION
 # =====================================================================
-cat("=== Starting Unified GradCafe Scraper (2020-2026) ===\n")
+cat("=== Starting Multi-Year GradCafe Scraper (2020-2025) ===\n")
 cat("Queries:", paste(queries, collapse = ", "), "\n")
 cat("Seasons:", paste(season_codes, collapse = ", "), "\n\n")
 
@@ -330,10 +330,24 @@ for (yr in target_years) {
 }
 
 # =====================================================================
-# Combine all years into one file
+# Combine all years (2020-2025) into one file
 # =====================================================================
 cat("\n\n=== Combining all years ===\n")
-combined_all <- bind_rows(all_years_data)
+combined <- bind_rows(all_years_data)
+cat("Total combined rows (2020-2025 PhD):", nrow(combined), "\n")
+
+# Also load 2026 for the combined master file
+load("scraped_2026.Rdata")
+data_2026 <- data
+data_2026$scrape_year <- 2026L
+
+# Ensure column compatibility
+common_cols <- intersect(names(combined), names(data_2026))
+combined_all <- bind_rows(
+  combined[, common_cols, drop = FALSE],
+  data_2026[, common_cols, drop = FALSE]
+)
+
 cat("Total combined rows (2020-2026 PhD):", nrow(combined_all), "\n")
 
 # Save combined
