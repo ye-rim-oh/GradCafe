@@ -1,5 +1,7 @@
 # GradCafe 2020-2026 Political Science PhD Trend Analysis
 
+🇰🇷 [한국어 설명은 여기를 클릭하세요 (Korean Version)](README-ko.md)
+
 Reproducible pipeline and interactive dashboards for analyzing GradCafe self-reported admission results across 7 years of Political Science PhD programs.
 
 ## Quick Start
