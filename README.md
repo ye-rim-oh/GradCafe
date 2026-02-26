@@ -131,6 +131,7 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - **Self-Reported Data**: All data is self-reported by users on [The GradCafe](https://www.thegradcafe.com/). Due to the anonymous and self-reported nature of the platform, the data cannot be independently verified and may contain inaccuracies, exaggerations, or omissions.
 - **Scraping & Cleaning Anomalies**: While extensive pattern matching is used to normalize university names, extract GRE scores, and classify subfields, there may still be scraping artifacts, misclassifications, or unhandled edge cases. Treat the data as an approximate trend indicator rather than an exact official record.
 - **Data was last updated on February 24, 2026.** Pre-scraped data includes `scraped_2020_2026_combined.Rdata`.
+- **Extensible & Real-Time**: You can freely run the `scrape_all_years.R` script at any time to gather the absolute latest data from GradCafe. The Shiny dashboard will automatically integrate the newly generated `.Rdata` file.
 - Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist are excluded from the denominator.
 - The 2026 season data is partial (as of scraping date) and subject to change.
 - University names are normalized via extensive pattern matching in `app_functions.R` (see details above).
