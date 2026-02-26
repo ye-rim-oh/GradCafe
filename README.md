@@ -146,17 +146,17 @@ All admission data is sourced from **[The GradCafe](https://www.thegradcafe.com/
 
 The original structure, scripts, and initial forks of this project have been archived into the `legacy_code/` directory to keep the root directory clean. If you are looking for the pre-2026 versions of the R scripts (`Scraping.R`, `Cleaning.R`, `Functions.R`, `app.R` or their `_v2` counterparts), you can find them all safely backed up there.
 
-For historical reference, the original Korean instructions for the older dashboard were:
+For historical reference, the features for the older legacy dashboard were:
 
 > **Political Science & Government PhD Admission Results Dashboard**
 >
-> R Shiny 대시보드로 GradCafe의 Political Science/Government PhD 입학 결과를 시각화합니다.
+> Visualizes Political Science/Government PhD admission results from GradCafe using an R Shiny dashboard.
 >
-> **기능**
+> **Features**
 >
-> - 스마트 스크래핑: 2020-2026년 데이터만 자동 수집 (2019년 이전 데이터 발견 시 중단)
-> - 인터랙티브 차트: 호버 시 지원자 스펙(GPA, GRE, Notes) 표시
-> - 데이터 테이블: 클릭하면 상세 정보 확인
-> - 색상 코딩: 합격(Green), 불합격(Red), 인터뷰(Light Green), 대기(Pink)
+> - Smart Scraping: Automatically collects data for 2020-2026 only (stops when it finds data before 2019)
+> - Interactive Charts: Displays applicant specs (GPA, GRE, Notes) on hover
+> - Data Table: Click to view detailed information
+> - Color Coding: Accepted (Green), Rejected (Red), Interview (Light Green), Waitlisted (Pink)
 >
-> 이 프로젝트는 Martin Devaux의 GradCafe 프로젝트를 기반으로 2020-2026년 데이터 지원과 향상된 UI로 업데이트되었습니다.
+> This legacy project was based on Martin Devaux's GradCafe project, updated to support 2020-2026 data and an improved UI.
