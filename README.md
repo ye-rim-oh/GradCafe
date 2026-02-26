@@ -33,7 +33,6 @@ Rscript -e "shiny::runApp('app.R')" # Launch the Shiny dashboard
 | `app.R`                              | Shiny dashboard app with Timeline, Trends, Subfields, and Data tabs |
 | `app_functions.R`                    | Helper functions and data loading for the Shiny app                 |
 | `scraped_2020_2026_combined.Rdata`   | Pre-scraped combined dataset                                        |
-| `unique_schools.csv`                 | List of unique normalized institution names (for reference)         |
 | `[sample] PhD Admission Analysis.md` | Sample English text report summarizing trends                       |
 | `README.md`                          | This file                                                           |
 
