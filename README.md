@@ -49,6 +49,7 @@ The scraper pulls GradCafe search results with broad query terms (`political sci
 - **Decision parsing**: Decision type and date are parsed from strings such as `"Accepted on 14 Feb"`.
 - **Deduplication**: Per-year dedup key is `(school, decision_text, notes, added_date)`.
 - **PhD filter**: Only `degree == "PhD"` is kept.
+- **Major filter**: After the PhD filter, rows are kept only if `program` includes at least one target major keyword: `political science`, `international relations`, `politics`, or `government`.
 - **Subfield tagging**: Notes are tagged with CP, IR, AP, Theory, Methods, Public Law/Policy, Psych/Behavior, or Unknown using regex rules.
 - **Institution handling**: The scraper passes through raw school text; canonical institution normalization happens in `app_functions.R`.
 
@@ -132,7 +133,7 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 
 - **Self-reported source**: Data comes from anonymous user posts on [The GradCafe](https://www.thegradcafe.com/). Some records can be noisy or incomplete.
 - **Cleaning is rule-based**: Regex-based parsing and normalization reduce errors, but edge cases still exist.
-- **Last refresh**: March 4, 2026. Current pre-scraped file (`scraped_2020_2026_combined.Rdata`) contains 5,139 rows total, including 1,098 rows for 2026.
+- **Last refresh**: March 4, 2026. Current pre-scraped file (`scraped_2020_2026_combined.Rdata`) contains 3,837 rows total, including 873 rows for 2026.
 - **Acceptance rate formula**: `Accepted / (Accepted + Rejected)`. Interview and Waitlist are excluded from the denominator.
 - **2026 is still moving**: Later posts can change counts and rates.
 

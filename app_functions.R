@@ -40,6 +40,11 @@ df_raw$dmd[out_of_season] <- NA
 df_raw$status <- ifelse(is.na(df_raw$status) | df_raw$status == "", "Unknown", df_raw$status)
 df_raw$subfield <- ifelse(is.na(df_raw$subfield) | df_raw$subfield == "", "Unknown", df_raw$subfield)
 
+# Keep only target majors to prevent cross-field noise from broad search queries.
+target_major_pattern <- regex("\\bpolitical\\s*science\\b|\\binternational\\s*relations\\b|\\bpolitics\\b|\\bgovernment\\b", ignore_case = TRUE)
+df_raw <- df_raw %>%
+  filter(str_detect(program, target_major_pattern))
+
 # --- Canonical Institution Normalization ---
 # Single source of truth:
 # - scraper keeps raw school text

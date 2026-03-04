@@ -8,8 +8,9 @@
 # 2) "institution" is intentionally kept as the raw school string here.
 #    Canonical institution normalization is centralized in app_functions.R
 #    so every downstream analysis uses one consistent mapping rule set.
-# 3) Query keywords are retrieval keywords, not strict major filters.
-#    If strict major filtering is needed, apply a downstream filter on `program`.
+# 3) Query keywords are retrieval keywords.
+#    We still apply a strict downstream major filter on `program`
+#    so only political-science-family programs are retained.
 
 library(rvest)
 library(dplyr)
@@ -227,6 +228,17 @@ classify_subfield <- function(notes) {
   )
 }
 
+# --- Major filter ---
+# Keep only the target political-science-family majors.
+# This removes rows pulled by broad query terms that are outside the scope.
+is_target_major <- function(program) {
+  p <- str_squish(str_to_lower(program))
+  str_detect(
+    p,
+    regex("\\bpolitical\\s*science\\b|\\binternational\\s*relations\\b|\\bpolitics\\b|\\bgovernment\\b")
+  )
+}
+
 # =====================================================================
 # MAIN EXECUTION
 # =====================================================================
@@ -262,6 +274,11 @@ for (yr in target_years) {
     
     # Restrict to PhD outcomes for the main analysis dataset.
     year_clean <- year_clean %>% filter(degree == "PhD")
+
+    # Restrict to target majors only.
+    phd_rows <- nrow(year_clean)
+    year_clean <- year_clean %>% filter(is_target_major(program))
+    cat("  Target-major rows:", nrow(year_clean), "/", phd_rows, "\n")
     
     # Standardize date columns used by downstream timeline summaries.
     year_clean <- year_clean %>%
