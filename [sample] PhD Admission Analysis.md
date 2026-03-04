@@ -24,7 +24,7 @@
 
 _\* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist samples are excluded from the denominator._
 
-- **Trend Analysis**: The overall acceptance rate fluctuated within a range of 35~47%, peaking at 40.7% in 2024 and hitting a low of 35.3% in 2026 (partial season).
+- **Trend Analysis**: Across the 2020-2026 snapshot, the overall acceptance rate ranged from 34.7% to 44.3%, peaking at 44.3% in 2020 and reaching a low of 34.7% in 2025. The 2026 value currently sits at 35.3% (partial season).
 - The massive sample size for 2026 (962 cases) reflects both the high activity of the GradCafe community this cycle and early scraping timing.
 
 ## 2. Acceptance Rate by Nationality (American vs International)
@@ -62,8 +62,8 @@ _\* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist sampl
 
 _\* Accept Rate = Accepted / (Accepted + Rejected)._
 
-- **Key Findings**: Across almost all years, **American** applicants consistently experience a higher acceptance rate than **International** applicants.
-- The gap in acceptance rates varies by year, ranging from approximately 10%p difference up to an extreme of 20%p.
+- **Key Findings**: In most years, **American** applicants show a higher acceptance rate than **International** applicants, with 2022 as the main exception.
+- The American-International gap varies substantially by year, from -1.9%p (2022) to +17.1%p (2026).
 - 'Unknown' status ratios were higher in the past (2020~2021) but have decreased in recent years as the badge system became more active.
 
 ## 3. Subfield Analysis
@@ -95,7 +95,7 @@ _\* Accept Rate = Accepted / (Accepted + Rejected)._
 _\* Accept Rate = Accepted / (Accepted + Rejected)._
 
 - **Interpretation Note**: Because the 'Unknown' ratio is generally high, this sub-sample may not perfectly represent the true applicant pool.
-- Among identified subfields, Comparative Politics (CP) and International Relations (IR) account for the largest share every year.
+- Among identified subfields, Comparative Politics (CP) is consistently the largest category, while the second-largest category varies by year (often IR or AP).
 
 ### 3.3. Cross-Tabulation: Subfield by Nationality (2026 Focus)
 
@@ -133,9 +133,23 @@ _\* Accept Rate = Accepted / (Accepted + Rejected)._
 
 - GRE scores are voluntarily submitted, meaning substantial sample bias is present.
 - AW (Analytical Writing) scores were harder to parse in earlier years, but with the recent introduction of the formatting badges, data collection has improved.
-- While the score averages haven't drastically changed, there is a distinct downward trend in the frequency of applicants reporting their scores.
+- While score averages are relatively stable, GRE reporting volume is not monotonic year-to-year (it declines in several years and rebounds in 2026).
 
-## 5. Key Dates & Yearly Timeline
+## 5. GRE/GPA and Acceptance Correlation (2020-2026)
+
+This section computes point-biserial correlations (Pearson correlation with binary outcome) between each score and final admission outcome, where Accepted = 1 and Rejected = 0.
+
+| Metric | N (non-missing) | Correlation r | p-value | Interpretation |
+| :----- | --------------: | ------------: | ------: | :------------- |
+| GPA    | 1846            | 0.028         | 0.2260  | No statistically significant linear correlation |
+| GRE V  | 963             | 0.072         | 0.0249  | Very weak positive correlation |
+| GRE Q  | 972             | 0.079         | 0.0135  | Very weak positive correlation |
+| GRE AW | 886             | 0.029         | 0.3890  | No statistically significant linear correlation |
+
+- Practical effect sizes are small across all metrics, even where p-values are below 0.05.
+- These are observational, self-reported data; correlations should not be interpreted as causal effects.
+
+## 6. Key Dates & Yearly Timeline
 
 | Year | First Acc | First Rej | First Int | Median Final | Peak Day      |
 | ---: | --------- | --------- | --------- | ------------ | ------------- |
@@ -147,54 +161,8 @@ _\* Accept Rate = Accepted / (Accepted + Rejected)._
 | 2025 | 01/02     | 01/06     | 01/04     | 02/12        | 02/12 (n=51)  |
 | 2026 | 01/01     | 01/05     | 01/06     | 02/10        | 02/12 (n=135) |
 
-- **First Acc (Initial Acceptances)**: The timing of the very first acceptances has slowly shifted earlier—from late January/early February to early-to-mid January.
-- **Median Final (Median Decision Date)**: Regardless of early decisions, the median date where the bulk of decisions hit remains highly consistent around February 10th to 15th every year.
-
-## 6. Cumulative Release Pace
-
-| Year | Final Decisions | By 02/15 | By 03/01 | By 03/15 | By 04/01 |
-| ---: | --------------- | -------- | -------- | -------- | -------- |
-| 2020 | 569             | 1.6%     | 25.1%    | 30.6%    | 33.9%    |
-| 2021 | 583             | 59.3%    | 81.8%    | 90.1%    | 94.5%    |
-| 2022 | 529             | 53.9%    | 82.4%    | 90.4%    | 95.1%    |
-| 2023 | 395             | 64.3%    | 87.6%    | 97.5%    | 99.2%    |
-| 2024 | 408             | 55.6%    | 79.9%    | 91.4%    | 95.3%    |
-| 2025 | 510             | 63.3%    | 80.4%    | 90.8%    | 93.7%    |
-| 2026 | 764             | 80.1%    | 99.6%    | 99.6%    | 99.6%    |
-
-- This metric shows what percentage of the total yearly decisions were released by a specific date.
-- Generally, between 50~80% of final decisions are shared by February 15th. Notably, the 2026 cycle shows an extremely fast release pace very early in the season.
-
-## 7. Select University Acceptance Rate Trends
-
-| School    | 2020  | 2021  | 2022   | 2023   | 2024   | 2025  | 2026  |
-| --------- | ----- | ----- | ------ | ------ | ------ | ----- | ----- |
-| Cornell   | 77.8% | 0.0%  | 9.1%   | 60.0%  | 44.4%  | 60.0% | 33.3% |
-| Duke      | N/A   | 53.8% | 100.0% | 100.0% | 100.0% | 33.3% | 40.0% |
-| Michigan  | 23.5% | 23.1% | 11.1%  | 20.0%  | 22.2%  | 18.2% | 17.0% |
-| Princeton | 37.5% | 11.1% | 66.7%  | 30.8%  | 66.7%  | 0.0%  | 44.4% |
-| Stanford  | 22.7% | 44.4% | 14.3%  | 45.5%  | 25.0%  | 16.7% | 8.7%  |
-| UCLA      | 75.0% | 45.5% | 60.0%  | 100.0% | 66.7%  | 44.4% | 18.2% |
-| UCSD      | 50.0% | 57.1% | N/A    | N/A    | N/A    | N/A   | 25.0% |
-| UPenn     | 33.3% | 0.0%  | 40.0%  | 12.5%  | 9.1%   | 0.0%  | 12.5% |
-| Yale      | 26.1% | 12.5% | 45.5%  | 20.0%  | 33.3%  | 21.4% | 20.7% |
-
-_\* Accept Rate = Accepted / (Accepted + Rejected)._
-
-## 8. Monthly Report Distribution
-
-| Year | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
-| ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2020 | 5   | 183 | 96  | 26  | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2021 | 161 | 532 | 132 | 43  | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2022 | 109 | 422 | 102 | 31  | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2023 | 132 | 298 | 71  | 6   | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2024 | 131 | 277 | 113 | 21  | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2025 | 129 | 388 | 76  | 23  | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-| 2026 | 230 | 720 | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
-
-- **February** is overwhelmingly the peak month for critical decisions across all historical seasons.
-- The lack of data from March onward in 2026 is due to the scraping occurring in mid/late-February.
+- **First Acc (Initial Acceptances)**: First acceptance dates are generally in January, with 2020 (01/23) as a later outlier relative to subsequent years.
+- **Median Final (Median Decision Date)**: Median final decision dates cluster around February 10th to 14th for most years, with 2020 (02/28) as an outlier.
 
 ---
 
@@ -228,19 +196,18 @@ The table below consolidates the various trend metrics and timeline indicators d
 
 ### Key Takeaways Summary
 
-1. **Overall Acceptance Rate Decline**: After peaking around 44% during the 2022/2024 cycles, the acceptance rate has dropped back down to the 35% range, showing a trend of intensified competition.
-2. **Structural Nationality Divide**: Every year without exception, American applicants maintain a relative advantage in acceptance rates, typically outperforming International applicants by a 10-20%p margin.
-3. **Decreasing GRE Reporting**: Although raw GRE averages have not drastically changed, the frequency of voluntarily reporting scores has consistently decreased year-over-year.
-4. **Timeline Solidification**: Even though the "first" release date fluctuates slightly, the absolute peak where the majority of decisions are concluded consistently lands in **early-to-mid February (Feb 10th - Feb 15th)**.
-5. **2026 Data Cautions**: The record-high sample volume and historically low acceptance rate must be weighed against the fact that the season is still "in progress" (missing late March/April waves and Waitlist conversions).
+1. **Overall Acceptance Rate Compression**: Acceptance rates moved from the low-to-mid 40% range (highs in 2020 and 2022) down to the mid-30% range in 2025-2026, indicating tighter recent competition.
+2. **Nationality Gap with One Exception**: American applicants outperform International applicants in most years, but 2022 is an exception where International acceptance is slightly higher.
+3. **GRE Reporting Volatility**: GRE averages are fairly stable, but reporting volume fluctuates across years rather than declining in a strict year-over-year pattern.
+4. **Timeline Concentration with Outliers**: Most years cluster in early-to-mid February for final decision timing, while 2020 is a clear outlier.
+5. **2026 Data Cautions**: The record-high sample volume and one of the lowest acceptance rates should still be interpreted as an in-progress snapshot (limited late March/April outcomes and Waitlist conversions).
 
 ---
 
 ## Fall 2026 Admission Cycle Specific Highlights
 
-- **Record Sample Size & Increased Competition**: Even though data was collected only through mid-February, the cycle logged 962 posts—the highest volume in the last 6 years. With an overall acceptance rate of 35.3%, it suggests a notably more competitive season than previous years.
+- **Record Sample Size & Increased Competition**: Even though data was collected only through mid-February, the cycle logged 962 posts, the highest volume in the 2020-2026 sample. With an overall acceptance rate of 35.3%, it suggests a notably more competitive season than many recent years.
 - **Plummeting International Acceptance Rate**: The acceptance rate for international students plummeted to 28.2%, a sharp decline compared to previous years (which averaged ~38%). The gap between American (45.3%) and International applicants is the largest on record.
-- **Unusually High Release Pace**: As of February 15, the cumulative completion rate reached an astonishing 80.1%. When compared to historical averages (55-65%) at the same point, this season exhibits an unprecedented "speed admissions" trend.
 - **Future Indicators**: Because late-cycle decisions and Waitlist movements have not yet been factored in, there remains potential for a marginal recovery in aggregate metrics as the cycle concludes.
 
 ---
