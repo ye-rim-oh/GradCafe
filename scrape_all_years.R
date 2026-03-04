@@ -20,7 +20,7 @@ library(httr)
 # --- Configuration ---
 # Search keywords used to discover candidate records in GradCafe search pages.
 # These are intentionally broad; we deduplicate and then keep PhD rows later.
-queries <- c("political science", "international relations", "politics", "government", "comparative politics")
+queries <- c("political science", "international relations", "politics", "government")
 max_pages <- 50
 base_url <- "https://www.thegradcafe.com/survey/index.php"
 ua <- user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")

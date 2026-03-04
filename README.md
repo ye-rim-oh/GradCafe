@@ -42,7 +42,7 @@ Rscript -e "shiny::runApp('app.R')" # Launch the Shiny dashboard
 
 ### `scrape_all_years.R` -- Scraper
 
-The scraper pulls GradCafe search results with broad query terms (`political science`, `international relations`, `politics`, `government`, `comparative politics`) for each season from Fall 2020 to Fall 2026.
+The scraper pulls GradCafe search results with broad query terms (`political science`, `international relations`, `politics`, `government`) for each season from Fall 2020 to Fall 2026.
 
 - **Page parsing**: Each record is rendered as three `<tr>` rows (main row, badges row, notes row). The parser stitches those rows into one observation.
 - **Badge extraction**: GRE (V/Q/AW/Total), GPA, nationality, and season tags are parsed from badge `<div>` elements.
