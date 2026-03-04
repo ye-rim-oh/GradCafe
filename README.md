@@ -97,6 +97,12 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 This repository extends the earlier GradCafe Political Science PhD analysis by **Martin Devaux**:
 <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
 
+I am genuinely grateful to Martin for publishing the original workflow so clearly.
+His early work made this extension much easier to build and maintain.
+
+I am also very thankful to the GradCafe community and site maintainers.
+Without their self-reported posts and continued platform support, this project would not exist.
+
 Data source: **[The GradCafe](https://www.thegradcafe.com/survey)**.
 
 ## Legacy Code

@@ -98,6 +98,12 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 이 프로젝트는 **Martin Devaux**의 기존 분석을 바탕으로 확장했습니다.
 원문: <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
 
+초기 분석 과정을 공개해 준 Martin Devaux에게 진심으로 감사드립니다.
+덕분에 이후 확장 작업을 훨씬 안정적으로 이어갈 수 있었습니다.
+
+또한 꾸준히 결과를 공유해 준 GradCafe 커뮤니티 사용자들과
+플랫폼을 운영해 온 The GradCafe 팀에도 깊이 감사드립니다.
+
 데이터 출처: **[The GradCafe](https://www.thegradcafe.com/survey)**
 
 ## 레거시 코드
