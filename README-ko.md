@@ -2,11 +2,80 @@
 
 [English](README.md)
 
-이 프로젝트는 2020년부터 2026년까지 GradCafe에 올라온 정치학/국제관계 박사과정(PhD) 입학 결과를 수집해, 추세를 확인할 수 있게 정리한 대시보드입니다.
+이 저장소는 2020-2026 GradCafe 자기보고 데이터를 바탕으로,
+정치학 PhD 어드미션 흐름을 한눈에 볼 수 있게 정리한 프로젝트입니다.
+
+핵심은 복잡하지 않습니다. 매년 같은 규칙으로 스크랩하고,
+같은 정제 로직을 거친 뒤, Shiny 대시보드에서 바로 확인하는 구조입니다.
 
 ## 빠른 시작
 
-### 1. 전제 조건 (R 및 패키지 설치)
+### `scraped_2020_2026_combined.Rdata`가 이미 있을 때
+
+```r
+Rscript -e "shiny::runApp('app.R')"
+```
+
+### 데이터까지 새로 갱신해서 실행할 때
+
+```r
+Rscript scrape_all_years.R
+Rscript -e "shiny::runApp('app.R')"
+```
+
+## 파이프라인
+
+| 단계 | 스크립트 | 입력 | 출력 |
+| ---: | --- | --- | --- |
+| 1 | `scrape_all_years.R` | GradCafe 검색 페이지 | 연도별 `.Rdata` + `scraped_2020_2026_combined.Rdata` |
+| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | 로컬/배포용 Shiny 대시보드 |
+
+## 파일 안내
+
+| 파일 | 역할 |
+| --- | --- |
+| `scrape_all_years.R` | 2020-2026을 하나의 파서 규칙으로 수집 |
+| `app_functions.R` | 데이터 로딩, 정제, 학교명 정규화, 보조 함수 |
+| `app.R` | 대시보드 UI/서버 로직 |
+| `scraped_2020_2026_combined.Rdata` | 분석용 통합 데이터 |
+| `[sample] PhD Admission Analysis.md` | 데이터 기반 영문 샘플 리포트 |
+| `README.md` | 영문 문서 |
+
+## 스크래퍼 동작 요약 (`scrape_all_years.R`)
+
+검색 키워드는 아래 4개를 사용합니다.
+`political science`, `international relations`, `politics`, `government`
+
+수집 후에는 다음 순서로 정리합니다.
+
+- GradCafe 3행 구조(main/badge/notes)를 한 건으로 합칩니다.
+- 결정 유형, 날짜, GRE, GPA, 국적 태그, 노트를 추출합니다.
+- `(school, decision_text, notes, added_date)` 기준으로 중복 제거합니다.
+- `degree == "PhD"`만 남깁니다.
+- `program` 문자열을 정규화한 뒤,
+  Political Science / IR / Politics / Government(및 직접 조합)만 유지합니다.
+- 노트 기반으로 서브필드 태그(`CP`, `IR`, `AP`, `Theory`, `Methods`, `Public Law/Policy`, `Psych/Behavior`, `Unknown`)를 붙입니다.
+
+## 앱 전처리 요약 (`app_functions.R`)
+
+앱에서 시각화하기 전에 추가로 다음 정제를 합니다.
+
+- `gre_total`로 복원 가능한 `gre_q`를 복원합니다.
+- 비정상 GRE/AW 값을 제거합니다.
+- 연도 비교가 가능하도록 타임라인 날짜를 표준화합니다.
+- 노이즈 행을 제거하고 학교명을 규칙 기반으로 통합합니다.
+
+## 대시보드 탭 구성 (`app.R`)
+
+- `Timeline`: 날짜축 기준 결정 시점 분포
+- `Trends`: 연도별 합격률 + 국적별 합격률
+- `Subfields`: 서브필드 신고량 + 서브필드 합격률
+- `Data`: 검색/정렬 가능한 원자료 테이블
+
+## 의존 패키지
+
+- R (>= 4.0)
+- `rvest`, `httr`, `dplyr`, `tidyr`, `lubridate`, `stringr`, `plotly`, `ggplot2`, `rmarkdown`, `knitr`, `kableExtra`, `shiny`, `shinyjs`, `shinyWidgets`, `DT`
 
 ```r
 install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
@@ -14,51 +83,23 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
                    "shiny", "shinyjs", "shinyWidgets", "DT"))
 ```
 
-### 2. 바로 실행하기 (크롤링된 데이터가 있는 경우)
+## 데이터 해석 시 주의
 
-`scraped_2020_2026_combined.Rdata` 파일이 이미 준비되어 있다면 아래 한 줄로 대시보드를 바로 실행할 수 있습니다:
+- GradCafe는 자기보고 데이터라 누락과 표본 편향이 있습니다.
+- 파싱/정규화는 규칙 기반이라 일부 예외는 남을 수 있습니다.
+- 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
+- 최신 갱신 기준은 **2026-03-04**입니다.
+  - 전체 표본: **3,766건**
+  - 2026 표본: **858건**
+- 2026 수치는 이후 게시글 유입에 따라 변할 수 있습니다.
 
-```r
-Rscript -e "shiny::runApp('app.R')"
-```
+## 크레딧
 
-### 3. 전체 데이터 새로 크롤링하기 (업데이트 시)
+이 프로젝트는 **Martin Devaux**의 기존 분석을 바탕으로 확장했습니다.
+원문: <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
 
-필요할 때 스크립트를 다시 실행하면 최신 게시글 기준으로 데이터를 갱신할 수 있습니다. Shiny 대시보드는 새로 생성된 `.Rdata`를 바로 사용합니다.
+데이터 출처: **[The GradCafe](https://www.thegradcafe.com/survey)**
 
-```r
-Rscript scrape_all_years.R          # 전체 기간(2020-2026) 크롤링 수행 (약 5~15분 소요)
-Rscript -e "shiny::runApp('app.R')" # 대시보드 실행
-```
+## 레거시 코드
 
-## 주요 파일 설명
-
-| 파일                                 | 설명                                                                                                                                                                                       |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scrape_all_years.R`                 | 2020~2026 시즌을 같은 파서 규칙으로 수집하는 통합 크롤러입니다. 키워드 검색, 중복 제거, PhD 필터 후 메인 전공(Political Science/IR/Politics/Government) 필터, 서브필드 태깅까지 포함합니다. |
-| `app.R`                              | 타임라인, 연도별 추세, 서브필드, 원자료 조회 탭으로 구성된 Shiny 대시보드입니다.                                                                                                           |
-| `app_functions.R`                    | 앱에서 공통으로 쓰는 데이터 로딩/정제/시각화 보조 함수 모음입니다. 학교명 정규화와 GRE 정제 로직이 여기서 최종 적용됩니다.                                                                |
-| `scraped_2020_2026_combined.Rdata`   | 크롤러가 수집한 분석용 최종 병합 데이터 세트.                                                                                                                                              |
-| `[sample] PhD Admission Analysis.md` | 수집된 데이터를 바탕으로 작성된 연간 동향 분석 보고서 영문 샘플.                                                                                                                           |
-| `README.md`                          | 영문 README 문서입니다.                                                                                                                                                                    |
-
-## 대시보드 구조 (`app.R`)
-
-- **Timeline 탭**: 1~4월 기준으로 합격/불합격/인터뷰/대기 결정 시점을 점 형태로 보여줍니다.
-- **Trends 탭**: 연도별 합격률과 American vs International 격차를 비교합니다.
-- **Subfields 탭**: 비교정치(CP), 국제관계(IR), 이론, 방법론 등 세부 분야별 신고량과 합격률을 확인합니다.
-- **Data 탭**: 필터링/정렬 가능한 원자료 테이블과 개별 노트 내용을 확인할 수 있습니다.
-
-## 한계 및 주의사항
-
-- **자기 보고 데이터**: 모든 데이터는 GradCafe 사용자 자발 신고 기반이라 표본 편향, 누락, 오기입 가능성이 있습니다.
-- **정제 로직의 한계**: 학교명 정규화와 서브필드 분류는 규칙 기반이라 일부 예외가 남을 수 있습니다.
-- **최신 갱신일**: 2026년 3월 4일 재수집 기준이며, 통합 표본은 3,766건(2026 시즌 858건)입니다.
-- **합격률 계산식**: `(합격) / (합격 + 불합격)`입니다. 인터뷰/웨이트리스트는 분모에서 제외됩니다.
-
-## 크레딧 (Credits & Acknowledgments)
-
-이 저장소는 **Martin Devaux**의 GradCafe 정치학 PhD 분석 작업을 기반으로 확장되었습니다. 원본 글은 [여기](https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/)에서 확인할 수 있으며, 이전 버전 스크립트는 `legacy_code/`에 보관되어 있습니다.
-
-데이터를 공유해 주는 **[The GradCafe](https://www.thegradcafe.com/)** 커뮤니티와 운영진께 감사드립니다.
-
+이전 구조와 스크립트는 `legacy_code/`에 보관되어 있습니다.

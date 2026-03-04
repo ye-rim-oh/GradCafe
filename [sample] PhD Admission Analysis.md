@@ -1,10 +1,12 @@
-﻿# 2020-2026 GradCafe Political Science PhD Yearly Comprehensive Trend Analysis Report
+﻿# 2020-2026 GradCafe Political Science PhD Trend Report
 
-**Report Date**: 2026-03-04
-**Data Source**: GradCafe 2020-2026 data re-filtered on 2026-03-04
-**Total Sample**: **3,766** cases (Fall PhD admission results from 2020 to 2026)
+**Report Date**: 2026-03-04  
+**Data Source**: GradCafe 2020-2026 data, re-filtered on 2026-03-04  
+**Total Sample**: **3,766** posts
 
-## 1. Yearly Decision Composition and Acceptance Rate
+This note summarizes what the current snapshot shows. It is descriptive, not causal.
+
+## 1. Yearly Decision Mix and Acceptance Rate
 
 | Year | Total Cases | Accepted | Rejected | Interview | Wait listed | Other | Accept Rate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,15 +18,17 @@
 | 2025 | 505 | 150 | 261 | 32 | 62 | 0 | 36.5% |
 | 2026 | 858 | 243 | 462 | 41 | 112 | 0 | 34.5% |
 
-_* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist samples are excluded from the denominator._
+Accept rate is calculated as `Accepted / (Accepted + Rejected)`.
+Interview and waitlist rows are excluded from the denominator.
 
-- Across 2020-2026, overall acceptance rates range from 34.5% to 46.4%.
-- The peak year in this snapshot is 2020, and the lowest is 2026.
-- As of 2026-03-04, the 2026 snapshot has 858 reports with a 34.5% acceptance rate.
+Quick read:
+- Across 2020-2026, rates stay between **34.5% and 46.4%**.
+- In this snapshot, 2020 is the highest and 2026 is the lowest.
+- As of 2026-03-04, the 2026 sample has **858** posts with a **34.5%** acceptance rate.
 
-## 2. Nationality Split and Gap
+## 2. Nationality Split
 
-### 2.1. Acceptance Rate by Nationality (Yearly)
+### 2.1 Yearly Acceptance Rate by Nationality
 
 | Year | American | International |
 | --- | --- | --- |
@@ -36,18 +40,18 @@ _* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist sample
 | 2025 | 41.5% | 33.7% |
 | 2026 | 42.5% | 28.5% |
 
-### 2.2. 2026 Nationality Breakdown
+### 2.2 2026 Breakdown
 
 | Year | Status | Total Cases | Accepted | Rejected | Interview | Wait listed | Other | Accept Rate |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026 | American | 366 | 128 | 173 | 20 | 45 | 0 | 42.5% |
 | 2026 | International | 492 | 115 | 289 | 21 | 67 | 0 | 28.5% |
 
-- In 2026, the gap is 14.1%p (American - International).
+In 2026, the American-International gap is **14.1%p**.
 
-## 3. Subfield Distribution and Acceptance
+## 3. Subfield Snapshot
 
-### 3.1. Subfield Volume by Year
+### 3.1 Subfield Volume by Year
 
 | Year | CP | IR | AP | Theory | Methods | Psych/Behavior | Public Law/Policy | Unknown |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -59,7 +63,7 @@ _* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist sample
 | 2025 | 54 | 27 | 34 | 21 | 3 | 1 | 1 | 364 |
 | 2026 | 80 | 61 | 43 | 16 | 18 | 1 | 6 | 633 |
 
-### 3.2. Subfield Acceptance Rate by Year
+### 3.2 Subfield Acceptance Rate by Year
 
 | Year | AP | CP | IR | Theory | Methods | Public Law/Policy |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -71,18 +75,20 @@ _* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist sample
 | 2025 | 48.3% | 39.5% | 27.3% | 72.2% | 50.0% | 0.0% |
 | 2026 | 58.1% | 42.4% | 44.6% | 53.8% | 35.3% | 33.3% |
 
-## 4. GRE Summary for 2026 (Accepted vs Rejected)
+Most rows are still tagged as `Unknown`, so subfield tables are useful for direction but not for strict ranking.
+
+## 4. GRE Summary (2026, Accepted vs Rejected)
 
 | Year | Decision | GRE V n | GRE V mean | GRE Q n | GRE Q mean | GRE AW n | GRE AW mean |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026 | Accepted | 77 | 164.5 | 70 | 165.5 | 70 | 4.66 |
 | 2026 | Rejected | 135 | 163.7 | 119 | 165.9 | 111 | 4.64 |
 
-- GRE is voluntarily reported, so the sample is selective.
+GRE is self-reported and optional, so these means come from a selective subset.
 
-## 5. GRE/GPA and Acceptance Correlation (2020-2026)
+## 5. GRE/GPA vs Outcome Correlation (2020-2026)
 
-This section computes point-biserial correlations (Pearson correlation with binary outcome) between each score and final admission outcome, where Accepted = 1 and Rejected = 0.
+Accepted is coded as `1`, Rejected as `0`, and Pearson correlation is used (point-biserial setup).
 
 | Metric | Valid N | Correlation r | p-value | Interpretation |
 | --- | --- | --- | --- | --- |
@@ -91,7 +97,7 @@ This section computes point-biserial correlations (Pearson correlation with bina
 | GRE Q | 881 | 0.117 | 0.0005 | Very weak linear correlation |
 | GRE AW | 812 | 0.005 | 0.8952 | No meaningful linear correlation |
 
-- These are observational self-reports, so correlations should not be interpreted as causal effects.
+These are small effects from observational data, so they should not be interpreted as causal.
 
 ## 6. Decision Timeline Markers
 
@@ -117,24 +123,23 @@ This section computes point-biserial correlations (Pearson correlation with bina
 | 2025 | 505 | 36.5% | 176 | 41.5% | 329 | 33.7% | 98 | 163.4 | 87 | 165.3 | 57.8% | 01/02 | 02/22 |
 | 2026 | 858 | 34.5% | 366 | 42.5% | 492 | 28.5% | 243 | 163.9 | 219 | 165.8 | 66.7% | 01/01 | 02/16 |
 
-## 8. Key Takeaways
+## 8. Takeaways
 
-1. **Acceptance rates stayed in a compressed band**: 34.5% to 46.4% across 2020-2026.
-2. **2026 currently sits at the lower end**: 34.5% based on 858 posts.
-3. **Nationality gap remains visible in 2026**: American 42.5% vs International 28.5% (14.1%p gap).
-4. **Score correlations are weak**: GRE Q is statistically detectable but still small in effect size.
-5. **2026 is still a moving snapshot**: additional posts and waitlist movement can shift these figures.
+1. Acceptance rates remain in a fairly narrow range across years.
+2. In this snapshot, 2026 is at the low end of that range.
+3. The nationality gap is still present in 2026.
+4. GRE/GPA correlations exist in places but stay small in magnitude.
+5. 2026 numbers can still move as new posts arrive.
 
-## Fall 2026 Snapshot Highlights
+## Fall 2026 Snapshot
 
-- As of 2026-03-04, this cycle has 858 posts.
-- 2026 overall acceptance rate is 34.5%.
-- 2026 American vs International acceptance is 42.5% vs 28.5% (gap: 14.1%p).
+- Total posts: **858**
+- Overall acceptance rate: **34.5%**
+- American vs International: **42.5% vs 28.5%** (gap **14.1%p**)
 
 ## Method Notes
 
-- Source: user-reported GradCafe posts; records can be incomplete or noisy.
-- Analysis focus: PhD entries filtered to core target majors (Political Science, International Relations, Politics, Government).
-- All seasons (2020-2026) were re-filtered on 2026-03-04 with one major-normalization workflow.
-- Numbers can update as new posts are added.
-
+- Source: user-reported GradCafe posts.
+- Scope: PhD entries filtered to core target majors.
+- Processing: all seasons (2020-2026) re-filtered on 2026-03-04 with the same major-normalization logic.
+- Interpretation: use these numbers as a directional snapshot, not a full census.
