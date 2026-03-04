@@ -40,10 +40,46 @@ df_raw$dmd[out_of_season] <- NA
 df_raw$status <- ifelse(is.na(df_raw$status) | df_raw$status == "", "Unknown", df_raw$status)
 df_raw$subfield <- ifelse(is.na(df_raw$subfield) | df_raw$subfield == "", "Unknown", df_raw$subfield)
 
-# Keep only target majors to prevent cross-field noise from broad search queries.
-target_major_pattern <- regex("\\bpolitical\\s*science\\b|\\binternational\\s*relations\\b|\\bpolitics\\b|\\bgovernment\\b", ignore_case = TRUE)
+# Normalize noisy GradCafe program labels before filtering.
+# This keeps label variants comparable between years and app runs.
+normalize_major_program <- function(program) {
+  p <- str_to_lower(program)
+  p <- str_replace_all(p, "\\([^)]*\\)", " ")
+  p <- str_replace_all(p, "\\b(department|deparment)\\s+of\\s+", " ")
+  p <- str_replace_all(p, "^(phd|dphil)\\s+in\\s+", "")
+  p <- str_replace_all(p, "^(phd|dphil)\\s+", "")
+  p <- str_replace_all(p, ",?\\s*phd\\b.*$", "")
+  p <- str_replace_all(p, "\\bpoir\\b", "political science and international relations")
+  p <- str_replace_all(p, "government\\s+political\\s+science", "government and political science")
+  p <- str_replace_all(p, "political\\s+science\\s+government", "political science and government")
+  p <- str_replace_all(p, "international\\s+relations\\s+political\\s+science", "international relations and political science")
+  p <- str_replace_all(p, "[,/&]", " and ")
+  p <- str_replace_all(p, "\\s+", " ")
+  str_squish(p)
+}
+
+# Keep only rows composed of target majors:
+# political science, international relations, politics, government.
+is_target_major <- function(program) {
+  p <- normalize_major_program(program)
+  allowed <- c("political science", "international relations", "politics", "government")
+  vapply(
+    p,
+    FUN.VALUE = logical(1),
+    FUN = function(one_program) {
+      if (is.na(one_program) || one_program == "") {
+        return(FALSE)
+      }
+      parts <- str_split(one_program, "\\band\\b", simplify = FALSE)[[1]]
+      parts <- str_squish(parts)
+      parts <- parts[parts != ""]
+      length(parts) > 0 && all(parts %in% allowed)
+    }
+  )
+}
+
 df_raw <- df_raw %>%
-  filter(str_detect(program, target_major_pattern))
+  filter(is_target_major(program))
 
 # --- Canonical Institution Normalization ---
 # Single source of truth:

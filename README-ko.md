@@ -1,4 +1,4 @@
-# GradCafe 2020-2026 정치학 박사과정 트렌드 분석
+﻿# GradCafe 2020-2026 정치학 박사과정 트렌드 분석
 
 [English](README.md)
 
@@ -53,7 +53,7 @@ Rscript -e "shiny::runApp('app.R')" # 대시보드 실행
 
 - **자기 보고 데이터**: 모든 데이터는 GradCafe 사용자 자발 신고 기반이라 표본 편향, 누락, 오기입 가능성이 있습니다.
 - **정제 로직의 한계**: 학교명 정규화와 서브필드 분류는 규칙 기반이라 일부 예외가 남을 수 있습니다.
-- **최신 갱신일**: 2026년 3월 4일 재수집 기준이며, 통합 표본은 3,837건(2026 시즌 873건)입니다.
+- **최신 갱신일**: 2026년 3월 4일 재수집 기준이며, 통합 표본은 3,766건(2026 시즌 858건)입니다.
 - **합격률 계산식**: `(합격) / (합격 + 불합격)`입니다. 인터뷰/웨이트리스트는 분모에서 제외됩니다.
 
 ## 크레딧 (Credits & Acknowledgments)
@@ -61,3 +61,4 @@ Rscript -e "shiny::runApp('app.R')" # 대시보드 실행
 이 저장소는 **Martin Devaux**의 GradCafe 정치학 PhD 분석 작업을 기반으로 확장되었습니다. 원본 글은 [여기](https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/)에서 확인할 수 있으며, 이전 버전 스크립트는 `legacy_code/`에 보관되어 있습니다.
 
 데이터를 공유해 주는 **[The GradCafe](https://www.thegradcafe.com/)** 커뮤니티와 운영진께 감사드립니다.
+

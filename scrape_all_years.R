@@ -229,13 +229,45 @@ classify_subfield <- function(notes) {
 }
 
 # --- Major filter ---
-# Keep only the target political-science-family majors.
-# This removes rows pulled by broad query terms that are outside the scope.
+# Normalize noisy GradCafe program labels into a comparable string.
+# The scraper can return variants such as:
+# - "Department of Political Science"
+# - "PhD in Politics"
+# - "Political Science/Government"
+# We standardize those before applying the strict major whitelist.
+normalize_major_program <- function(program) {
+  p <- str_to_lower(program)
+  p <- str_replace_all(p, "\\([^)]*\\)", " ")
+  p <- str_replace_all(p, "\\b(department|deparment)\\s+of\\s+", " ")
+  p <- str_replace_all(p, "^(phd|dphil)\\s+in\\s+", "")
+  p <- str_replace_all(p, "^(phd|dphil)\\s+", "")
+  p <- str_replace_all(p, ",?\\s*phd\\b.*$", "")
+  p <- str_replace_all(p, "\\bpoir\\b", "political science and international relations")
+  p <- str_replace_all(p, "government\\s+political\\s+science", "government and political science")
+  p <- str_replace_all(p, "political\\s+science\\s+government", "political science and government")
+  p <- str_replace_all(p, "international\\s+relations\\s+political\\s+science", "international relations and political science")
+  p <- str_replace_all(p, "[,/&]", " and ")
+  p <- str_replace_all(p, "\\s+", " ")
+  str_squish(p)
+}
+
+# Keep only records whose normalized major is composed exclusively of
+# the four target fields (and their direct combinations).
 is_target_major <- function(program) {
-  p <- str_squish(str_to_lower(program))
-  str_detect(
+  p <- normalize_major_program(program)
+  allowed <- c("political science", "international relations", "politics", "government")
+  vapply(
     p,
-    regex("\\bpolitical\\s*science\\b|\\binternational\\s*relations\\b|\\bpolitics\\b|\\bgovernment\\b")
+    FUN.VALUE = logical(1),
+    FUN = function(one_program) {
+      if (is.na(one_program) || one_program == "") {
+        return(FALSE)
+      }
+      parts <- str_split(one_program, "\\band\\b", simplify = FALSE)[[1]]
+      parts <- str_squish(parts)
+      parts <- parts[parts != ""]
+      length(parts) > 0 && all(parts %in% allowed)
+    }
   )
 }
 
