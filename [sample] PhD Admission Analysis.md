@@ -6,8 +6,6 @@
 
 **Total Sample**: **5,139** cases (Fall PhD admission results from 2020 to 2026)
 
-> Note: Due to GradCafe UI changes over time, all seasons (2020-2026) were re-scraped on March 4, 2026 using one unified parser workflow. This improves cross-year structural consistency.
-
 ---
 
 ## 1. Yearly Decision Breakdown
