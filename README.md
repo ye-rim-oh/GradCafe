@@ -50,7 +50,8 @@ The scraper queries The GradCafe search page for multiple political-science-rela
 - **Deduplication**: Results are deduplicated per year by `(school, decision_text, notes, added_date)` to remove overlap between query terms.
 - **PhD filter**: Only `degree == "PhD"` rows are kept.
 - **Subfield classification**: Notes text is classified into CP, IR, AP, Theory, Methods, or Psych/Behavior using keyword regex matching.
-- **Initial institution normalization**: A first-pass `normalize_institution()` function maps common school names to short labels. This is further refined in `app_functions.R`.
+- **Institution pass-through in scraper**: `scrape_all_years.R` keeps `institution` as the raw scraped school text.
+- **Canonical normalization in app layer**: `app_functions.R` applies the full normalization ruleset in one place so all analyses use the same institution mapping.
 
 ### `app_functions.R` -- Data Loading & Helpers
 

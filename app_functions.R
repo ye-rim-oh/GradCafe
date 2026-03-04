@@ -40,8 +40,11 @@ df_raw$dmd[out_of_season] <- NA
 df_raw$status <- ifelse(is.na(df_raw$status) | df_raw$status == "", "Unknown", df_raw$status)
 df_raw$subfield <- ifelse(is.na(df_raw$subfield) | df_raw$subfield == "", "Unknown", df_raw$subfield)
 
-# --- Better Institution Normalization ---
-# Re-normalize using the raw 'school' column to fix UC aggregation errors
+# --- Canonical Institution Normalization ---
+# Single source of truth:
+# - scraper keeps raw school text
+# - app layer applies one shared normalization map for analysis + dashboard
+# This avoids split logic and year-to-year drift in institution labeling.
 df_raw <- df_raw %>%
   filter(!grepl("Piss|Trump|McDonalds|Ravinder|Cocksucker|Cunnilingus", school, ignore.case = TRUE)) %>%
   # Remove truncated / garbled school names that cannot be reliably identified
@@ -55,8 +58,9 @@ df_raw <- df_raw %>%
   # Remove department-level entries (not actual school names)
   filter(!grepl("^Graduate School Of Arts|^Henry Jackson School|^Said Business School$|^Krieger School|^Kennedy School Of|^SAIS$", school)) %>%
   mutate(
-    # First, apply Title Case to raw institution string so fallbacks are clean
-    institution = str_to_title(institution),
+    # Build fallback institution labels directly from raw school text.
+    # If a row does not match any explicit rule below, this cleaned fallback is used.
+    institution = str_to_title(school),
     institution = str_replace_all(institution, "(?i)\\b of \\b", " of "),
     institution = str_replace_all(institution, "\\b(At|In|And)\\b", function(x) tolower(x)),
     school = str_replace_all(school, "(?i)\\b of \\b", " of ")
