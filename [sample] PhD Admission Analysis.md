@@ -2,7 +2,7 @@
 
 **Report Date**: 2026-03-04
 
-**Data Source**: GradCafe 2020-2026 data re-scraped using a unified parser format
+**Data Source**: GradCafe 2020-2026 data (re-scraped on March 4, 2026 with one unified parser)
 
 **Total Sample**: **5,139** cases (Fall PhD admission results from 2020 to 2026)
 
@@ -22,8 +22,9 @@
 
 _* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist samples are excluded from the denominator._
 
-- **Trend Analysis**: Across the 2020-2026 snapshot, the overall acceptance rate ranged from 34.6% to 44.3%, peaking in 2020 and reaching a low in 2025.
-- The latest 2026 snapshot includes 1,098 reports with an overall acceptance rate of 34.7%.
+- Across 2020-2026, overall acceptance rates stay in a fairly tight band: 34.6% to 44.3%.
+- 2020 is the high point in this sample, and 2025 is the low point.
+- As of March 4, 2026, the 2026 snapshot has 1,098 reports with a 34.7% acceptance rate.
 
 ## 2. Acceptance Rate by Nationality (American vs International)
 
@@ -60,9 +61,9 @@ _* Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist sample
 
 _* Accept Rate = Accepted / (Accepted + Rejected)._
 
-- **Key Findings**: American applicants outperform International applicants in most years, with 2022 as the main exception.
+- American applicants have a higher acceptance rate in most years; 2022 is the main exception.
 - The American-International gap ranges from -1.9%p (2022) to 14.0%p (2026).
-- Unknown-status counts fell from 108 in 2020 to 0 in 2026.
+- Unknown-status counts drop from 108 in 2020 to 0 in 2026.
 
 ## 3. Subfield Analysis
 
@@ -92,8 +93,8 @@ _* Accept Rate = Accepted / (Accepted + Rejected)._
 
 _* Accept Rate = Accepted / (Accepted + Rejected)._
 
-- **Interpretation Note**: Because the Unknown ratio is high, this sub-sample may not perfectly represent the full applicant pool.
-- Among identified subfields, Comparative Politics (CP) remains the largest category in most years.
+- The `Unknown` share is still large, so subfield-specific results should be read with caution.
+- Among identified subfields, Comparative Politics (CP) is the largest group in most years.
 
 ### 3.3. Cross-Tabulation: Subfield by Nationality (2026 Focus)
 
@@ -108,7 +109,7 @@ _* Accept Rate = Accepted / (Accepted + Rejected)._
 | Public Law/Policy | 1 | 1 | 2 |
 | Psych/Behavior | 1 | 0 | 1 |
 
-- This table highlights accepted applicants in 2026 by subfield and nationality status.
+- This cross-tab shows where accepted 2026 reports are concentrated by subfield and nationality status.
 
 ## 4. Yearly GRE Score Reporting Analysis
 
@@ -129,8 +130,8 @@ _* Accept Rate = Accepted / (Accepted + Rejected)._
 | 2026 | Accepted | 81 | 164.5 | 75 | 165.2 | 71 | 4.66 |
 | 2026 | Rejected | 149 | 163.4 | 136 | 166.3 | 126 | 4.62 |
 
-- GRE scores are voluntarily submitted, so sample bias is substantial.
-- Score averages are relatively stable, but reporting volume is not monotonic year-to-year.
+- GRE is voluntarily reported, so the sample is selective.
+- Mean scores move less than reporting volume, which swings quite a bit year to year.
 
 ## 5. GRE/GPA and Acceptance Correlation (2020-2026)
 
@@ -143,8 +144,8 @@ This section computes point-biserial correlations (Pearson correlation with bina
 | GRE Q | 990 | 0.080 | 0.0121 | Very weak positive correlation |
 | GRE AW | 902 | 0.027 | 0.4254 | No statistically significant linear correlation |
 
-- Practical effect sizes are small across all metrics, even where p-values are below 0.05.
-- These are observational, self-reported data; correlations should not be interpreted as causal effects.
+- Even when p-values are below 0.05, effect sizes stay very small.
+- These are observational self-reports, so correlations here should not be read as causal effects.
 
 ## 6. Key Dates & Yearly Timeline
 
@@ -158,14 +159,14 @@ This section computes point-biserial correlations (Pearson correlation with bina
 | 2025 | 01/02 | 01/06 | 01/04 | 02/12 | 02/12 (n=52) |
 | 2026 | 01/01 | 01/05 | 01/06 | 02/11 | 02/12 (n=140) |
 
-- **First Acc (Initial Acceptances)**: First acceptance dates are generally in January, with 2020 as a later outlier.
-- **Median Final (Median Decision Date)**: Most years cluster around early-to-mid February, while 2020 is notably later.
+- First acceptances usually appear in January, with 2020 arriving later than the rest.
+- Median final decision timing is mostly early-to-mid February; again, 2020 is later.
 
 ---
 
-## FINAL: Master Yearly Aggregate Summary
+## Final: Master Yearly Summary
 
-The table below consolidates the various trend metrics and timeline indicators discussed into a single master overview.
+The table below puts the main yearly indicators in one place.
 
 | Year | Total Cases | Accept Rate | Amer N | Amer AccRate | Intl N | Intl AccRate | GRE V (N) | GRE V Avg | GRE Q (N) | GRE Q Avg | Subfield Known % | First Acc | Median Final |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -177,7 +178,7 @@ The table below consolidates the various trend metrics and timeline indicators d
 | 2025 | 631 | 34.6% | 224 | 39.9% | 407 | 31.7% | 102 | 163.4 | 90 | 165.2 | 23.1% | 01/02 | 02/12 |
 | 2026 | 1,098 | 34.7% | 461 | 42.9% | 637 | 28.9% | 264 | 163.7 | 245 | 166.0 | 20.7% | 01/01 | 02/11 |
 
-### Reading Guide
+### How to Read This Table
 
 | Metric | Description |
 | :--- | :--- |
@@ -191,27 +192,28 @@ The table below consolidates the various trend metrics and timeline indicators d
 | First Acc | Date of the first reported acceptance. |
 | Median Final | Median date of accepted/rejected postings. |
 
-### Key Takeaways Summary
+### Key Takeaways
 
-1. **Overall Acceptance Rate Compression**: Rates that were mostly in the low-to-mid 40% range in earlier years are now in the mid-30% range in 2025-2026.
-2. **Nationality Gap with One Exception**: American applicants maintain an advantage in most years, with 2022 as the main exception.
-3. **GRE Reporting Volatility**: GRE averages are stable, but reporting participation fluctuates considerably across years.
-4. **Timeline Concentration with Outliers**: Most years cluster in early-to-mid February for final timing, while 2020 remains a clear outlier.
-5. **2026 Snapshot Caution**: The current 2026 picture is based on self-reported postings and may continue evolving through later updates.
+1. **Acceptance rates have tightened down**: Earlier seasons often sat in the low-40% range, while 2025-2026 are in the mid-30% range.
+2. **Nationality gap is persistent**: American acceptance is higher in most years, with 2022 as the notable exception.
+3. **GRE participation is uneven**: Average scores are fairly stable, but the number of people reporting GRE shifts a lot by year.
+4. **Decision timing is concentrated**: Most seasons center around early-to-mid February, and 2020 is the clear outlier.
+5. **2026 is still a moving target**: Additional posts and waitlist movement can still change the picture.
 
 ---
 
-## Fall 2026 Admission Cycle Specific Highlights
+## Fall 2026 Snapshot Highlights
 
-- **Record Sample Size & Increased Competition**: As of March 4, 2026, the cycle logs 1,098 posts, the largest yearly sample in 2020-2026. The overall acceptance rate is 34.7%.
-- **Nationality Gap in 2026**: American acceptance is 42.9% versus International acceptance at 28.9%, a gap of 14.0%p.
-- **Future Indicators**: Late-cycle updates and waitlist conversions can still shift aggregate metrics.
+- As of March 4, 2026, this cycle has 1,098 posts, the largest yearly sample in 2020-2026.
+- 2026 overall acceptance rate is 34.7%.
+- 2026 American vs International acceptance is 42.9% vs 28.9% (gap: 14.0%p).
+- Late-cycle updates and waitlist conversions can still move these numbers.
 
 ---
 
 ## Notes and Caveats
 
-- Due to changes in the GradCafe UI over time, all seasons (2020-2026) were re-scraped with a unified parser workflow on March 4, 2026 to improve structural consistency.
+- All seasons (2020-2026) were re-scraped on March 4, 2026 with one parser workflow so the structure is consistent across years.
 - Unknown values indicate records where users did not report nationality or subfield badges.
 - All volume and acceptance rate calculations use Accepted and Rejected for the denominator; Interview and Waitlist are excluded by design.
 - Because data is self-reported, results should be interpreted as directional trends rather than official statistics.

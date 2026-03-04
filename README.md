@@ -2,7 +2,7 @@
 
 🇰🇷 [한국어 설명은 여기를 클릭하세요 (Korean Version)](README-ko.md)
 
-Reproducible pipeline and interactive dashboards for analyzing GradCafe self-reported admission results across 7 years of Political Science PhD programs.
+This repository collects and analyzes self-reported GradCafe admission posts for Political Science PhD cycles from 2020 to 2026, then serves the results through a Shiny dashboard.
 
 ## Quick Start
 
@@ -42,40 +42,39 @@ Rscript -e "shiny::runApp('app.R')" # Launch the Shiny dashboard
 
 ### `scrape_all_years.R` -- Scraper
 
-The scraper queries The GradCafe search page for multiple political-science-related keywords (`political science`, `international relations`, `politics`, `government`, `comparative politics`) across each admission season from Fall 2020 to Fall 2026.
+The scraper pulls GradCafe search results with broad query terms (`political science`, `international relations`, `politics`, `government`, `comparative politics`) for each season from Fall 2020 to Fall 2026.
 
-- **Page parsing**: Each GradCafe result consists of 3 `<tr>` rows (main data, badge row, notes row). The parser walks through all `<tr>`s and groups them by checking the `tw-border-none` CSS class on child rows.
-- **Badge extraction**: GRE scores (V/Q/AW/Total), GPA, nationality (American/International), and season tags are extracted from inline badge `<div>` elements.
-- **Decision parsing**: The decision type (Accepted/Rejected/Interview/Wait listed) and date are parsed from strings like `"Accepted on 14 Feb"` using regex.
-- **Deduplication**: Results are deduplicated per year by `(school, decision_text, notes, added_date)` to remove overlap between query terms.
-- **PhD filter**: Only `degree == "PhD"` rows are kept.
-- **Subfield classification**: Notes text is classified into CP, IR, AP, Theory, Methods, or Psych/Behavior using keyword regex matching.
-- **Institution pass-through in scraper**: `scrape_all_years.R` keeps `institution` as the raw scraped school text.
-- **Canonical normalization in app layer**: `app_functions.R` applies the full normalization ruleset in one place so all analyses use the same institution mapping.
+- **Page parsing**: Each record is rendered as three `<tr>` rows (main row, badges row, notes row). The parser stitches those rows into one observation.
+- **Badge extraction**: GRE (V/Q/AW/Total), GPA, nationality, and season tags are parsed from badge `<div>` elements.
+- **Decision parsing**: Decision type and date are parsed from strings such as `"Accepted on 14 Feb"`.
+- **Deduplication**: Per-year dedup key is `(school, decision_text, notes, added_date)`.
+- **PhD filter**: Only `degree == "PhD"` is kept.
+- **Subfield tagging**: Notes are tagged with CP, IR, AP, Theory, Methods, Public Law/Policy, Psych/Behavior, or Unknown using regex rules.
+- **Institution handling**: The scraper passes through raw school text; canonical institution normalization happens in `app_functions.R`.
 
 ### `app_functions.R` -- Data Loading & Helpers
 
-This file loads `scraped_2020_2026_combined.Rdata` and prepares the data for the Shiny dashboard.
+This script loads `scraped_2020_2026_combined.Rdata` and prepares the final app-ready dataset.
 
 #### Data Cleaning
 
-- **GRE score repair**: If `gre_q` is missing but `gre_total` is available (and in the 130-170 or 260-340 range), `gre_q` is derived. Out-of-range GRE values are set to `NA`.
-- **Date normalization**: Decision dates are collapsed to a common year (`2020-MM-DD`) in the `dmd` column so that dates from different years can be compared on the same calendar axis. Dates outside Jan-Apr (out of season) are set to `NA`.
-- **Junk filtering**: Rows with clearly bogus school names (profanity, joke entries) are removed.
+- **GRE score repair**: Missing `gre_q` is recovered from `gre_total` when possible, and invalid ranges are dropped to `NA`.
+- **Date normalization**: Decision dates are collapsed into a common calendar year (`2020-MM-DD`) in `dmd`, making cross-year timeline plots comparable.
+- **Junk filtering**: Clearly bogus rows (joke/profanity school names) are removed.
 
 #### Institution Normalization
 
-The core of the data cleaning is a large `case_when()` block that re-normalizes school names using the raw `school` column. This addresses several categories of issues:
+Institution labels are standardized with a large `case_when()` map using the raw `school` field. Main cleanup categories:
 
-- **Truncated names**: Entries with prematurely cut-off names (e.g. `"Corne"`, `"University of Chi"`, `"Penn s"`) are filtered out entirely, since the underlying data may also be unreliable.
-- **Garbled names**: Entries with corrupted text (e.g. `"Northwestern Universitywestern"`, `"University Of Michigan (Ann Arbor)gan"`) are filtered out.
+- **Truncated names**: Cut-off entries (e.g. `"Corne"`, `"University of Chi"`, `"Penn s"`) are removed.
+- **Garbled names**: Corrupted strings (e.g. `"Northwestern Universitywestern"`) are removed.
 - **UC system disaggregation**: Raw entries like `"UC Berkeley"`, `"UCSD"`, `"University of California, Davis"` are mapped to their full canonical forms (e.g. `"University of California, Berkeley (UCB)"`).
 - **Abbreviation expansion**: Short forms like `UNC`, `UGA`, `UIUC`, `WashU`, `TAMU`, `UPenn`, `MIT`, `NYU`, etc. are expanded to full university names with the abbreviation in parentheses.
 - **Disambiguation**: `Washington University` (in St. Louis) vs. `University of Washington` vs. `Washington State University` vs. `Western Washington University` are each mapped to distinct entries. Similarly, `Georgia State University` vs. `University of Georgia`.
 - **Merging variants**: `York University` and `York University (Canada)` are unified into `York University`. Various SUNY campuses (`Binghamton`, `Stony Brook`, `Albany`, `Buffalo`) are tagged with `(SUNY)`.
-- **Department-level entries**: Entries like `"Graduate School of Arts & Science"` or `"Said Business School"` (which are departments, not schools) are filtered out.
+- **Department-level entries**: Department names posted as if they were institutions are filtered out.
 
-After the `case_when()`, a post-processing step forces all text inside parentheses to uppercase and cleans trailing whitespace.
+After mapping, a post-processing step uppercases text in parentheses and trims trailing artifacts.
 
 #### Visualization & Analysis Functions
 
@@ -87,7 +86,7 @@ After the `case_when()`, a post-processing step forces all text inside parenthes
 
 ### `app.R` -- Shiny Dashboard
 
-The dashboard UI is built with `fluidPage` and consists of a sidebar + 4 main tabs:
+The dashboard uses `fluidPage` with a filter sidebar and four tabs:
 
 - **Sidebar**: Institution picker (with "All Schools" aggregate option), year checkboxes, decision type checkboxes, key date summaries, and a 3-year vs. all-year comparison table.
 - **Timeline tab**: Interactive dot-plot of decisions across the Jan-Apr calendar, using `decision_calendar()`.
@@ -109,7 +108,7 @@ Interactive dashboard with:
 
 ### Sample Analysis Report
 
-A sample text report (`[sample] PhD Admission Analysis.md`) is included to demonstrate how the scraped data can be used to generate a comprehensive yearly trend document summarizing acceptance rates, nationality distributions, and subfield popularity.
+`[sample] PhD Admission Analysis.md` is an example write-up generated from the dataset, covering acceptance rates, nationality gaps, subfield distribution, and score reporting trends.
 
 ## Dependencies
 
@@ -131,21 +130,20 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 
 ## Data Notes & Limitations
 
-- **Self-Reported Data**: All data is self-reported by users on [The GradCafe](https://www.thegradcafe.com/). Due to the anonymous and self-reported nature of the platform, the data cannot be independently verified and may contain inaccuracies, exaggerations, or omissions.
-- **Scraping & Cleaning Anomalies**: While extensive pattern matching is used to normalize university names, extract GRE scores, and classify subfields, there may still be scraping artifacts, misclassifications, or unhandled edge cases. Treat the data as an approximate trend indicator rather than an exact official record.
-- **Data was last updated on March 4, 2026.** Pre-scraped data includes `scraped_2020_2026_combined.Rdata` (5,139 total rows; 1,098 rows for 2026).
-- **Extensible & Real-Time**: You can freely run the `scrape_all_years.R` script at any time to gather the absolute latest data from GradCafe. The Shiny dashboard will automatically integrate the newly generated `.Rdata` file.
-- Accept Rate = Accepted / (Accepted + Rejected). Interview and Waitlist are excluded from the denominator.
-- The 2026 season data is partial (as of scraping date) and subject to change.
-- University names are normalized via extensive pattern matching in `app_functions.R` (see details above).
+- **Self-reported source**: Data comes from anonymous user posts on [The GradCafe](https://www.thegradcafe.com/). Some records can be noisy or incomplete.
+- **Cleaning is rule-based**: Regex-based parsing and normalization reduce errors, but edge cases still exist.
+- **Last refresh**: March 4, 2026. Current pre-scraped file (`scraped_2020_2026_combined.Rdata`) contains 5,139 rows total, including 1,098 rows for 2026.
+- **Acceptance rate formula**: `Accepted / (Accepted + Rejected)`. Interview and Waitlist are excluded from the denominator.
+- **2026 is still moving**: Later posts can change counts and rates.
 
 ## Credits & Acknowledgments
 
-This project builds upon the original work by **Martin Devaux**, who first collected and analyzed GradCafe Political Science PhD admission data. His methodology and initial dataset provided the foundation and inspiration for this extended analysis. See his original work here:
+This project builds on the earlier GradCafe Political Science PhD analysis by **Martin Devaux**. His original write-up:
 <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
 
-All admission data is sourced from **[The GradCafe](https://www.thegradcafe.com/survey)**, a community where applicants self-report their graduate school admission results. I am grateful to The GradCafe for making this data publicly accessible.
+All admission data comes from **[The GradCafe](https://www.thegradcafe.com/survey)**, where applicants self-report outcomes.
 
 ## 🕰️ Legacy Versions (Before 2026 Upgrade)
 
-The original structure, scripts, and initial forks of this project have been archived into the `legacy_code/` directory to keep the root directory clean. If you are looking for the pre-2026 versions of the R scripts (`Scraping.R`, `Cleaning.R`, `Functions.R`, `app.R` or their `_v2` counterparts), you can find them all safely backed up there.
+Pre-2026 scripts and old project structure are archived in `legacy_code/`.  
+If you need older versions such as `Scraping.R`, `Cleaning.R`, `Functions.R`, or earlier `app.R` variants, use that folder.
