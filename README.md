@@ -1,6 +1,6 @@
 # GradCafe 2020-2026 Political Science PhD Trend Analysis
 
-🇰🇷 [한국어 설명은 여기를 클릭하세요 (Korean Version)](README-ko.md)
+🇰🇷 [한국어](README-ko.md)
 
 This repository collects and analyzes self-reported GradCafe admission posts for Political Science PhD cycles from 2020 to 2026, then serves the results through a Shiny dashboard.
 
