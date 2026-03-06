@@ -6,9 +6,9 @@
 
 ## 한국어
 
-이 저장소는 2020년부터 2026년까지의 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
+2020년부터 2026년까지의 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
 
-핵심은 단순합니다. 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 만드는 것입니다.
+해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 했습니다.
 
 ### 빠른 시작
 
@@ -45,7 +45,7 @@ Rscript -e "shiny::runApp('app.R')"
 
 ### 스크래퍼 동작 방식
 
-스크래퍼는 `political science`, `international relations`, `politics`, `government` 네 가지 넓은 검색어로 GradCafe를 조회합니다.
+스크래퍼는 `political science`, `international relations`, `politics`, `government` 네 가지 검색어로 GradCafe를 조회합니다.
 
 그다음 아래 규칙으로 정리합니다.
 
