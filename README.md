@@ -1,87 +1,83 @@
 # GradCafe 2020-2026 political science PhD trend analysis
 
-This repository tracks self-reported GradCafe outcomes for political science PhD admissions from 2020 through 2026.
+[한국어](#한국어) | [English](#english)
 
-이 저장소는 2020-2026년 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
+---
 
-The idea is simple: scrape each cycle the same way, clean it with the same rules, and make the patterns easy to check in a Shiny dashboard.
+## 한국어
 
-목표도 단순합니다. 매년 같은 방식으로 수집하고, 같은 규칙으로 정제한 뒤, Shiny 대시보드에서 바로 흐름을 확인할 수 있게 만드는 것입니다.
+이 저장소는 2020년부터 2026년까지의 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
 
-## Quick start / 빠른 시작
+핵심은 단순합니다. 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 만드는 것입니다.
 
-### If `scraped_2020_2026_combined.Rdata` already exists / 통합 데이터가 이미 있을 때
+### 빠른 시작
+
+#### `scraped_2020_2026_combined.Rdata`가 이미 있을 때
 
 ```r
 Rscript -e "shiny::runApp('app.R')"
 ```
 
-### Full refresh, then run the app / 처음부터 다시 수집하고 실행할 때
+#### 처음부터 다시 수집하고 실행할 때
 
 ```r
 Rscript scrape_all_years.R
 Rscript -e "shiny::runApp('app.R')"
 ```
 
-## Pipeline / 파이프라인
+### 파이프라인
 
-| Step / 단계 | Script | Input / 입력 | Output / 출력 |
+| 단계 | 스크립트 | 입력 | 출력 |
 | ---: | --- | --- | --- |
-| 1 | `scrape_all_years.R` | GradCafe search pages / GradCafe 검색 페이지 | Per-year `.Rdata` files and `scraped_2020_2026_combined.Rdata` / 연도별 `.Rdata`와 통합 데이터 |
-| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | Local or deployed Shiny dashboard / 로컬 또는 배포용 Shiny 대시보드 |
+| 1 | `scrape_all_years.R` | GradCafe 검색 페이지 | 연도별 `.Rdata` 파일과 `scraped_2020_2026_combined.Rdata` |
+| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | 로컬 또는 배포용 Shiny 대시보드 |
 
-## Main files / 주요 파일
+### 주요 파일
 
-| File | Description / 설명 |
+| 파일 | 설명 |
 | --- | --- |
-| `scrape_all_years.R` | Unified scraper for 2020-2026 with one parser flow / 2020-2026을 같은 파서 규칙으로 수집 |
-| `app_functions.R` | Data loading, cleanup, normalization, and helper functions / 데이터 로딩, 정제, 정규화, 보조 함수 |
-| `app.R` | Shiny UI and server logic / Shiny UI와 서버 로직 |
-| `scraped_2020_2026_combined.Rdata` | Combined dataset used by the app / 앱에서 사용하는 통합 데이터 |
-| `[sample] PhD Admission Analysis.md` | Sample report generated from the dataset / 데이터 기반 샘플 리포트 |
-| `legacy_code/` | Older scripts and project structure / 예전 스크립트와 구조 보관본 |
+| `scrape_all_years.R` | 2020-2026 데이터를 같은 파서 규칙으로 수집 |
+| `app_functions.R` | 데이터 로딩, 정제, 정규화, 보조 함수 |
+| `app.R` | Shiny UI와 서버 로직 |
+| `scraped_2020_2026_combined.Rdata` | 앱에서 사용하는 통합 데이터 |
+| `[sample] PhD Admission Analysis.md` | 데이터 기반 샘플 리포트 |
+| `legacy_code/` | 예전 스크립트와 이전 구조 보관본 |
 
-## How the scraper works / 스크래퍼 동작
+### 스크래퍼 동작 방식
 
-The scraper queries GradCafe with four broad terms: `political science`, `international relations`, `politics`, `government`.
+스크래퍼는 `political science`, `international relations`, `politics`, `government` 네 가지 넓은 검색어로 GradCafe를 조회합니다.
 
-검색은 `political science`, `international relations`, `politics`, `government` 네 개의 넓은 키워드로 시작합니다.
+그다음 아래 규칙으로 정리합니다.
 
-After that, it applies the same cleanup steps each year.
+- GradCafe의 3행 구조(main, badge, notes)를 한 건으로 묶습니다.
+- 결정 유형, 날짜, GRE, GPA, 국적 태그, 노트를 추출합니다.
+- `(school, decision_text, notes, added_date)` 기준으로 중복을 제거합니다.
+- `degree == "PhD"`만 남깁니다.
+- `program` 문자열을 정규화한 뒤 목표 전공만 유지합니다.
+- 노트 내용을 바탕으로 `CP`, `IR`, `AP`, `Theory`, `Methods`, `Public Law/Policy`, `Psych/Behavior`, `Unknown` 태그를 붙입니다.
 
-그다음에는 매년 같은 정리 규칙을 적용합니다.
+### 앱 전처리
 
-- It treats GradCafe's three-row structure (main row, badge row, notes row) as one record. / GradCafe의 3행 구조(main, badge, notes)를 한 건으로 묶습니다.
-- It extracts decision labels, dates, GRE, GPA, nationality tags, and notes. / 결정 유형, 날짜, GRE, GPA, 국적 태그, 노트를 추출합니다.
-- It removes duplicates with `(school, decision_text, notes, added_date)`. / `(school, decision_text, notes, added_date)` 기준으로 중복을 제거합니다.
-- It keeps only `degree == "PhD"`. / `degree == "PhD"`만 남깁니다.
-- It normalizes `program` text and keeps only the target majors. / `program` 문자열을 정규화한 뒤 목표 전공만 남깁니다.
-- It tags subfields from notes: `CP`, `IR`, `AP`, `Theory`, `Methods`, `Public Law/Policy`, `Psych/Behavior`, `Unknown`. / 노트 내용을 바탕으로 서브필드 태그를 붙입니다.
+시각화 전에 앱 단계에서 한 번 더 정리합니다.
 
-## App-side cleanup / 앱 전처리
+- 복원 가능한 경우 `gre_total`을 바탕으로 `gre_q`를 되살립니다.
+- 비정상적인 GRE와 AW 값을 제거합니다.
+- 연도 비교가 가능하도록 타임라인 날짜를 표준화합니다.
+- 노이즈 행을 걸러내고 학교명을 규칙 기반으로 통합합니다.
 
-Before plotting, the app does a second cleanup pass.
+### 대시보드 탭
 
-시각화에 들어가기 전 앱 단계에서 한 번 더 정리합니다.
+- `Timeline`: 날짜축 위에서 결과 시점을 확인하는 탭
+- `Trends`: 연도별 합격률과 국적 분포를 보는 탭
+- `Subfields`: 서브필드별 표본 수와 합격률을 보는 탭
+- `Data`: 검색 가능한 원자료 테이블과 상세 보기
 
-- Recover missing `gre_q` values from `gre_total` when that is possible. / 복원 가능한 경우 `gre_total`로 `gre_q`를 되살립니다.
-- Remove impossible GRE and AW values. / 비정상적인 GRE와 AW 값을 제거합니다.
-- Standardize timeline dates for cross-year comparison. / 연도 간 비교가 되도록 타임라인 날짜를 표준화합니다.
-- Drop obvious junk rows and normalize institution names with a rule map. / 노이즈 행을 걸러내고 학교명을 규칙 기반으로 통합합니다.
-
-## Dashboard tabs / 대시보드 탭
-
-- `Timeline`: dot-based decision calendar / 날짜축 위에 결과를 찍어 보는 결정 타임라인
-- `Trends`: yearly acceptance rate and nationality split / 연도별 합격률과 국적 분포
-- `Subfields`: subfield volume and subfield-specific acceptance rates / 서브필드별 표본 수와 합격률
-- `Data`: searchable raw table with a detail view / 검색 가능한 원자료 테이블과 상세 보기
-
-## Dependencies / 의존 패키지
+### 의존 패키지
 
 - R (>= 4.0)
 - `rvest`, `httr`, `dplyr`, `tidyr`, `lubridate`, `stringr`, `plotly`, `ggplot2`, `rmarkdown`, `knitr`, `kableExtra`, `shiny`, `shinyjs`, `shinyWidgets`, `DT`
 
-Install once / 한 번만 설치:
+한 번만 설치하면 됩니다.
 
 ```r
 install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
@@ -89,33 +85,135 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
                    "shiny", "shinyjs", "shinyWidgets", "DT"))
 ```
 
-## Data notes / 데이터 해석 시 주의
+### 데이터 해석 시 주의
 
-- The source is self-reported GradCafe data, so missingness and reporting bias are unavoidable. / GradCafe는 자기보고 데이터라 누락과 표본 편향이 있습니다.
-- Parsing and normalization are rule-based, so a few edge cases can still slip through. / 파싱과 정규화는 규칙 기반이라 일부 예외는 남을 수 있습니다.
-- Acceptance rate is defined as `Accepted / (Accepted + Rejected)`. / 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
-- Last refresh / 최신 갱신: **March 4, 2026**
-- Combined rows / 전체 표본: **3,766**
-- 2026 rows / 2026 표본: **858**
-- The 2026 slice is still moving as new posts come in. / 2026 수치는 이후 게시글 유입에 따라 계속 달라질 수 있습니다.
+- GradCafe는 자기보고 데이터라 누락과 표본 편향이 있습니다.
+- 파싱과 정규화는 규칙 기반이라 일부 예외가 남을 수 있습니다.
+- 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
+- 최신 갱신 기준은 **2026-03-04**입니다.
+- 전체 표본은 **3,766건**입니다.
+- 2026 표본은 **858건**입니다.
+- 2026 수치는 이후 게시글이 더 들어오면 달라질 수 있습니다.
 
-## Credits / 크레딧
+### 크레딧
 
-This repository extends the earlier GradCafe political science PhD analysis by **Martin Devaux**:
-<https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
+이 프로젝트는 **Martin Devaux**의 기존 GradCafe 정치학 PhD 분석을 바탕으로 확장했습니다.
+원문: <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
 
-Martin laid out the original workflow clearly, and that made this extension much easier to build and maintain.
+초기 워크플로를 공개해 준 Martin Devaux 덕분에 이후 확장 작업을 훨씬 수월하게 이어갈 수 있었습니다.
 
-초기 분석 과정을 공개해 준 Martin Devaux 덕분에 이후 확장 작업을 훨씬 수월하게 이어갈 수 있었습니다.
+또한 결과를 꾸준히 남겨 준 GradCafe 커뮤니티 이용자들과 사이트 운영진에게도 감사드립니다. 그 기록과 플랫폼이 없었다면 이 프로젝트도 성립하지 않았을 것입니다.
+
+데이터 출처: **[The GradCafe](https://www.thegradcafe.com/survey)**
+
+### 레거시 코드
+
+이전 스크립트와 예전 프로젝트 구조는 `legacy_code/`에 보관되어 있습니다.
+
+---
+
+## English
+
+This repository tracks self-reported GradCafe outcomes for political science PhD admissions from 2020 through 2026.
+
+The point is straightforward: scrape each cycle the same way, clean it with the same rules, and make the results easy to inspect in a Shiny dashboard.
+
+### Quick start
+
+#### If `scraped_2020_2026_combined.Rdata` already exists
+
+```r
+Rscript -e "shiny::runApp('app.R')"
+```
+
+#### If you want a full refresh first
+
+```r
+Rscript scrape_all_years.R
+Rscript -e "shiny::runApp('app.R')"
+```
+
+### Pipeline
+
+| Step | Script | Input | Output |
+| ---: | --- | --- | --- |
+| 1 | `scrape_all_years.R` | GradCafe search pages | Per-year `.Rdata` files and `scraped_2020_2026_combined.Rdata` |
+| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | Local or deployed Shiny dashboard |
+
+### Main files
+
+| File | Description |
+| --- | --- |
+| `scrape_all_years.R` | Scrapes 2020-2026 data with one parser flow |
+| `app_functions.R` | Data loading, cleanup, normalization, and helper functions |
+| `app.R` | Shiny UI and server logic |
+| `scraped_2020_2026_combined.Rdata` | Combined dataset used by the app |
+| `[sample] PhD Admission Analysis.md` | Sample report generated from the dataset |
+| `legacy_code/` | Older scripts and the previous project structure |
+
+### How the scraper works
+
+The scraper queries GradCafe with four broad terms: `political science`, `international relations`, `politics`, and `government`.
+
+It then applies the same cleanup rules each year.
+
+- It treats GradCafe's three-row structure (main row, badge row, notes row) as a single record.
+- It extracts decision labels, dates, GRE, GPA, nationality tags, and notes.
+- It removes duplicates with `(school, decision_text, notes, added_date)`.
+- It keeps only `degree == "PhD"`.
+- It normalizes `program` text and keeps only the target majors.
+- It tags subfields from notes: `CP`, `IR`, `AP`, `Theory`, `Methods`, `Public Law/Policy`, `Psych/Behavior`, and `Unknown`.
+
+### App-side cleanup
+
+Before plotting, the app makes one more cleanup pass.
+
+- It recovers missing `gre_q` values from `gre_total` when possible.
+- It removes impossible GRE and AW values.
+- It standardizes timeline dates for cross-year comparison.
+- It drops obvious junk rows and normalizes institution names with a rule map.
+
+### Dashboard tabs
+
+- `Timeline`: decision timing on a date axis
+- `Trends`: yearly acceptance rates and nationality splits
+- `Subfields`: subfield volume and subfield-specific acceptance rates
+- `Data`: searchable raw table with a detail view
+
+### Dependencies
+
+- R (>= 4.0)
+- `rvest`, `httr`, `dplyr`, `tidyr`, `lubridate`, `stringr`, `plotly`, `ggplot2`, `rmarkdown`, `knitr`, `kableExtra`, `shiny`, `shinyjs`, `shinyWidgets`, `DT`
+
+Install once:
+
+```r
+install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
+                   "plotly", "ggplot2", "rmarkdown", "knitr", "kableExtra",
+                   "shiny", "shinyjs", "shinyWidgets", "DT"))
+```
+
+### Data notes
+
+- The source is self-reported GradCafe data, so missingness and reporting bias are unavoidable.
+- Parsing and normalization are rule-based, so some edge cases may still remain.
+- Acceptance rate is defined as `Accepted / (Accepted + Rejected)`.
+- Last refresh: **March 4, 2026**
+- Combined rows: **3,766**
+- 2026 rows: **858**
+- The 2026 snapshot will keep moving as new posts appear.
+
+### Credits
+
+This repository extends the earlier GradCafe political science PhD analysis by **Martin Devaux**.
+Original post: <https://www.martindevaux.com/2020/11/political-science-phd-admission-decisions/>
+
+Martin published the original workflow clearly, and that made this extension much easier to build and maintain.
 
 I also owe a lot to the GradCafe community and the site maintainers. Without their posts and the platform itself, there would be nothing here to analyze.
 
-또한 결과를 꾸준히 남겨 준 GradCafe 커뮤니티 이용자들과 사이트 운영진에게도 감사드립니다. 그 기록과 플랫폼이 없었다면 이 프로젝트도 존재할 수 없었습니다.
+Data source: **[The GradCafe](https://www.thegradcafe.com/survey)**
 
-Data source / 데이터 출처: **[The GradCafe](https://www.thegradcafe.com/survey)**
-
-## Legacy code / 레거시 코드
+### Legacy code
 
 Older scripts and the previous project structure are preserved in `legacy_code/`.
-
-이전 스크립트와 예전 프로젝트 구조는 `legacy_code/`에 보관해 두었습니다.
