@@ -10,13 +10,13 @@
 
 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 했습니다.
 
-이제 저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 배포할 수 있습니다.
+이제 저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 확인할 수 있습니다.
 
-정적 사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
+사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
 
 ### 빠른 시작
 
-#### GitHub Pages용 정적 사이트 갱신
+#### GitHub Pages용 사이트 갱신
 
 ```r
 Rscript scripts/export_dashboard_data.R
