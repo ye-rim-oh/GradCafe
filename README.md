@@ -10,7 +10,17 @@
 
 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 했습니다.
 
+이제 저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 배포할 수 있습니다.
+
 ### 빠른 시작
+
+#### GitHub Pages용 정적 사이트 갱신
+
+```r
+Rscript scripts/export_dashboard_data.R
+```
+
+그 다음 `site/index.html`을 기준으로 GitHub Pages에 배포하면 됩니다. 저장소의 Actions 탭에서 `Deploy GitHub Pages` 워크플로가 자동으로 정적 사이트를 올립니다.
 
 #### `scraped_2020_2026_combined.Rdata`가 이미 있을 때
 
@@ -31,6 +41,7 @@ Rscript -e "shiny::runApp('app.R')"
 | ---: | --- | --- | --- |
 | 1 | `scrape_all_years.R` | GradCafe 검색 페이지 | 연도별 `.Rdata` 파일과 `scraped_2020_2026_combined.Rdata` |
 | 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | 로컬 또는 배포용 Shiny 대시보드 |
+| 3 | `scripts/export_dashboard_data.R` + `site/` | 정제된 `data` 객체 | GitHub Pages용 정적 React 대시보드 |
 
 ### 주요 파일
 
@@ -39,6 +50,8 @@ Rscript -e "shiny::runApp('app.R')"
 | `scrape_all_years.R` | 2020-2026 데이터를 같은 파서 규칙으로 수집 |
 | `app_functions.R` | 데이터 로딩, 정제, 정규화, 보조 함수 |
 | `app.R` | Shiny UI와 서버 로직 |
+| `scripts/export_dashboard_data.R` | 정제된 데이터를 `site/data/gradcafe.json`으로 내보냄 |
+| `site/` | GitHub Pages에 배포되는 정적 React 대시보드 |
 | `scraped_2020_2026_combined.Rdata` | 앱에서 사용하는 통합 데이터 |
 | `[sample] PhD Admission Analysis.md` | 데이터 기반 샘플 리포트 |
 | `legacy_code/` | 예전 스크립트와 이전 구조 보관본 |
@@ -91,8 +104,8 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - 파싱과 정규화는 규칙 기반이라 일부 예외가 남을 수 있습니다.
 - 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
 - 최신 갱신 기준은 **2026-03-04**입니다.
-- 전체 표본은 **3,766건**입니다.
-- 2026 표본은 **858건**입니다.
+- 전체 표본은 **3,747건**입니다.
+- 2026 표본은 **847건**입니다.
 - 2026 수치는 이후 게시글이 더 들어오면 달라질 수 있습니다.
 
 ### 크레딧
@@ -118,7 +131,17 @@ This repository tracks self-reported GradCafe outcomes for political science PhD
 
 The point is straightforward: scrape each cycle the same way, clean it with the same rules, and make the results easy to inspect in a Shiny dashboard.
 
+The repository now also includes a **GitHub Pages-ready static React dashboard** in `site/`. That version keeps the shared filters and tabs in the browser, so it can be deployed for free without running a Shiny server.
+
 ### Quick start
+
+#### Refresh the static GitHub Pages snapshot
+
+```r
+Rscript scripts/export_dashboard_data.R
+```
+
+After that, deploy the contents of `site/` to GitHub Pages. The repository includes a `Deploy GitHub Pages` workflow for this static site.
 
 #### If `scraped_2020_2026_combined.Rdata` already exists
 
@@ -139,6 +162,7 @@ Rscript -e "shiny::runApp('app.R')"
 | ---: | --- | --- | --- |
 | 1 | `scrape_all_years.R` | GradCafe search pages | Per-year `.Rdata` files and `scraped_2020_2026_combined.Rdata` |
 | 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | Local or deployed Shiny dashboard |
+| 3 | `scripts/export_dashboard_data.R` + `site/` | Cleaned `data` object | Static React dashboard for GitHub Pages |
 
 ### Main files
 
@@ -147,6 +171,8 @@ Rscript -e "shiny::runApp('app.R')"
 | `scrape_all_years.R` | Scrapes 2020-2026 data with one parser flow |
 | `app_functions.R` | Data loading, cleanup, normalization, and helper functions |
 | `app.R` | Shiny UI and server logic |
+| `scripts/export_dashboard_data.R` | Exports the cleaned dataset to `site/data/gradcafe.json` |
+| `site/` | Static React dashboard deployed to GitHub Pages |
 | `scraped_2020_2026_combined.Rdata` | Combined dataset used by the app |
 | `[sample] PhD Admission Analysis.md` | Sample report generated from the dataset |
 | `legacy_code/` | Older scripts and the previous project structure |
@@ -199,8 +225,8 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - Parsing and normalization are rule-based, so some edge cases may still remain.
 - Acceptance rate is defined as `Accepted / (Accepted + Rejected)`.
 - Last refresh: **March 4, 2026**
-- Combined rows: **3,766**
-- 2026 rows: **858**
+- Combined rows: **3,747**
+- 2026 rows: **847**
 - The 2026 snapshot will keep moving as new posts appear.
 
 ### Credits
