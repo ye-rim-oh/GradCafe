@@ -12,6 +12,8 @@
 
 이제 저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 배포할 수 있습니다.
 
+정적 사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
+
 ### 빠른 시작
 
 #### GitHub Pages용 정적 사이트 갱신
@@ -132,6 +134,8 @@ This repository tracks self-reported GradCafe outcomes for political science PhD
 The point is straightforward: scrape each cycle the same way, clean it with the same rules, and make the results easy to inspect in a Shiny dashboard.
 
 The repository now also includes a **GitHub Pages-ready static React dashboard** in `site/`. That version keeps the shared filters and tabs in the browser, so it can be deployed for free without running a Shiny server.
+
+Static site: <https://ye-rim-oh.github.io/GradCafe/>
 
 ### Quick start
 
