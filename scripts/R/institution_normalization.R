@@ -47,6 +47,7 @@ valid_institution_school <- function(school) {
     "^University of mennesota$",
     "^Brown Rice University$",
     "^Iqtisad Uni$",
+    "^(All|ALL|Overall|Overall \\(All Schools\\))$",
     "^Graduate School Of Arts|^Henry Jackson School|^Said Business School$|^Krieger School|^Kennedy School Of|^SAIS$"
   )
 

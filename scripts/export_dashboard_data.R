@@ -27,6 +27,38 @@ clean_number <- function(x, lower = -Inf, upper = Inf) {
   value
 }
 
+canonical_institution <- function(institution, school) {
+  value <- ifelse(is.na(institution) | institution == "", school, institution)
+  value <- trimws(as.character(value))
+  value <- gsub("[[:cntrl:]]", " ", value)
+  value <- gsub("\\s+", " ", value)
+
+  replace_hit <- function(pattern, replacement) {
+    hit <- grepl(pattern, value, ignore.case = TRUE)
+    value[hit] <<- replacement
+  }
+
+  replace_hit("The\\s+University\\s+Of\\s+Toront(o)?|University\\s+Of\\s+Toronto|Toront", "University of Toronto (UofT)")
+  replace_hit("University of Texas at Austin|UT Austin|UT AUSTIN", "University of Texas at Austin (UT Austin)")
+  replace_hit("Wisconsin-Madison|UW-MADISON", "University of Wisconsin-Madison (UW-Madison)")
+  replace_hit("Colorado Boulder|CU BOULDER", "University of Colorado Boulder (CU Boulder)")
+  replace_hit("University of California \\(UNSPECIFIED\\)|University of California \\(Unspecified\\)$", "University of California (Unspecified)")
+
+  value <- gsub("\\(UOFT\\)", "(UofT)", value)
+  value <- gsub("\\(UT AUSTIN\\)", "(UT Austin)", value)
+  value <- gsub("\\(UW-MADISON\\)", "(UW-Madison)", value)
+  value <- gsub("\\(CU BOULDER\\)", "(CU Boulder)", value)
+  value <- gsub("\\(UNSPECIFIED\\)", "(Unspecified)", value)
+  trimws(value)
+}
+
+valid_export_institution <- function(institution) {
+  value <- trimws(as.character(institution))
+  !is.na(value) &
+    value != "" &
+    !grepl("^(All|ALL|Overall|Overall \\(All Schools\\))$", value, ignore.case = TRUE)
+}
+
 json_escape <- function(x) {
   x <- enc2utf8(as.character(x))
   x <- gsub("\\", "\\\\", x, fixed = TRUE)
@@ -61,13 +93,16 @@ json_array <- function(values) {
 }
 
 df <- load_clean_data()
+df$institution <- canonical_institution(df$institution, df$school)
+df <- df[valid_export_institution(df$institution), , drop = FALSE]
+
 decision_date <- as.Date(df$decision_date)
 decision_month <- as.integer(format(decision_date, "%m"))
 decision_month_day <- as.Date(paste0("2020-", format(decision_date, "%m-%d")))
 decision_month_day[is.na(decision_date) | decision_month >= 5] <- NA
 
 records <- data.frame(
-  institution = ifelse(is.na(df$institution) | df$institution == "", df$school, df$institution),
+  institution = df$institution,
   decision = ifelse(
     df$decision_type %in% c("Accepted", "Rejected", "Interview", "Wait listed", "Other"),
     df$decision_type,

@@ -10,7 +10,7 @@ import {
 const payload = JSON.parse(readFileSync("site/data/gradcafe.json", "utf8"));
 
 assert.equal(payload.recordCount, payload.records.length);
-assert.equal(payload.recordCount, 4750);
+assert.equal(payload.recordCount, 4749);
 assert.equal(payload.seasonRange, "2016-2026");
 assert.equal(payload.latestDecisionDate, "2026-04-15");
 assert.deepEqual(DEFAULT_DECISIONS, ["Accepted", "Rejected", "Interview", "Wait listed", "Other"]);
@@ -24,6 +24,10 @@ assert.equal(institutions[0], OVERALL_LABEL);
 assert.ok(institutions.includes("University of Toronto (UofT)"));
 assert.equal(
   payload.records.filter((record) => /the university of toront/i.test(record.institution)).length,
+  0
+);
+assert.equal(
+  payload.records.filter((record) => /^(all|overall|overall \(all schools\))$/i.test(record.institution)).length,
   0
 );
 

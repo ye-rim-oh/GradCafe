@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-04-17",
-  "recordCount": 4750,
+  "recordCount": 4749,
   "seasonRange": "2016-2026",
   "latestDecisionDate": "2026-04-15",
   "decisionChoices": ["Accepted", "Rejected", "Interview", "Wait listed", "Other"],
@@ -3505,7 +3505,6 @@
     {"institution": "University of Oxford", "decision": "Accepted", "decisionYear": 2019, "decisionMonthDay": "2020-03-25", "status": "International", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": "DPhil"},
     {"institution": "University of Oxford", "decision": "Accepted", "decisionYear": 2019, "decisionMonthDay": "2020-03-25", "status": "American", "subfield": "Unknown", "gpa": 3.79, "greV": 161, "greQ": 154, "notes": "DPhil in Politics (Comparative). No word on funding yet..."},
     {"institution": "University of Victoria", "decision": "Other", "decisionYear": 2019, "decisionMonthDay": "2020-03-25", "status": "Unknown", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": "I am apparently on their waitlist. if you have been admitted and know that you will be accepting another offer, please let them know ASAP."},
-    {"institution": "All", "decision": "Other", "decisionYear": 2019, "decisionMonthDay": "2020-03-24", "status": "Unknown", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": "If you don't plan to accept offers, please do not hesitate to reject the offer asap!"},
     {"institution": "Johns Hopkins University (JHU)", "decision": "Other", "decisionYear": 2019, "decisionMonthDay": "2020-03-24", "status": "American", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": "I have declined the offer of admission. Best of luck to those on the waitlist."},
     {"institution": "University of Oxford", "decision": "Rejected", "decisionYear": 2019, "decisionMonthDay": "2020-03-24", "status": "American", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": ""},
     {"institution": "University of Oxford", "decision": "Rejected", "decisionYear": 2019, "decisionMonthDay": "2020-03-24", "status": "International", "subfield": "Unknown", "gpa": null, "greV": null, "greQ": null, "notes": ""},

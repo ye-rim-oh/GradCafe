@@ -107,7 +107,7 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - 파싱과 정규화는 규칙 기반이라 일부 예외가 남을 수 있습니다.
 - 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
 - 최신 데이터 기준일은 **2026-04-15**입니다.
-- 전체 표본은 **4,750건**입니다.
+- 웹사이트 표본은 **4,749건**입니다. 학교명이 `All`로 들어온 가짜 institution 1건은 필터에서 제외했습니다.
 - 2026 표본은 **1,030건**입니다.
 - 2026 수치는 이후 게시글이 더 들어오면 달라질 수 있습니다.
 
@@ -233,7 +233,7 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - Parsing and normalization are rule-based, so some edge cases may still remain.
 - Acceptance rate is defined as `Accepted / (Accepted + Rejected)`.
 - Latest data date: **April 15, 2026**
-- Combined rows: **4,750**
+- Website rows: **4,749**. One fake institution row labeled `All` is excluded from the public dashboard.
 - 2026 rows: **1,030**
 - The 2026 snapshot will keep moving as new posts appear.
 

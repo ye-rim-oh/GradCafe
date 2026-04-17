@@ -2,7 +2,7 @@
 
 **Report Date**: 2026-04-17
 **Data Source**: GradCafe survey data refreshed through 2026-04-15
-**Total Sample**: **4,750** cleaned posts
+**Total Sample**: **4,749** cleaned posts
 
 This note summarizes what the current snapshot shows. It is descriptive, not causal.
 
@@ -13,7 +13,7 @@ This note summarizes what the current snapshot shows. It is descriptive, not cau
 | 2016 | 343 | 100 | 162 | 7 | 30 | 44 | 38.2% |
 | 2017 | 341 | 125 | 126 | 13 | 41 | 36 | 49.8% |
 | 2018 | 254 | 109 | 82 | 6 | 25 | 32 | 57.1% |
-| 2019 | 326 | 120 | 143 | 4 | 29 | 30 | 45.6% |
+| 2019 | 325 | 120 | 143 | 4 | 29 | 29 | 45.6% |
 | 2020 | 259 | 71 | 108 | 4 | 27 | 49 | 39.7% |
 | 2021 | 594 | 163 | 285 | 31 | 64 | 51 | 36.4% |
 | 2022 | 234 | 69 | 103 | 22 | 40 | 0 | 40.1% |
@@ -65,7 +65,7 @@ In 2026, the American-International gap is **8.3 percentage points**. This is a 
 | 2016 | 1 | 1 | 7 | 2 | 0 | 0 | 2 | 330 |
 | 2017 | 2 | 3 | 18 | 2 | 0 | 0 | 14 | 302 |
 | 2018 | 0 | 3 | 3 | 1 | 1 | 0 | 3 | 243 |
-| 2019 | 8 | 18 | 29 | 16 | 0 | 0 | 13 | 242 |
+| 2019 | 8 | 18 | 29 | 16 | 0 | 0 | 13 | 241 |
 | 2020 | 6 | 16 | 8 | 3 | 0 | 0 | 13 | 213 |
 | 2021 | 17 | 41 | 34 | 3 | 1 | 1 | 14 | 483 |
 | 2022 | 1 | 13 | 12 | 1 | 0 | 0 | 9 | 198 |
@@ -122,7 +122,7 @@ The timeline table uses January-April decision dates only, because later dates o
 | 2016 | 01/22 | 02/05 | 02/12 | 02/26 | 04/15 (n=343) |
 | 2017 | 01/14 | 02/09 | 02/15 | 02/27 | 04/25 (n=340) |
 | 2018 | 01/14 | 02/12 | 02/16 | 03/01 | 04/26 (n=254) |
-| 2019 | 01/03 | 02/07 | 02/09 | 02/14 | 04/27 (n=326) |
+| 2019 | 01/03 | 02/07 | 02/09 | 02/14 | 04/27 (n=325) |
 | 2020 | 01/02 | 02/12 | 02/26 | 02/28 | 04/15 (n=259) |
 | 2021 | 01/16 | 01/28 | 02/08 | 02/19 | 04/13 (n=593) |
 | 2022 | 01/05 | 01/26 | 02/17 | 03/02 | 04/22 (n=234) |
@@ -138,7 +138,7 @@ The timeline table uses January-April decision dates only, because later dates o
 | 2016 | 343 | 38.2% | 178 | 40.6% | 146 | 35.6% | 122 | 163.3 | 122 | 160.1 | 33.2% | 01/22 | 02/26 |
 | 2017 | 341 | 49.8% | 154 | 46.2% | 176 | 53.5% | 143 | 163.6 | 142 | 161.0 | 40.2% | 01/14 | 02/27 |
 | 2018 | 254 | 57.1% | 145 | 63.7% | 104 | 48.1% | 111 | 163.6 | 111 | 162.1 | 40.9% | 01/14 | 03/01 |
-| 2019 | 326 | 45.6% | 193 | 49.7% | 114 | 38.5% | 124 | 163.2 | 125 | 160.9 | 36.2% | 01/03 | 02/14 |
+| 2019 | 325 | 45.6% | 193 | 49.7% | 114 | 38.5% | 124 | 163.2 | 125 | 160.9 | 36.3% | 01/03 | 02/14 |
 | 2020 | 259 | 39.7% | 141 | 42.3% | 98 | 33.8% | 79 | 162.4 | 79 | 158.5 | 28.2% | 01/02 | 02/28 |
 | 2021 | 594 | 36.4% | 351 | 39.3% | 219 | 29.4% | 106 | 164.7 | 105 | 162.2 | 30.1% | 01/16 | 02/19 |
 | 2022 | 234 | 40.1% | 88 | 41.3% | 136 | 41.2% | 64 | 163.9 | 76 | 162.2 | 50.9% | 01/05 | 03/02 |
@@ -149,7 +149,7 @@ The timeline table uses January-April decision dates only, because later dates o
 
 ## 8. Takeaways
 
-1. The full 2016-2026 sample contains 4,750 cleaned posts across 196 canonical institutions.
+1. The full 2016-2026 sample contains 4,749 cleaned posts across 195 canonical institutions.
 2. Acceptance rates range from 30.9% in 2026 to 60.9% in 2023; 2026 sits at 30.9%.
 3. In 2026, American and international acceptance rates are 34.8% and 26.5%, a gap of 8.3 percentage points.
 4. Subfield information is sparse: 81.1% of all rows and 74.5% of 2026 rows are tagged Unknown.
@@ -169,4 +169,5 @@ The timeline table uses January-April decision dates only, because later dates o
 - Cleaning: program labels and school names are rule-normalized; obvious junk or truncated school labels are filtered or repaired.
 - Collection: season-filtered pages are supplemented with recent no-season pages; **1223** clean rows currently come from that supplement path.
 - Interpretation: use these numbers as a directional snapshot, not a full census.
+
 
