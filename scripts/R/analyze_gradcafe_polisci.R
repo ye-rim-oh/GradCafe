@@ -427,6 +427,7 @@ report <- c(
   "- Scope: PhD entries filtered to Political Science, International Relations, Politics, Government, and direct combinations.",
   "- Cleaning: program labels and school names are rule-normalized; obvious junk or truncated school labels are filtered or repaired.",
   paste0("- Collection: season-filtered pages are supplemented with recent no-season pages; **", source_supplement_n, "** clean rows currently come from that supplement path."),
+  "- Unit of observation: each row is a reported school-level outcome, not a distinct applicant. One applicant may apply to multiple schools and report multiple outcomes, so 12 reported cases do not necessarily mean 12 distinct people. It could just as easily mean 6 people reporting 2 schools each, or 3 people reporting 4 schools each.",
   "- Interpretation: use these numbers as a directional snapshot, not a full census."
 )
 
