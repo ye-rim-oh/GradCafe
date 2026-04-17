@@ -14,27 +14,11 @@
 
 사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
 
-### 빠른 시작
+### 데이터와 사이트
 
-#### GitHub Pages용 사이트 갱신
+JSON 스크래퍼가 만든 cleaned 데이터가 `site/data/gradcafe.json`으로 export되고, GitHub Pages 홈페이지는 이 파일을 읽어 필터와 시각화를 구성합니다.
 
-```r
-Rscript scripts/R/update_polisci_data.R
-```
-
-이 명령은 GradCafe 데이터를 다시 수집하고, `gradcafe_polisci_2016_2026_analysis.md`를 갱신한 뒤, 기존 GitHub Pages 홈페이지가 읽는 `site/data/gradcafe.json`을 다시 만듭니다. 저장소의 Actions 탭에서 `Deploy GitHub Pages` 워크플로가 자동으로 정적 사이트를 올립니다.
-
-#### 이미 cleaned 데이터가 있을 때
-
-```r
-Rscript scripts/export_dashboard_data.R
-```
-
-#### Shiny 앱 실행
-
-```r
-Rscript -e "shiny::runApp('app.R')"
-```
+Shiny 앱도 같은 cleaned 데이터를 기준으로 실행됩니다.
 
 ### 파이프라인
 
@@ -140,27 +124,11 @@ The repository now also includes a **GitHub Pages-ready static React dashboard**
 
 Static site: <https://ye-rim-oh.github.io/GradCafe/>
 
-### Quick start
+### Data and Site
 
-#### Refresh the static GitHub Pages snapshot
+The JSON scraper produces cleaned data, exports it to `site/data/gradcafe.json`, and the GitHub Pages homepage reads that file to build the filters and visualizations.
 
-```r
-Rscript scripts/R/update_polisci_data.R
-```
-
-That command re-scrapes GradCafe, rebuilds `gradcafe_polisci_2016_2026_analysis.md`, and regenerates the `site/data/gradcafe.json` file read by the existing GitHub Pages homepage. The repository includes a `Deploy GitHub Pages` workflow for this static site.
-
-#### If cleaned data already exists
-
-```r
-Rscript scripts/export_dashboard_data.R
-```
-
-#### Run the Shiny app
-
-```r
-Rscript -e "shiny::runApp('app.R')"
-```
+The Shiny app uses the same cleaned data.
 
 ### Pipeline
 
