@@ -1,5 +1,5 @@
 export const OVERALL_LABEL = "Overall (All Schools)";
-export const DEFAULT_DECISIONS = ["Accepted", "Rejected", "Interview", "Wait listed"];
+export const DEFAULT_DECISIONS = ["Accepted", "Rejected", "Interview", "Wait listed", "Other"];
 export const DECISION_ORDER = ["Accepted", "Interview", "Wait listed", "Rejected", "Other"];
 export const DECISION_COLORS = {
   Accepted: "#2563eb",

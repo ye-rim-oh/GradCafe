@@ -1,4 +1,4 @@
-# GradCafe 2020-2026 political science PhD trend analysis
+# GradCafe 2016-2026 political science PhD trend analysis
 
 [한국어](#한국어) | [English](#english)
 
@@ -6,11 +6,11 @@
 
 ## 한국어
 
-2020년부터 2026년까지의 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
+2016년부터 2026년까지의 GradCafe 자기보고 데이터를 바탕으로 정치학 PhD 어드미션 흐름을 정리한 프로젝트입니다.
 
 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 했습니다.
 
-이제 저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 확인할 수 있습니다.
+저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 확인할 수 있습니다. GradCafe 사이트가 기존 HTML 표 대신 현재 survey 데이터를 JSON으로 제공하는 구조에 맞춰, 새 스크래퍼와 Pages 데이터 export도 JSON 기반 cleaned 데이터로 갱신했습니다.
 
 사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
 
@@ -19,21 +19,20 @@
 #### GitHub Pages용 사이트 갱신
 
 ```r
+Rscript scripts/R/update_polisci_data.R
+```
+
+이 명령은 GradCafe 데이터를 다시 수집하고, `gradcafe_polisci_2016_2026_analysis.md`를 갱신한 뒤, 기존 GitHub Pages 홈페이지가 읽는 `site/data/gradcafe.json`을 다시 만듭니다. 저장소의 Actions 탭에서 `Deploy GitHub Pages` 워크플로가 자동으로 정적 사이트를 올립니다.
+
+#### 이미 cleaned 데이터가 있을 때
+
+```r
 Rscript scripts/export_dashboard_data.R
 ```
 
-그 다음 `site/index.html`을 기준으로 GitHub Pages에 배포하면 됩니다. 저장소의 Actions 탭에서 `Deploy GitHub Pages` 워크플로가 자동으로 정적 사이트를 올립니다.
-
-#### `scraped_2020_2026_combined.Rdata`가 이미 있을 때
+#### Shiny 앱 실행
 
 ```r
-Rscript -e "shiny::runApp('app.R')"
-```
-
-#### 처음부터 다시 수집하고 실행할 때
-
-```r
-Rscript scrape_all_years.R
 Rscript -e "shiny::runApp('app.R')"
 ```
 
@@ -41,30 +40,32 @@ Rscript -e "shiny::runApp('app.R')"
 
 | 단계 | 스크립트 | 입력 | 출력 |
 | ---: | --- | --- | --- |
-| 1 | `scrape_all_years.R` | GradCafe 검색 페이지 | 연도별 `.Rdata` 파일과 `scraped_2020_2026_combined.Rdata` |
-| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | 로컬 또는 배포용 Shiny 대시보드 |
-| 3 | `scripts/export_dashboard_data.R` + `site/` | 정제된 `data` 객체 | GitHub Pages용 정적 React 대시보드 |
+| 1 | `scripts/R/scrape_gradcafe_polisci.R` | GradCafe survey data | `output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds` |
+| 2 | `scripts/R/analyze_gradcafe_polisci.R` | 정제 데이터 | `gradcafe_polisci_2016_2026_analysis.md` |
+| 3 | `scripts/export_dashboard_data.R` + `site/` | 정제 데이터 | GitHub Pages용 `site/data/gradcafe.json` |
+| 4 | `app_functions.R` + `app.R` | 같은 정제 데이터 | 로컬 또는 배포용 Shiny 대시보드 |
 
 ### 주요 파일
 
 | 파일 | 설명 |
 | --- | --- |
-| `scrape_all_years.R` | 2020-2026 데이터를 같은 파서 규칙으로 수집 |
+| `scripts/R/scrape_gradcafe_polisci.R` | 2016-2026 데이터를 현재 GradCafe survey 구조에 맞춰 수집 |
+| `scripts/R/update_polisci_data.R` | 수집, 분석, Pages 데이터 export를 한 번에 실행 |
 | `app_functions.R` | 데이터 로딩, 정제, 정규화, 보조 함수 |
 | `app.R` | Shiny UI와 서버 로직 |
 | `scripts/export_dashboard_data.R` | 정제된 데이터를 `site/data/gradcafe.json`으로 내보냄 |
 | `site/` | GitHub Pages에 배포되는 정적 React 대시보드 |
-| `scraped_2020_2026_combined.Rdata` | 앱에서 사용하는 통합 데이터 |
-| `[sample] PhD Admission Analysis.md` | 데이터 기반 샘플 리포트 |
+| `html_version/` | 기존 HTML-table 파서와 2020-2026 Shiny 버전 보관본 |
+| `gradcafe_polisci_2016_2026_analysis.md` | 현재 cleaned 데이터 기반 분석 리포트 |
 | `legacy_code/` | 예전 스크립트와 이전 구조 보관본 |
 
 ### 스크래퍼 동작 방식
 
-스크래퍼는 `political science`, `international relations`, `politics`, `government` 네 가지 검색어로 GradCafe를 조회합니다.
+스크래퍼는 `political science`, `international relations`, `politics`, `government` 네 가지 검색어와 Fall 2016-2026 season 필터로 GradCafe survey 데이터를 조회합니다.
 
 그다음 아래 규칙으로 정리합니다.
 
-- GradCafe의 3행 구조(main, badge, notes)를 한 건으로 묶습니다.
+- GradCafe 페이지의 Inertia `data-page` JSON payload에서 결과 행을 추출합니다.
 - 결정 유형, 날짜, GRE, GPA, 국적 태그, 노트를 추출합니다.
 - `(school, decision_text, notes, added_date)` 기준으로 중복을 제거합니다.
 - `degree == "PhD"`만 남깁니다.
@@ -105,9 +106,9 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - GradCafe는 자기보고 데이터라 누락과 표본 편향이 있습니다.
 - 파싱과 정규화는 규칙 기반이라 일부 예외가 남을 수 있습니다.
 - 합격률 계산식은 `Accepted / (Accepted + Rejected)`입니다.
-- 최신 갱신 기준은 **2026-03-04**입니다.
-- 전체 표본은 **3,747건**입니다.
-- 2026 표본은 **847건**입니다.
+- 최신 데이터 기준일은 **2026-04-15**입니다.
+- 전체 표본은 **4,750건**입니다.
+- 2026 표본은 **1,030건**입니다.
 - 2026 수치는 이후 게시글이 더 들어오면 달라질 수 있습니다.
 
 ### 크레딧
@@ -123,17 +124,19 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 
 ### 레거시 코드
 
+기존 HTML-table 파서 버전은 `html_version/`에 따로 모아 두었습니다. 메인 홈페이지와 기본 데이터 갱신 경로는 JSON 버전입니다.
+
 이전 스크립트와 예전 프로젝트 구조는 `legacy_code/`에 보관되어 있습니다.
 
 ---
 
 ## English
 
-This repository tracks self-reported GradCafe outcomes for political science PhD admissions from 2020 through 2026.
+This repository tracks self-reported GradCafe outcomes for political science PhD admissions from 2016 through 2026.
 
 The point is straightforward: scrape each cycle the same way, clean it with the same rules, and make the results easy to inspect in a Shiny dashboard.
 
-The repository now also includes a **GitHub Pages-ready static React dashboard** in `site/`. That version keeps the shared filters and tabs in the browser, so it can be deployed for free without running a Shiny server.
+The repository now also includes a **GitHub Pages-ready static React dashboard** in `site/`. That version keeps the shared filters and tabs in the browser, so it can be deployed for free without running a Shiny server. Because GradCafe's current survey pages are no longer reliably available as the old HTML table, the scraper and Pages export now use the current JSON-backed survey data path.
 
 Static site: <https://ye-rim-oh.github.io/GradCafe/>
 
@@ -142,21 +145,20 @@ Static site: <https://ye-rim-oh.github.io/GradCafe/>
 #### Refresh the static GitHub Pages snapshot
 
 ```r
+Rscript scripts/R/update_polisci_data.R
+```
+
+That command re-scrapes GradCafe, rebuilds `gradcafe_polisci_2016_2026_analysis.md`, and regenerates the `site/data/gradcafe.json` file read by the existing GitHub Pages homepage. The repository includes a `Deploy GitHub Pages` workflow for this static site.
+
+#### If cleaned data already exists
+
+```r
 Rscript scripts/export_dashboard_data.R
 ```
 
-After that, deploy the contents of `site/` to GitHub Pages. The repository includes a `Deploy GitHub Pages` workflow for this static site.
-
-#### If `scraped_2020_2026_combined.Rdata` already exists
+#### Run the Shiny app
 
 ```r
-Rscript -e "shiny::runApp('app.R')"
-```
-
-#### If you want a full refresh first
-
-```r
-Rscript scrape_all_years.R
 Rscript -e "shiny::runApp('app.R')"
 ```
 
@@ -164,30 +166,32 @@ Rscript -e "shiny::runApp('app.R')"
 
 | Step | Script | Input | Output |
 | ---: | --- | --- | --- |
-| 1 | `scrape_all_years.R` | GradCafe search pages | Per-year `.Rdata` files and `scraped_2020_2026_combined.Rdata` |
-| 2 | `app_functions.R` + `app.R` | `scraped_2020_2026_combined.Rdata` | Local or deployed Shiny dashboard |
-| 3 | `scripts/export_dashboard_data.R` + `site/` | Cleaned `data` object | Static React dashboard for GitHub Pages |
+| 1 | `scripts/R/scrape_gradcafe_polisci.R` | GradCafe survey data | `output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds` |
+| 2 | `scripts/R/analyze_gradcafe_polisci.R` | Cleaned data | `gradcafe_polisci_2016_2026_analysis.md` |
+| 3 | `scripts/export_dashboard_data.R` + `site/` | Cleaned data | `site/data/gradcafe.json` for GitHub Pages |
+| 4 | `app_functions.R` + `app.R` | Same cleaned data | Local or deployed Shiny dashboard |
 
 ### Main files
 
 | File | Description |
 | --- | --- |
-| `scrape_all_years.R` | Scrapes 2020-2026 data with one parser flow |
+| `scripts/R/scrape_gradcafe_polisci.R` | Scrapes 2016-2026 data against the current GradCafe survey structure |
+| `scripts/R/update_polisci_data.R` | Runs scrape, analysis, and Pages data export together |
 | `app_functions.R` | Data loading, cleanup, normalization, and helper functions |
 | `app.R` | Shiny UI and server logic |
 | `scripts/export_dashboard_data.R` | Exports the cleaned dataset to `site/data/gradcafe.json` |
 | `site/` | Static React dashboard deployed to GitHub Pages |
-| `scraped_2020_2026_combined.Rdata` | Combined dataset used by the app |
-| `[sample] PhD Admission Analysis.md` | Sample report generated from the dataset |
+| `html_version/` | Archived HTML-table parser and 2020-2026 Shiny version |
+| `gradcafe_polisci_2016_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
 | `legacy_code/` | Older scripts and the previous project structure |
 
 ### How the scraper works
 
-The scraper queries GradCafe with four broad terms: `political science`, `international relations`, `politics`, and `government`.
+The scraper queries GradCafe survey data with four broad terms: `political science`, `international relations`, `politics`, and `government`, combined with Fall 2016-2026 season filters.
 
 It then applies the same cleanup rules each year.
 
-- It treats GradCafe's three-row structure (main row, badge row, notes row) as a single record.
+- It extracts result rows from the Inertia `data-page` JSON payload embedded in the survey page.
 - It extracts decision labels, dates, GRE, GPA, nationality tags, and notes.
 - It removes duplicates with `(school, decision_text, notes, added_date)`.
 - It keeps only `degree == "PhD"`.
@@ -228,9 +232,9 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 - The source is self-reported GradCafe data, so missingness and reporting bias are unavoidable.
 - Parsing and normalization are rule-based, so some edge cases may still remain.
 - Acceptance rate is defined as `Accepted / (Accepted + Rejected)`.
-- Last refresh: **March 4, 2026**
-- Combined rows: **3,747**
-- 2026 rows: **847**
+- Latest data date: **April 15, 2026**
+- Combined rows: **4,750**
+- 2026 rows: **1,030**
 - The 2026 snapshot will keep moving as new posts appear.
 
 ### Credits
@@ -245,5 +249,7 @@ I also owe a lot to the GradCafe community and the site maintainers. Without the
 Data source: **[The GradCafe](https://www.thegradcafe.com/survey)**
 
 ### Legacy code
+
+The previous HTML-table parser version is now grouped under `html_version/`. The main homepage and default refresh path use the JSON version.
 
 Older scripts and the previous project structure are preserved in `legacy_code/`.

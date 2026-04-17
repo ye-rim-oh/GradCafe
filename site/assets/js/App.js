@@ -41,10 +41,11 @@ export default function App({ payload }) {
       <div className="app-grid">
         <aside className="panel sidebar">
           <div className="brand-block">
-            <p className="eyebrow">GradCafe 2020-2026</p>
+            <p className="eyebrow">GradCafe 2016-2026</p>
             <h1>PhD Admission Results Dashboard</h1>
             <div className="brand-meta">
               <span className="brand-pill">${payload.recordCount.toLocaleString()} rows</span>
+              <a className="brand-link" href="./html-version/">HTML version</a>
             </div>
           </div>
 

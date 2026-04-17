@@ -1,38 +1,12 @@
 # app_functions.R -- Data loading and helper functions for the Shiny Dashboard
-# Uses the current GradCafe survey JSON scraper output when available.
+# Uses scraped_2020_2026_combined.Rdata (unified parser)
 
 library(tidyverse)
 library(lubridate)
 library(plotly)
 
-load_gradcafe_data <- function() {
-  clean_rds <- file.path("output", "polisci_analysis", "gradcafe_polisci_2016_2026_clean.rds")
-  clean_csv <- file.path("output", "polisci_analysis", "gradcafe_polisci_2016_2026_clean.csv")
-
-  if (file.exists(clean_rds)) {
-    return(as.data.frame(readRDS(clean_rds)))
-  }
-
-  if (file.exists(clean_csv)) {
-    return(as.data.frame(readr::read_csv(clean_csv, show_col_types = FALSE)))
-  }
-
-  legacy_rdata <- "scraped_2020_2026_combined.Rdata"
-  if (file.exists(legacy_rdata)) {
-    loaded_names <- load(legacy_rdata)
-    if (!"data" %in% loaded_names) {
-      stop("Legacy Rdata file did not contain an object named data.", call. = FALSE)
-    }
-    return(as.data.frame(data))
-  }
-
-  stop(
-    "No GradCafe data found. Run scripts/R/update_polisci_data.R or scripts/R/scrape_gradcafe_polisci.R first.",
-    call. = FALSE
-  )
-}
-
-df_raw <- load_gradcafe_data()
+load("scraped_2020_2026_combined.Rdata")
+df_raw <- as.data.frame(data)
 
 # --- Data Prep ---
 df_raw$year <- as.integer(df_raw$scrape_year)
@@ -250,18 +224,13 @@ df_raw <- df_raw %>%
     # Force anything inside parentheses to be fully uppercase (e.g. (Cuhk) -> (CUHK))
     institution = str_replace_all(institution, "\\((.*?)\\)", function(x) toupper(x)),
     institution = str_replace_all(institution, "\\b(?i)(Uiuc|Ucla|Mit|Nyu|Suny|Cuny|Psu|Ubc|Lse|Usc|Tamu|Wustl|Umich|Uga|Sais)\\b", function(x) toupper(x)),
-    institution = str_replace_all(institution, "\\(UOFT\\)", "(UofT)"),
-    institution = str_replace_all(institution, "\\(UT AUSTIN\\)", "(UT Austin)"),
-    institution = str_replace_all(institution, "\\(UW-MADISON\\)", "(UW-Madison)"),
-    institution = str_replace_all(institution, "\\(CU BOULDER\\)", "(CU Boulder)"),
-    institution = str_replace_all(institution, "\\(UNSPECIFIED\\)", "(Unspecified)"),
     institution = str_replace_all(institution, "Â|\\s+$", "")
   )
 
 # Rename columns for Shiny compatibility
 # Drop the original scraper columns that conflict, use our recomputed ones
 data <- df_raw %>%
-  select(-any_of(c("decision_year", "decision_month_day"))) %>%
+  select(-decision_year, -decision_month_day) %>%
   rename(
     decision = decision_type,
     decision_year = year,

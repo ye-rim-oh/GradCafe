@@ -196,7 +196,7 @@ ui <- fluidPage(
   titlePanel(
     div(class = "main-title",
         h2("PhD Admission Results Dashboard"),
-        h5("Political Science & Government | GradCafe 2016-2026")
+        h5("Political Science & Government | GradCafe 2020-2026")
     )
   ),
 
