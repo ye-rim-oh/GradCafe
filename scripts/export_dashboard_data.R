@@ -39,24 +39,49 @@ canonical_institution <- function(institution, school) {
   }
 
   replace_hit("The\\s+University\\s+Of\\s+Toront(o)?|University\\s+Of\\s+Toronto|Toront", "University of Toronto (UofT)")
+  replace_hit("Berkeley|Berkekey|Berkely|Berekeley|UCB", "University of California, Berkeley (UCB)")
   replace_hit("University of Texas at Austin|UT Austin|UT AUSTIN", "University of Texas at Austin (UT Austin)")
+  replace_hit("^Texas A$|Texas A\\s*$|Texas A&M|TAMU|Texas A & M", "Texas A&M University (TAMU)")
   replace_hit("Wisconsin-Madison|UW-MADISON", "University of Wisconsin-Madison (UW-Madison)")
+  replace_hit("^Uw Madison$", "University of Wisconsin-Madison (UW-Madison)")
   replace_hit("Colorado Boulder|CU BOULDER", "University of Colorado Boulder (CU Boulder)")
+  replace_hit("Northern Illinois|^NIU$", "Northern Illinois University (NIU)")
+  replace_hit("George Washingon|George Washington", "George Washington University (GWU)")
+  replace_hit("George Mason|^GMU$", "George Mason University (GMU)")
+  replace_hit("Massaa+chusett|Massachussett|Massachusetts Institute of Technology|^MIT$", "Massachusetts Institute of Technology (MIT)")
+  replace_hit("^U Mass|University of Massachusetts$|Massachusetts.*Amherst|UMass", "University of Massachusetts Amherst (UMass)")
+  replace_hit("Louisiana State University and Agricultural|^LSU$|Louisiana State", "Louisiana State University (LSU)")
+  replace_hit("Michigan State|^MSU$", "Michigan State University (MSU)")
+  replace_hit("University of South Florida|^USF$", "University of South Florida (USF)")
+  replace_hit("University of Hawaii", "University of Hawaii at Manoa")
+  replace_hit("University of Texas at Dallas|UT Dallas|^UTD$", "University of Texas at Dallas (UT Dallas)")
+  replace_hit("Georiga", "University of Georgia (UGA)")
+  replace_hit("Delaware|UDEL", "University of Delaware")
+  replace_hit("Gess Mannheim|Mannheim, Gess", "University of Mannheim (GESS)")
+  replace_hit("St\\.? Andrews|University of St Andrews", "University of St Andrews")
+  replace_hit("Université De Montréal|University of Montreal", "Université de Montréal")
+  replace_hit("ีUniversity of Florida|University of Florida|UFL|^UF$", "University of Florida (UF)")
   replace_hit("University of California \\(UNSPECIFIED\\)|University of California \\(Unspecified\\)$", "University of California (Unspecified)")
 
   value <- gsub("\\(UOFT\\)", "(UofT)", value)
   value <- gsub("\\(UT AUSTIN\\)", "(UT Austin)", value)
   value <- gsub("\\(UW-MADISON\\)", "(UW-Madison)", value)
   value <- gsub("\\(CU BOULDER\\)", "(CU Boulder)", value)
+  value <- gsub("\\(UCONN\\)", "(UConn)", value)
+  value <- gsub("\\(UMASS\\)", "(UMass)", value)
+  value <- gsub("\\(UPENN\\)", "(UPenn)", value)
+  value <- gsub("\\(FLETCHER\\)", "(Fletcher)", value)
+  value <- gsub("\\(KORBEL\\)", "(Korbel)", value)
+  value <- gsub("\\(UFL OR UF\\)", "(UF)", value)
   value <- gsub("\\(UNSPECIFIED\\)", "(Unspecified)", value)
   trimws(value)
 }
 
 valid_export_institution <- function(institution) {
   value <- trimws(as.character(institution))
-  !is.na(value) &
+    !is.na(value) &
     value != "" &
-    !grepl("^(All|ALL|Overall|Overall \\(All Schools\\))$", value, ignore.case = TRUE)
+    !grepl("^(All|ALL|Overall|Overall \\(All Schools\\)|Nsf Grfp|Sis|Coomtown University)$", value, ignore.case = TRUE)
 }
 
 json_escape <- function(x) {
