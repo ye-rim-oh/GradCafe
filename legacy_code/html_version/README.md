@@ -18,7 +18,7 @@ The main repository now uses the JSON-backed GradCafe survey scraper in `scripts
 From the repository root:
 
 ```r
-setwd("html_version")
+setwd("legacy_code/html_version")
 shiny::runApp("app.R")
 ```
 

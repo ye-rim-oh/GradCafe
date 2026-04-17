@@ -10,7 +10,7 @@
 
 해마다 같은 방식으로 데이터를 모으고, 같은 규칙으로 정리한 뒤, Shiny 대시보드에서 결과를 바로 확인할 수 있게 했습니다.
 
-저장소 안에는 **GitHub Pages용 정적 React 대시보드**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 필터링과 탭 전환이 가능한 웹 버전을 확인할 수 있습니다. GradCafe 사이트가 기존 HTML 표 대신 현재 survey 데이터를 JSON으로 제공하는 구조에 맞춰, 새 스크래퍼와 Pages 데이터 export도 JSON 기반 cleaned 데이터로 갱신했습니다.
+저장소 안에는 **GitHub Pages용 정적 React 사이트**도 함께 들어 있습니다. Shiny를 서버에 올리지 않아도 `site/` 폴더만으로 브라우저에서 학교 검색, 필터링, 타임라인, 결과표를 확인할 수 있습니다. GradCafe 사이트가 기존 HTML 표 대신 현재 survey 데이터를 JSON으로 제공하는 구조에 맞춰, 새 스크래퍼와 Pages 데이터 export도 JSON 기반 cleaned 데이터로 갱신했습니다.
 
 사이트 주소: <https://ye-rim-oh.github.io/GradCafe/>
 
@@ -38,8 +38,8 @@ Shiny 앱도 같은 cleaned 데이터를 기준으로 실행됩니다.
 | `app_functions.R` | 데이터 로딩, 정제, 정규화, 보조 함수 |
 | `app.R` | Shiny UI와 서버 로직 |
 | `scripts/export_dashboard_data.R` | 정제된 데이터를 `site/data/gradcafe.json`으로 내보냄 |
-| `site/` | GitHub Pages에 배포되는 정적 React 대시보드 |
-| `html_version/` | 기존 HTML-table 파서와 2020-2026 Shiny 버전 보관본 |
+| `site/` | GitHub Pages에 배포되는 정적 React 사이트 |
+| `legacy_code/html_version/` | 기존 HTML-table 파서와 2020-2026 Shiny 버전 보관본 |
 | `gradcafe_polisci_2016_2026_analysis.md` | 현재 cleaned 데이터 기반 분석 리포트 |
 | `legacy_code/` | 예전 스크립트와 이전 구조 보관본 |
 
@@ -65,12 +65,11 @@ Shiny 앱도 같은 cleaned 데이터를 기준으로 실행됩니다.
 - 연도 비교가 가능하도록 타임라인 날짜를 표준화합니다.
 - 노이즈 행을 걸러내고 학교명을 규칙 기반으로 통합합니다.
 
-### 대시보드 탭
+### 웹사이트 구성
 
-- `Timeline`: 날짜축 위에서 결과 시점을 확인하는 탭
-- `Trends`: 연도별 합격률과 국적 분포를 보는 탭
-- `Subfields`: 서브필드별 표본 수와 합격률을 보는 탭
-- `Data`: 검색 가능한 원자료 테이블과 상세 보기
+- `Decision timeline`: 날짜축 위에서 결과 시점을 확인하는 메인 섹션
+- `All results`: 검색 가능한 원자료 테이블
+- `Additional analysis`: 연도별 합격률, 국적 분포, 서브필드별 표본 수와 합격률
 
 ### 의존 패키지
 
@@ -108,7 +107,7 @@ install.packages(c("rvest", "httr", "dplyr", "tidyr", "lubridate", "stringr",
 
 ### 레거시 코드
 
-기존 HTML-table 파서 버전은 `html_version/`에 따로 모아 두었습니다. 메인 홈페이지와 기본 데이터 갱신 경로는 JSON 버전입니다.
+기존 HTML-table 파서 버전은 `legacy_code/html_version/`에 따로 모아 두었습니다. 메인 홈페이지와 기본 데이터 갱신 경로는 JSON 버전입니다.
 
 이전 스크립트와 예전 프로젝트 구조는 `legacy_code/`에 보관되어 있습니다.
 
@@ -149,7 +148,7 @@ The Shiny app uses the same cleaned data.
 | `app.R` | Shiny UI and server logic |
 | `scripts/export_dashboard_data.R` | Exports the cleaned dataset to `site/data/gradcafe.json` |
 | `site/` | Static React dashboard deployed to GitHub Pages |
-| `html_version/` | Archived HTML-table parser and 2020-2026 Shiny version |
+| `legacy_code/html_version/` | Archived HTML-table parser and 2020-2026 Shiny version |
 | `gradcafe_polisci_2016_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
 | `legacy_code/` | Older scripts and the previous project structure |
 
@@ -175,12 +174,11 @@ Before plotting, the app makes one more cleanup pass.
 - It standardizes timeline dates for cross-year comparison.
 - It drops obvious junk rows and normalizes institution names with a rule map.
 
-### Dashboard tabs
+### Site sections
 
-- `Timeline`: decision timing on a date axis
-- `Trends`: yearly acceptance rates and nationality splits
-- `Subfields`: subfield volume and subfield-specific acceptance rates
-- `Data`: searchable raw table with a detail view
+- `Decision timeline`: decision timing on a date axis
+- `All results`: searchable raw table
+- `Additional analysis`: yearly acceptance rates, nationality splits, subfield volume, and subfield-specific acceptance rates
 
 ### Dependencies
 
@@ -218,7 +216,7 @@ Data source: **[The GradCafe](https://www.thegradcafe.com/survey)**
 
 ### Legacy code
 
-The previous HTML-table parser version is now grouped under `html_version/`. The main homepage and default refresh path use the JSON version.
+The previous HTML-table parser version is now grouped under `legacy_code/html_version/`. The main homepage and default refresh path use the JSON version.
 
 Older scripts and the previous project structure are preserved in `legacy_code/`.
 
