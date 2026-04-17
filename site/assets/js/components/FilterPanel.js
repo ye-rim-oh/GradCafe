@@ -21,6 +21,7 @@ export function FilterPanel({
           value=${filters.institution}
           onChange=${(event) => onInstitutionChange(event.target.value)}
         >
+          <option value="">No school filter</option>
           ${institutions.map(
             (institution) => html`
               <option key=${institution} value=${institution}>${institution}</option>

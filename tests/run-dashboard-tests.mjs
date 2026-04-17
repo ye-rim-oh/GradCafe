@@ -20,7 +20,8 @@ assert.equal(years[0], 2026);
 assert.equal(years[years.length - 1], 2016);
 
 const institutions = getInstitutions(payload.records);
-assert.equal(institutions[0], OVERALL_LABEL);
+assert.equal(OVERALL_LABEL, "");
+assert.equal(institutions.filter((institution) => /^(all|overall|overall \(all schools\))$/i.test(institution)).length, 0);
 assert.ok(institutions.includes("University of Toronto (UofT)"));
 assert.equal(
   payload.records.filter((record) => /the university of toront/i.test(record.institution)).length,

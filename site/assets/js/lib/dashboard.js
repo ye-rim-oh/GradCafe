@@ -1,4 +1,4 @@
-export const OVERALL_LABEL = "Overall (All Schools)";
+export const OVERALL_LABEL = "";
 export const DEFAULT_DECISIONS = ["Accepted", "Rejected", "Interview", "Wait listed", "Other"];
 export const DECISION_ORDER = ["Accepted", "Interview", "Wait listed", "Rejected", "Other"];
 export const DECISION_COLORS = {
@@ -301,10 +301,8 @@ export const buildTableRows = (records, showSchool) =>
       showSchool
     }));
 
-export const getInstitutions = (records) => [
-  OVERALL_LABEL,
-  ...new Set(records.map((record) => record.institution).sort((left, right) => left.localeCompare(right)))
-];
+export const getInstitutions = (records) =>
+  [...new Set(records.map((record) => record.institution).sort((left, right) => left.localeCompare(right)))];
 
 export const getYears = (records) =>
   [...new Set(records.map((record) => record.decisionYear))].sort((left, right) => right - left);

@@ -86,7 +86,7 @@ export default function App({ payload }) {
           </section>
 
           <div className="stats-inline">
-            <span className="stats-pill">${showSchool ? "All schools" : filters.institution}</span>
+            <span className="stats-pill">${showSchool ? "No school filter" : filters.institution}</span>
             <span className="stats-pill">${searchedRecords.length} filtered rows</span>
             <span className="stats-pill">${timelinePoints.length} timeline dots</span>
             <span className="stats-pill">${filters.years.length} years selected</span>
