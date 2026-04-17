@@ -42,12 +42,8 @@ export default function App({ payload }) {
       <div className="app-grid">
         <aside className="panel sidebar">
           <div className="brand-block">
-            <p className="eyebrow">GradCafe 2016-2026</p>
-            <h1>PhD Admission Results Dashboard</h1>
-            <div className="brand-meta">
-              <span className="brand-pill">${payload.recordCount.toLocaleString()} rows</span>
-              <a className="brand-link" href="./html-version/">HTML version</a>
-            </div>
+            <p className="eyebrow">Search index</p>
+            <h2>Find a school</h2>
           </div>
 
           <${FilterPanel}
@@ -84,8 +80,7 @@ export default function App({ payload }) {
         <main className="panel main-panel">
           <section className="hero-header">
             <div>
-              <p className="eyebrow">Timeline-first view</p>
-              <h2 className="hero-title">Decision Timeline</h2>
+              <h1 className="hero-title">Political Science PhD Results (2016-2026)</h1>
             </div>
           </section>
 

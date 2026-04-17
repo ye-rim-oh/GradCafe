@@ -9,6 +9,8 @@ import {
 
 const payload = JSON.parse(readFileSync("site/data/gradcafe.json", "utf8"));
 const dataViewSource = readFileSync("site/assets/js/components/views/DataView.js", "utf8");
+const appSource = readFileSync("site/assets/js/App.js", "utf8");
+const indexSource = readFileSync("site/index.html", "utf8");
 
 assert.equal(payload.recordCount, payload.records.length);
 assert.equal(payload.recordCount, 4746);
@@ -43,5 +45,11 @@ assert.equal(
   0
 );
 assert.equal(dataViewSource.includes("slice(0, 48)"), false);
+assert.equal(appSource.includes("Political Science PhD Results (2016-2026)"), true);
+assert.equal(appSource.includes("HTML version"), false);
+assert.equal(appSource.includes("toLocaleString()"), false);
+assert.equal(indexSource.includes("PhD Admission Results Dashboard"), false);
+assert.equal(indexSource.includes("JSON snapshot"), false);
+assert.equal(indexSource.includes("Loading Political Science"), false);
 
 console.log("dashboard data tests passed");

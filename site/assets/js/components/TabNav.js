@@ -9,7 +9,7 @@ const tabs = [
 
 export function TabNav({ activeTab, onTabChange }) {
   return html`
-    <nav className="tab-strip" aria-label="Dashboard tabs">
+    <nav className="tab-strip" aria-label="Results views">
       ${tabs.map(
         (tab) => html`
           <button

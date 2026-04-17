@@ -2,15 +2,15 @@ export const OVERALL_LABEL = "";
 export const DEFAULT_DECISIONS = ["Accepted", "Rejected", "Interview", "Wait listed", "Other"];
 export const DECISION_ORDER = ["Accepted", "Interview", "Wait listed", "Rejected", "Other"];
 export const DECISION_COLORS = {
-  Accepted: "#2563eb",
-  Interview: "#16a34a",
-  "Wait listed": "#ea580c",
-  Rejected: "#dc2626",
-  Other: "#64748b"
+  Accepted: "#234d73",
+  Interview: "#4f7b63",
+  "Wait listed": "#9a6b2f",
+  Rejected: "#a2473d",
+  Other: "#7b8287"
 };
 export const STATUS_COLORS = {
-  American: "#2563eb",
-  International: "#dc2626"
+  American: "#234d73",
+  International: "#a2473d"
 };
 export const SUBFIELD_COLORS = {
   CP: "#6482A6",

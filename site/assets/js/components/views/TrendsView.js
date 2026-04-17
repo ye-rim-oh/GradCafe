@@ -42,9 +42,9 @@ const lineSvg = (rows, series, colors) => {
               x2=${WIDTH - MARGIN.right}
               y1=${meta.yScale(tick)}
               y2=${meta.yScale(tick)}
-              stroke="rgba(255,255,255,0.12)"
+              stroke="rgba(32,32,29,0.12)"
             />
-            <text x=${MARGIN.left - 10} y=${meta.yScale(tick) + 4} text-anchor="end" fill="#c1c8d2" font-size="12">
+            <text x=${MARGIN.left - 10} y=${meta.yScale(tick) + 4} text-anchor="end" fill="#6e6b63" font-size="12">
               ${tick}
             </text>
           </g>
@@ -57,7 +57,7 @@ const lineSvg = (rows, series, colors) => {
             x=${meta.xScale(row.decisionYear)}
             y=${HEIGHT - 12}
             text-anchor="middle"
-            fill="#c1c8d2"
+            fill="#6e6b63"
             font-size="12"
           >
             ${row.decisionYear}
@@ -108,7 +108,7 @@ export function TrendsView({ records }) {
       ${yearlyRates.length
         ? html`
             <div className="chart-shell">
-              ${lineSvg(yearlyRates, [{ key: "rate", label: "Acceptance rate" }], { rate: "#c7d2ff" })}
+              ${lineSvg(yearlyRates, [{ key: "rate", label: "Acceptance rate" }], { rate: "#234d73" })}
             </div>
           `
         : html`<div className="empty-state">No accepted or rejected outcomes match the active filters.</div>`}
@@ -129,8 +129,8 @@ export function TrendsView({ records }) {
               )}
             </div>
             <div className="stats-inline">
-              <span className="stats-pill">Blue: American</span>
-              <span className="stats-pill">Red: International</span>
+              <span className="stats-pill">American</span>
+              <span className="stats-pill">International</span>
             </div>
           `
         : html`<div className="empty-state">No nationality split is available for the active filters.</div>`}

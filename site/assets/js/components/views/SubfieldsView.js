@@ -45,9 +45,9 @@ const stackedBarSvg = (rows, keys) => {
               x2=${WIDTH - MARGIN.right}
               y1=${yScale(value)}
               y2=${yScale(value)}
-              stroke="rgba(255,255,255,0.12)"
+              stroke="rgba(32,32,29,0.12)"
             />
-            <text x=${MARGIN.left - 10} y=${yScale(value) + 4} text-anchor="end" fill="#c1c8d2" font-size="12">
+            <text x=${MARGIN.left - 10} y=${yScale(value) + 4} text-anchor="end" fill="#6e6b63" font-size="12">
               ${value}
             </text>
           </g>
@@ -72,7 +72,7 @@ const stackedBarSvg = (rows, keys) => {
                   `
                 : null;
             })}
-            <text x=${x + barWidth / 2} y=${HEIGHT - 12} text-anchor="middle" fill="#c1c8d2" font-size="12">
+            <text x=${x + barWidth / 2} y=${HEIGHT - 12} text-anchor="middle" fill="#6e6b63" font-size="12">
               ${row.decisionYear}
             </text>
           </g>
@@ -100,9 +100,9 @@ const lineSvg = (rows, keys) => {
               x2=${WIDTH - MARGIN.right}
               y1=${yScale(tick)}
               y2=${yScale(tick)}
-              stroke="rgba(255,255,255,0.12)"
+              stroke="rgba(32,32,29,0.12)"
             />
-            <text x=${MARGIN.left - 10} y=${yScale(tick) + 4} text-anchor="end" fill="#c1c8d2" font-size="12">
+            <text x=${MARGIN.left - 10} y=${yScale(tick) + 4} text-anchor="end" fill="#6e6b63" font-size="12">
               ${tick}
             </text>
           </g>
@@ -115,7 +115,7 @@ const lineSvg = (rows, keys) => {
             x=${xScale(row.decisionYear)}
             y=${HEIGHT - 12}
             text-anchor="middle"
-            fill="#c1c8d2"
+            fill="#6e6b63"
             font-size="12"
           >
             ${row.decisionYear}

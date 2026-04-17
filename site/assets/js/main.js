@@ -16,8 +16,8 @@ const renderError = (message) => {
   mount(html`
     <div className="error-shell">
       <div>
-        <p className="eyebrow">GradCafe Dashboard</p>
-        <h1>Could not load the snapshot.</h1>
+        <p className="eyebrow">GradCafe results</p>
+        <h1>Could not load the results.</h1>
         <p>${message}</p>
       </div>
     </div>

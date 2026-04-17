@@ -48,10 +48,10 @@ export function TimelineView({ records, points: providedPoints }) {
                   x2=${xScale(value)}
                   y1=${MARGIN.top - 8}
                   y2=${HEIGHT - MARGIN.bottom}
-                  stroke="rgba(255,255,255,0.16)"
+                  stroke="rgba(32,32,29,0.14)"
                   strokeDasharray="4 6"
                 />
-                <text x=${xScale(value)} y=${HEIGHT - 16} text-anchor="middle" fill="#c1c8d2" font-size="14">
+                <text x=${xScale(value)} y=${HEIGHT - 16} text-anchor="middle" fill="#6e6b63" font-size="14">
                   ${label}
                 </text>
               </g>
@@ -65,9 +65,9 @@ export function TimelineView({ records, points: providedPoints }) {
                   x2=${WIDTH - MARGIN.right}
                   y1=${yScale(index)}
                   y2=${yScale(index)}
-                  stroke="rgba(255,255,255,0.1)"
+                  stroke="rgba(32,32,29,0.1)"
                 />
-                <text x=${MARGIN.left - 14} y=${yScale(index) + 5} text-anchor="end" fill="#f3f5f7" font-size="14">
+                <text x=${MARGIN.left - 14} y=${yScale(index) + 5} text-anchor="end" fill="#20201d" font-size="14">
                   ${decision}
                 </text>
               </g>

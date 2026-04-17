@@ -14,14 +14,27 @@ const decisionClass = (decision) => {
 
 export function DataView({ records, showSchool, query, onQueryChange }) {
   const [page, setPage] = useState(0);
+  const [expandedNotes, setExpandedNotes] = useState(() => new Set());
 
   const rows = buildTableRows(records, showSchool);
   const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
   const currentPage = Math.min(page, totalPages - 1);
   const pageRows = rows.slice(currentPage * pageSize, currentPage * pageSize + pageSize);
+  const toggleNote = (id) => {
+    setExpandedNotes((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     setPage(0);
+    setExpandedNotes(new Set());
   }, [query, records]);
 
   return html`
@@ -56,19 +69,37 @@ export function DataView({ records, showSchool, query, onQueryChange }) {
           </thead>
           <tbody>
             ${pageRows.map(
-              (row) => html`
-                <tr key=${row.id}>
-                  ${showSchool ? html`<td>${row.school}</td>` : null}
-                  <td><span className=${decisionClass(row.decision)}>${row.decision}</span></td>
-                  <td>${row.year}</td>
-                  <td>${row.date}</td>
-                  <td>${row.status}</td>
-                  <td>${row.subfield}</td>
-                  <td>${row.gpa}</td>
-                  <td>${row.gre}</td>
-                  <td className="notes-cell">${row.notes}</td>
-                </tr>
-              `
+              (row) => {
+                const hasExpandableNote = row.notes !== "-" && row.notes.length > 120;
+                const isExpanded = expandedNotes.has(row.id);
+
+                return html`
+                  <tr key=${row.id}>
+                    ${showSchool ? html`<td>${row.school}</td>` : null}
+                    <td><span className=${decisionClass(row.decision)}>${row.decision}</span></td>
+                    <td>${row.year}</td>
+                    <td>${row.date}</td>
+                    <td>${row.status}</td>
+                    <td>${row.subfield}</td>
+                    <td>${row.gpa}</td>
+                    <td>${row.gre}</td>
+                    <td className=${`notes-cell ${isExpanded ? "notes-expanded" : ""}`}>
+                      <div className="notes-text">${row.notes}</div>
+                      ${hasExpandableNote
+                        ? html`
+                            <button
+                              className="notes-toggle"
+                              type="button"
+                              onClick=${() => toggleNote(row.id)}
+                            >
+                              ${isExpanded ? "Show less" : "Show more"}
+                            </button>
+                          `
+                        : null}
+                    </td>
+                  </tr>
+                `;
+              }
             )}
           </tbody>
         </table>
