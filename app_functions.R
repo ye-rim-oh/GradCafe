@@ -108,188 +108,30 @@ df_raw <- df_raw %>%
   filter(is_target_major(program))
 
 # --- Canonical Institution Normalization ---
-# Single source of truth:
-# - scraper keeps raw school text
-# - app layer applies one shared normalization map for analysis + dashboard
-# This avoids split logic and year-to-year drift in institution labeling.
-df_raw <- df_raw %>%
-  filter(!grepl("Piss|Trump|McDonalds|Ravinder|Cocksucker|Cunnilingus", school, ignore.case = TRUE)) %>%
-  # Remove truncated / garbled school names that cannot be reliably identified
-  filter(!grepl("^Corne$|^Penn s$|^Penns$|^Stony$|^University of Chi$", school, ignore.case = TRUE)) %>%
-  filter(!grepl("^University of Connec$|^University of Oreg$|^University Of Wiscon$", school, ignore.case = TRUE)) %>%
-  filter(!grepl("Universitywestern$|UniversityGSB$|Ann Arbor\\)gan|Madisonnsin$", school)) %>%
-  filter(!grepl("^Florida International University\u00c2$|^Floirda International", school)) %>%
-  filter(!grepl("^University of mennesota$", school, ignore.case = TRUE)) %>%
-  filter(!grepl("^Brown Rice University$", school)) %>%
-  filter(!grepl("^Iqtisad Uni$", school)) %>%
-  # Remove department-level entries (not actual school names)
-  filter(!grepl("^Graduate School Of Arts|^Henry Jackson School|^Said Business School$|^Krieger School|^Kennedy School Of|^SAIS$", school)) %>%
-  mutate(
-    # Build fallback institution labels directly from raw school text.
-    # If a row does not match any explicit rule below, this cleaned fallback is used.
-    institution = str_to_title(school),
-    institution = str_replace_all(institution, "(?i)\\b of \\b", " of "),
-    institution = str_replace_all(institution, "\\b(At|In|And)\\b", function(x) tolower(x)),
-    school = str_replace_all(school, "(?i)\\b of \\b", " of ")
-  ) %>%
-  mutate(
-    institution = case_when(
-      grepl("Santa Barbara|UCSB", school, ignore.case = TRUE) ~ "University of California, Santa Barbara (UCSB)",
-      grepl("Irvine|UCI", school, ignore.case = TRUE) ~ "University of California, Irvine (UCI)",
-      grepl("Santa Cruz|UCSC", school, ignore.case = TRUE) ~ "University of California, Santa Cruz (UCSC)",
-      grepl("Riverside|UC RIVERSIDE|UCR", school, ignore.case = TRUE) ~ "University of California, Riverside (UCR)",
-      grepl("Merced|UCM", school, ignore.case = TRUE) ~ "University of California, Merced (UCM)",
-      grepl("Davis|UCD", school, ignore.case = TRUE) ~ "University of California, Davis (UCD)",
-      grepl("San Diego|UCSD", school, ignore.case = TRUE) ~ "University of California, San Diego (UCSD)",
-      grepl("Los Angeles|UCLA", school, ignore.case = TRUE) ~ "University of California, Los Angeles (UCLA)",
-      grepl("Berkeley|Berkekey|Berkely|Berekeley|UCB", school, ignore.case = TRUE) ~ "University of California, Berkeley (UCB)",
-      grepl("University of California$", school, ignore.case = TRUE) ~ "University of California (Unspecified)",
-      
-      grepl("^Colorado.*Boulder|^University of Colorado Boulder", school, ignore.case = TRUE) ~ "University of Colorado Boulder (CU Boulder)",
-      grepl("Florida International|^Floirda International", school, ignore.case = TRUE) ~ "Florida International University (FIU)",
-      grepl("Florida Atlantic", school, ignore.case = TRUE) ~ "Florida Atlantic University (FAU)",
-      grepl("Florida State|FSU", school, ignore.case = TRUE) ~ "Florida State University (FSU)",
-      grepl("Northern Illinois|^NIU$", school, ignore.case = TRUE) ~ "Northern Illinois University (NIU)",
-      grepl("George Washingon|George Washington", school, ignore.case = TRUE) ~ "George Washington University (GWU)",
-      grepl("George Mason|^GMU$", school, ignore.case = TRUE) ~ "George Mason University (GMU)",
-      grepl("Colorado State", school, ignore.case = TRUE) ~ "Colorado State University",
-      grepl("Louisiana State University and Agricultural|^LSU$|Louisiana State", school, ignore.case = TRUE) ~ "Louisiana State University (LSU)",
-      grepl("Michigan State|^MSU$", school, ignore.case = TRUE) ~ "Michigan State University (MSU)",
-      grepl("University of Pittsburgh|^Pitt$", school, ignore.case = TRUE) ~ "University of Pittsburgh",
-      grepl("University of Houston", school, ignore.case = TRUE) ~ "University of Houston",
-      grepl("University of Iowa", school, ignore.case = TRUE) ~ "University of Iowa",
-      grepl("University of Kansas", school, ignore.case = TRUE) ~ "University of Kansas",
-      grepl("University of Missouri", school, ignore.case = TRUE) ~ "University of Missouri",
-      grepl("University of Cincinnati", school, ignore.case = TRUE) ~ "University of Cincinnati",
-      grepl("University of South Florida|^USF$", school, ignore.case = TRUE) ~ "University of South Florida (USF)",
-      grepl("University of Hawaii", school, ignore.case = TRUE) ~ "University of Hawaii at Manoa",
-      grepl("University of Ottawa", school, ignore.case = TRUE) ~ "University of Ottawa",
-      grepl("Western Ontario", school, ignore.case = TRUE) ~ "University of Western Ontario",
-      grepl("University of Texas at Dallas|UT Dallas|^UTD$", school, ignore.case = TRUE) ~ "University of Texas at Dallas (UT Dallas)",
-      grepl("Illinois.*Urbana|Illinois UIUC|UIUC|^University of Illinois$", school, ignore.case = TRUE) ~ "University of Illinois Urbana-Champaign (UIUC)",
-      grepl("Illinois.*Chicago|UIC", school, ignore.case = TRUE) ~ "University of Illinois Chicago (UIC)",
-      grepl("^Texas A$|Texas A&M|TAMU|Texas A & M", school, ignore.case = TRUE) ~ "Texas A&M University (TAMU)",
-      grepl("Texas.*Austin|UT Austin|^University of Texas$", school, ignore.case = TRUE) ~ "University of Texas at Austin (UT Austin)",
-      grepl("Western Washington", school, ignore.case = TRUE) ~ "Western Washington University",
-      grepl("Washington University.*St|WUSTL|WashU|^Washington University$", school, ignore.case = TRUE) ~ "Washington University in St. Louis",
-      grepl("^University of Washington|UW Seattle", school, ignore.case = TRUE) ~ "University of Washington (UW)",
-      
-      grepl("Southern California|USC", school, ignore.case = TRUE) ~ "University of Southern California (USC)",
-      grepl("Max Plank|Max Planck|IMPRS", school, ignore.case = TRUE) ~ "International Max Planck Research School (IMPRS)",
-      grepl("Pennsylvania.*State|Penn State|PSU|Penns$|Penn s", school, ignore.case = TRUE) ~ "Pennsylvania State University (PSU)",
-      grepl("Pennsylvania|UPenn|U Penn", school, ignore.case = TRUE) ~ "University of Pennsylvania (UPenn)",
-      grepl("Maryland.*College Park|[^a-z]UMD|^University of Maryland$|^University of maryland", school, ignore.case = TRUE) ~ "University of Maryland, College Park (UMD)",
-      grepl("North Carolina.*Chapel|^UNC[- ]|[^a-z]UNC[^a-z]|^UNC$|^University of North Carolina$", school, ignore.case = TRUE) ~ "University of North Carolina at Chapel Hill (UNC)",
-      grepl("City University of New York|CUNY|Graduate Center", school, ignore.case = TRUE) ~ "City University of New York (CUNY)",
-      grepl("British Columbia|UBC", school, ignore.case = TRUE) ~ "University of British Columbia (UBC)",
-      grepl("London School of Economics|LSE", school, ignore.case = TRUE) ~ "London School of Economics (LSE)",
-      grepl("Bocconi", school, ignore.case = TRUE) ~ "Bocconi University",
-      grepl("Binghamton", school, ignore.case = TRUE) ~ "Binghamton University (SUNY)",
-      grepl("Stony|Stony Brook", school, ignore.case = TRUE) ~ "Stony Brook University (SUNY)",
-      grepl("Albany", school, ignore.case = TRUE) ~ "University at Albany (SUNY)",
-      grepl("Buffalo", school, ignore.case = TRUE) ~ "University at Buffalo (SUNY)",
-      grepl("Columbia.*Teachers|Teachers College", school, ignore.case = TRUE) ~ "Teachers College, Columbia University",
-      
-      # Badly chopped names and sole words
-      grepl("University of Connec", school, ignore.case = TRUE) ~ "University of Connecticut (UConn)",
-      grepl("University of Oreg", school, ignore.case = TRUE) ~ "University of Oregon",
-      grepl("Wisconsin", school, ignore.case = TRUE) ~ "University of Wisconsin-Madison (UW-Madison)",
-      grepl("Cornell", school, ignore.case = TRUE) ~ "Cornell University",
-      grepl("UChicago|Chicago", school, ignore.case = TRUE) ~ "University of Chicago (UChicago)",
-      grepl("Virginia", school, ignore.case = TRUE) ~ "University of Virginia (UVA)",
-      grepl("Minnesota|mennesota", school, ignore.case = TRUE) ~ "University of Minnesota",
-      grepl("Brown Rice", school, ignore.case = TRUE) ~ "Brown University",
-      grepl("Arizona State", school, ignore.case = TRUE) ~ "Arizona State University (ASU)",
-      grepl("Arizona", school, ignore.case = TRUE) ~ "University of Arizona (UA)",
-      grepl("Indiana", school, ignore.case = TRUE) ~ "Indiana University Bloomington (IU)",
-      grepl("Alabama", school, ignore.case = TRUE) ~ "University of Alabama (UA)",
-      grepl("Iqtisad", school, ignore.case = TRUE) ~ "Iqtisad University",
-      grepl("Purdue", school, ignore.case = TRUE) ~ "Purdue University",
-      grepl("Hillsdale", school, ignore.case = TRUE) ~ "Hillsdale College",
-      grepl("Denver.*Korbel|University of Denver", school, ignore.case = TRUE) ~ "University of Denver (Korbel)",
-      
-      # Proper full names for Ivies and Majors
-      grepl("Yale", school, ignore.case = TRUE) ~ "Yale University",
-      grepl("Harvard|Kennedy School", school, ignore.case = TRUE) ~ "Harvard University",
-      grepl("Stanford", school, ignore.case = TRUE) ~ "Stanford University",
-      grepl("Princeton", school, ignore.case = TRUE) ~ "Princeton University",
-      grepl("Columbia", school, ignore.case = TRUE) ~ "Columbia University",
-      grepl("Brown", school, ignore.case = TRUE) ~ "Brown University",
-      grepl("Dartmouth", school, ignore.case = TRUE) ~ "Dartmouth College",
-      grepl("Massachusetts Institute of Technology|^MIT$|Massaa+chusett|Massachussett", school, ignore.case = TRUE) ~ "Massachusetts Institute of Technology (MIT)",
-      grepl("New York University|NYU|Steinhardt", school, ignore.case = TRUE) ~ "New York University (NYU)",
-      grepl("Northwestern", school, ignore.case = TRUE) ~ "Northwestern University (NU)",
-      grepl("Duke", school, ignore.case = TRUE) ~ "Duke University",
-      grepl("Johns Hopkins|SAIS|Bloomberg|Krieger", school, ignore.case = TRUE) ~ "Johns Hopkins University (JHU)",
-      grepl("Michigan", school, ignore.case = TRUE) ~ "University of Michigan (UMich)",
-      grepl("Emory", school, ignore.case = TRUE) ~ "Emory University",
-      grepl("Toronto", school, ignore.case = TRUE) ~ "University of Toronto (UofT)",
-      grepl("Pompeu Fabra|UPF", school, ignore.case = TRUE) ~ "Pompeu Fabra University (UPF)",
-      grepl("Syracuse|Maxwell", school, ignore.case = TRUE) ~ "Syracuse University",
-      grepl("Georgetown", school, ignore.case = TRUE) ~ "Georgetown University",
-      grepl("George Washington", school, ignore.case = TRUE) ~ "George Washington University (GWU)",
-      grepl("Georgia State", school, ignore.case = TRUE) ~ "Georgia State University",
-      grepl("Georgia.*Athens|[^a-z]UGA[^a-z]|^UGA$|^University of Georgia$|Georiga", school, ignore.case = TRUE) ~ "University of Georgia (UGA)",
-      grepl("Rutgers", school, ignore.case = TRUE) ~ "Rutgers University",
-      grepl("^American U|American University", school, ignore.case = TRUE) ~ "American University (AU)",
-      grepl("McGill", school, ignore.case = TRUE) ~ "McGill University",
-      grepl("McMaster", school, ignore.case = TRUE) ~ "McMaster University",
-      grepl("Queen.*Canada|Queens University", school, ignore.case = TRUE) ~ "Queen's University",
-      grepl("^York University", school, ignore.case = TRUE) ~ "York University",
-      grepl("European University Institute|EUI", school, ignore.case = TRUE) ~ "European University Institute (EUI)",
-      grepl("Gess Mannheim|Mannheim, Gess", school, ignore.case = TRUE) ~ "University of Mannheim (GESS)",
-      grepl("Cambridge", school, ignore.case = TRUE) ~ "University of Cambridge",
-      grepl("Oxford", school, ignore.case = TRUE) ~ "University of Oxford",
-      grepl("St\\.? Andrews|University of St Andrews", school, ignore.case = TRUE) ~ "University of St Andrews",
-      grepl("Fletcher School|^Tufts", school, ignore.case = TRUE) ~ "Tufts University (Fletcher)",
-      grepl("Texas Tech", school, ignore.case = TRUE) ~ "Texas Tech University",
-      grepl("Washington State", school, ignore.case = TRUE) ~ "Washington State University (WSU)",
-      grepl("New School", school, ignore.case = TRUE) ~ "The New School",
-      grepl("Central European University", school, ignore.case = TRUE) ~ "Central European University (CEU)",
-      grepl("Richard Gilder|AMNH", school, ignore.case = TRUE) ~ "Richard Gilder Graduate School (AMNH)",
-      grepl("Rice", school, ignore.case = TRUE) ~ "Rice University",
-      grepl("Rochester", school, ignore.case = TRUE) ~ "University of Rochester",
-      grepl("Ohio State|^OSU|Ohio State University - Columbus", school, ignore.case = TRUE) ~ "Ohio State University (OSU)",
-      grepl("Ohio University", school, ignore.case = TRUE) ~ "Ohio University",
-      grepl("EMBL", school, ignore.case = TRUE) ~ "European Molecular Biology Laboratory (EMBL)",
-      grepl("ETH Zurich", school, ignore.case = TRUE) ~ "ETH Zurich",
-      grepl("Geneva Graduate Institute", school, ignore.case = TRUE) ~ "Geneva Graduate Institute",
-      grepl("Vanderbilt", school, ignore.case = TRUE) ~ "Vanderbilt University",
-      grepl("Nebraska", school, ignore.case = TRUE) ~ "University of Nebraska-Lincoln",
-      grepl("Delaware|UDEL", school, ignore.case = TRUE) ~ "University of Delaware",
-      grepl("Tulane", school, ignore.case = TRUE) ~ "Tulane University",
-      grepl("Tennessee", school, ignore.case = TRUE) ~ "University of Tennessee (UTK)",
-      grepl("South Carolina", school, ignore.case = TRUE) ~ "University of South Carolina (USC)",
-      grepl("^U Mass|University of Massachusetts$|Massachusetts.*Amherst|UMass", school, ignore.case = TRUE) ~ "University of Massachusetts Amherst (UMass)",
-      grepl("Notre Dame", school, ignore.case = TRUE) ~ "University of Notre Dame",
-      grepl("Université De Montréal|University of Montreal", school, ignore.case = TRUE) ~ "Université de Montréal",
-      grepl("ีUniversity of Florida|University of Florida|UFL|^UF$", school, ignore.case = TRUE) ~ "University of Florida (UF)",
-      
-      TRUE ~ institution
-    )
-  ) %>%
-  mutate(
-    # Force anything inside parentheses to be fully uppercase (e.g. (Cuhk) -> (CUHK))
-    institution = str_replace_all(institution, "\\((.*?)\\)", function(x) toupper(x)),
-    institution = str_replace_all(institution, "\\b(?i)(Uiuc|Ucla|Mit|Nyu|Suny|Cuny|Psu|Ubc|Lse|Usc|Tamu|Wustl|Umich|Uga|Sais)\\b", function(x) toupper(x)),
-    institution = str_replace_all(institution, "\\(UOFT\\)", "(UofT)"),
-    institution = str_replace_all(institution, "\\(UT AUSTIN\\)", "(UT Austin)"),
-    institution = str_replace_all(institution, "\\(UW-MADISON\\)", "(UW-Madison)"),
-    institution = str_replace_all(institution, "\\(CU BOULDER\\)", "(CU Boulder)"),
-    institution = str_replace_all(institution, "\\(UCONN\\)", "(UConn)"),
-    institution = str_replace_all(institution, "\\(UMASS\\)", "(UMass)"),
-    institution = str_replace_all(institution, "\\(UPENN\\)", "(UPenn)"),
-    institution = str_replace_all(institution, "\\(FLETCHER\\)", "(Fletcher)"),
-    institution = str_replace_all(institution, "\\(KORBEL\\)", "(Korbel)"),
-    institution = str_replace_all(institution, "\\(UFL OR UF\\)", "(UF)"),
-    institution = str_replace_all(institution, "\\(UNSPECIFIED\\)", "(Unspecified)"),
-    institution = str_replace_all(institution, "Â|\\s+$", "")
-  )
+# Keep institution cleanup in one shared helper used by scraper, export, and app code.
+source(file.path("scripts", "R", "institution_normalization.R"), encoding = "UTF-8")
 
+if (!"institution_raw" %in% names(df_raw)) {
+  df_raw$institution_raw <- df_raw$school
+}
+
+df_raw$institution_source <- ifelse(
+  is.na(df_raw$institution_raw) | df_raw$institution_raw == "",
+  df_raw$school,
+  df_raw$institution_raw
+)
+
+df_raw <- df_raw %>%
+  mutate(
+    school = clean_institution_text(institution_source),
+    institution = normalize_institution(institution_source)
+  ) %>%
+  filter(valid_institution_school(institution_source)) %>%
+  mutate(institution_raw = school)
 # Rename columns for Shiny compatibility
 # Drop the original scraper columns that conflict, use our recomputed ones
 data <- df_raw %>%
-  select(-any_of(c("decision_year", "decision_month_day"))) %>%
+  select(-any_of(c("decision_year", "decision_month_day", "institution_source"))) %>%
   rename(
     decision = decision_type,
     decision_year = year,

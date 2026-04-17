@@ -24,6 +24,7 @@ export default function App({ payload }) {
   const institutions = getInstitutions(records);
   const years = getYears(records);
   const [searchQuery, setSearchQuery] = useState("");
+  const [schoolQuery, setSchoolQuery] = useState("");
 
   const [filters, setFilters] = useState({
     institution: OVERALL_LABEL,
@@ -54,6 +55,8 @@ export default function App({ payload }) {
             years=${years}
             decisions=${payload.decisionChoices}
             filters=${filters}
+            schoolQuery=${schoolQuery}
+            onSchoolQueryChange=${setSchoolQuery}
             onInstitutionChange=${(institution) => setFilters((current) => ({ ...current, institution }))}
             onYearToggle=${(year) =>
               setFilters((current) => ({
@@ -67,13 +70,14 @@ export default function App({ payload }) {
                 decisions: toggleValue(current.decisions, decision)
               }))
             }
-            onReset=${() =>
+            onReset=${() => {
+              setSchoolQuery("");
               setFilters({
                 institution: OVERALL_LABEL,
                 years,
                 decisions: DEFAULT_DECISIONS
-              })
-            }
+              });
+            }}
           />
         </aside>
 

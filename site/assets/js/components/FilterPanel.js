@@ -5,24 +5,42 @@ export function FilterPanel({
   years,
   decisions,
   filters,
+  schoolQuery,
+  onSchoolQueryChange,
   onInstitutionChange,
   onYearToggle,
   onDecisionToggle,
   onReset
 }) {
+  const normalizedSchoolQuery = schoolQuery.trim().toLowerCase();
+  const visibleInstitutions = normalizedSchoolQuery
+    ? institutions.filter((institution) => institution.toLowerCase().includes(normalizedSchoolQuery))
+    : institutions;
+  const selectInstitutions =
+    filters.institution && !visibleInstitutions.includes(filters.institution)
+      ? [filters.institution, ...visibleInstitutions]
+      : visibleInstitutions;
+
   return html`
     <section className="section-card">
       <span className="section-label">Filters</span>
 
       <div className="control-group">
         <h3>School</h3>
+        <input
+          className="search-input school-search"
+          type="search"
+          value=${schoolQuery}
+          placeholder="Search schools"
+          onInput=${(event) => onSchoolQueryChange(event.target.value)}
+        />
         <select
           className="select-input"
           value=${filters.institution}
           onChange=${(event) => onInstitutionChange(event.target.value)}
         >
           <option value="">No school filter</option>
-          ${institutions.map(
+          ${selectInstitutions.map(
             (institution) => html`
               <option key=${institution} value=${institution}>${institution}</option>
             `

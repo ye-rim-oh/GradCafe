@@ -1,36 +1,68 @@
 # ============================================================
 # Institution Normalization Helpers
-# Purpose: Reuse the repo's app-side school cleaning rules for
-#          GradCafe datasets and static analysis outputs.
+# Purpose: Keep school cleanup rules in one place for scraper,
+#          analysis, Shiny, and GitHub Pages export.
 # ============================================================
 
-required_for_institution_normalization <- c("stringr")
-missing_for_institution_normalization <- required_for_institution_normalization[
-  !vapply(required_for_institution_normalization, requireNamespace, logical(1), quietly = TRUE)
-]
-if (length(missing_for_institution_normalization) > 0) {
-  stop(
-    "Missing packages for institution normalization: ",
-    paste(missing_for_institution_normalization, collapse = ", ")
+squish_text <- function(x) {
+  x <- ifelse(is.na(x), "", as.character(x))
+  x <- gsub("[[:cntrl:]]", " ", x, perl = TRUE)
+  x <- gsub("\\\\b", " ", x, perl = TRUE)
+  x <- gsub("\u00a0", " ", x, fixed = TRUE)
+  x <- gsub("\\s+", " ", x, perl = TRUE)
+  trimws(x)
+}
+
+title_text <- function(x) {
+  vapply(strsplit(tolower(x), " ", fixed = TRUE), function(parts) {
+    paste0(toupper(substr(parts, 1, 1)), substr(parts, 2, nchar(parts))) |>
+      paste(collapse = " ")
+  }, character(1), USE.NAMES = FALSE)
+}
+
+fix_institution_case <- function(institution) {
+  acronyms <- c(
+    "UIUC", "UCLA", "MIT", "NYU", "SUNY", "CUNY", "PSU", "UBC", "LSE",
+    "USC", "TAMU", "WUSTL", "UMICH", "UGA", "SAIS", "FIU", "FSU", "NIU",
+    "GMU", "LSU", "MSU", "USF", "UTD", "GESS", "UCB", "UCD", "UCI", "UCM",
+    "UCR", "UCSD", "UCSC", "UCSB", "AU", "GWU", "JHU", "NU", "ASU", "UA",
+    "IU", "CEU", "EUI", "OSU", "WSU", "UNC", "UMD", "UW", "UF", "FAU", "UVA",
+    "CUHK", "UNT"
   )
+  for (acronym in acronyms) {
+    institution <- gsub(
+      paste0("\\b", acronym, "\\b"),
+      acronym,
+      institution,
+      ignore.case = TRUE,
+      perl = TRUE
+    )
+  }
+
+  replacements <- c(
+    "\\(UOFT\\)" = "(UofT)",
+    "\\(UT AUSTIN\\)" = "(UT Austin)",
+    "\\(UW-MADISON\\)" = "(UW-Madison)",
+    "\\(CU BOULDER\\)" = "(CU Boulder)",
+    "\\(UCONN\\)" = "(UConn)",
+    "\\(UMICH\\)" = "(UMich)",
+    "\\(UMASS\\)" = "(UMass)",
+    "\\(UPENN\\)" = "(UPenn)",
+    "\\(FLETCHER\\)" = "(Fletcher)",
+    "\\(KORBEL\\)" = "(Korbel)",
+    "\\(UNSPECIFIED\\)" = "(Unspecified)"
+  )
+  for (pattern in names(replacements)) {
+    institution <- gsub(pattern, replacements[[pattern]], institution, perl = TRUE)
+  }
+
+  squish_text(gsub("Â", "", institution, fixed = TRUE))
 }
 
 clean_institution_text <- function(school) {
-  x <- ifelse(is.na(school), "", as.character(school))
-  x <- stringr::str_replace_all(x, "[[:cntrl:]]", " ")
-  x <- stringr::str_replace_all(x, "\\\\b", " ")
-  x <- stringr::str_replace_all(x, "\u00a0", " ")
-  x <- stringr::str_squish(x)
-  x <- stringr::str_replace_all(
-    x,
-    stringr::regex("^The\\s+University\\s+Of\\s+Toront(o)?$", ignore_case = TRUE),
-    "University of Toronto"
-  )
-  x <- stringr::str_replace_all(
-    x,
-    stringr::regex("^University\\s+Of\\s+Toronto$", ignore_case = TRUE),
-    "University of Toronto"
-  )
+  x <- squish_text(school)
+  x <- gsub("^The\\s+University\\s+Of\\s+Toront(o)?$", "University of Toronto", x, ignore.case = TRUE, perl = TRUE)
+  x <- gsub("^University\\s+Of\\s+Toronto$", "University of Toronto", x, ignore.case = TRUE, perl = TRUE)
   x
 }
 
@@ -43,7 +75,7 @@ valid_institution_school <- function(school) {
     "^Corne$|^Penn s$|^Penns$|^Stony$|^University of Chi$",
     "^University of Connec$|^University of Oreg$|^University Of Wiscon$",
     "Universitywestern$|UniversityGSB$|Ann Arbor\\)gan|Madisonnsin$",
-    "^Florida International University\\u00c2$|^Floirda International",
+    "^Florida International University\\x{00C2}$|^Floirda International",
     "^University of mennesota$",
     "^Brown Rice University$",
     "^Iqtisad Uni$",
@@ -53,26 +85,26 @@ valid_institution_school <- function(school) {
   )
 
   for (pattern in bad_patterns) {
-    keep <- keep & !grepl(pattern, x, ignore.case = TRUE)
+    keep <- keep & !grepl(pattern, x, ignore.case = TRUE, perl = TRUE)
   }
   keep
 }
 
 normalize_institution <- function(school) {
   x <- clean_institution_text(school)
-  x_for_match <- stringr::str_replace_all(x, "(?i)\\b of \\b", " of ")
+  x_for_match <- gsub("(?i)\\b of \\b", " of ", x, perl = TRUE)
 
-  institution <- stringr::str_to_title(x)
-  institution <- stringr::str_replace_all(institution, "(?i)\\b of \\b", " of ")
-  institution <- stringr::str_replace_all(
-    institution,
-    "\\b(At|In|And)\\b",
-    function(match) tolower(match)
-  )
+  institution <- title_text(x)
+  institution <- gsub("(?i)\\b of \\b", " of ", institution, perl = TRUE)
+  for (word in c("At", "In", "And")) {
+    institution <- gsub(paste0("\\b", word, "\\b"), tolower(word), institution, perl = TRUE)
+  }
+  matched <- rep(FALSE, length(institution))
 
   apply_rule <- function(pattern, replacement) {
-    hit <- grepl(pattern, x_for_match, ignore.case = TRUE)
+    hit <- grepl(pattern, x_for_match, ignore.case = TRUE, perl = TRUE) & !matched
     institution[hit] <<- replacement
+    matched[hit] <<- TRUE
   }
 
   apply_rule("Santa Barbara|UCSB", "University of California, Santa Barbara (UCSB)")
@@ -92,13 +124,12 @@ normalize_institution <- function(school) {
   apply_rule("Florida State|FSU", "Florida State University (FSU)")
   apply_rule("Northern Illinois|^NIU$", "Northern Illinois University (NIU)")
   apply_rule("George Washingon|George Washington", "George Washington University (GWU)")
-  apply_rule("George Mason", "George Mason University")
+  apply_rule("George Mason|^GMU$", "George Mason University (GMU)")
   apply_rule("Boston University", "Boston University")
   apply_rule("Boston College", "Boston College")
   apply_rule("Colorado State", "Colorado State University")
   apply_rule("Louisiana State University and Agricultural|^LSU$|Louisiana State", "Louisiana State University (LSU)")
   apply_rule("Michigan State|^MSU$", "Michigan State University (MSU)")
-  apply_rule("George Mason|^GMU$", "George Mason University (GMU)")
   apply_rule("University of Pittsburgh|^Pitt$", "University of Pittsburgh")
   apply_rule("University of Houston", "University of Houston")
   apply_rule("University of Iowa", "University of Iowa")
@@ -112,7 +143,7 @@ normalize_institution <- function(school) {
   apply_rule("University of Texas at Dallas|UT Dallas|^UTD$", "University of Texas at Dallas (UT Dallas)")
   apply_rule("Illinois.*Urbana|Illinois UIUC|UIUC|^University of Illinois$", "University of Illinois Urbana-Champaign (UIUC)")
   apply_rule("Illinois.*Chicago|UIC", "University of Illinois Chicago (UIC)")
-  apply_rule("Texas A&M|TAMU|Texas A & M", "Texas A&M University (TAMU)")
+  apply_rule("^Texas A$|Texas A&M|TAMU|Texas A & M", "Texas A&M University (TAMU)")
   apply_rule("Texas.*Austin|UT Austin|^University of Texas$", "University of Texas at Austin (UT Austin)")
   apply_rule("Western Washington", "Western Washington University")
   apply_rule("Washington University.*St|WUSTL|WashU|^Washington University$", "Washington University in St. Louis")
@@ -136,7 +167,7 @@ normalize_institution <- function(school) {
 
   apply_rule("University of Connec", "University of Connecticut (UConn)")
   apply_rule("University of Oreg", "University of Oregon")
-  apply_rule("Wisconsin", "University of Wisconsin-Madison (UW-Madison)")
+  apply_rule("Wisconsin|^Uw Madison$", "University of Wisconsin-Madison (UW-Madison)")
   apply_rule("Cornell", "Cornell University")
   apply_rule("UChicago|Chicago", "University of Chicago (UChicago)")
   apply_rule("Virginia", "University of Virginia (UVA)")
@@ -158,8 +189,7 @@ normalize_institution <- function(school) {
   apply_rule("Columbia", "Columbia University")
   apply_rule("Brown", "Brown University")
   apply_rule("Dartmouth", "Dartmouth College")
-  apply_rule("Massachusetts Institute of Technology|^MIT$", "Massachusetts Institute of Technology (MIT)")
-  apply_rule("Massaa+chusett|Massachussett", "Massachusetts Institute of Technology (MIT)")
+  apply_rule("Massachusetts Institute of Technology|^MIT$|Massaa+chusett|Massachussett", "Massachusetts Institute of Technology (MIT)")
   apply_rule("New York University|NYU|Steinhardt", "New York University (NYU)")
   apply_rule("Northwestern", "Northwestern University (NU)")
   apply_rule("Duke", "Duke University")
@@ -170,10 +200,8 @@ normalize_institution <- function(school) {
   apply_rule("Pompeu Fabra|UPF", "Pompeu Fabra University (UPF)")
   apply_rule("Syracuse|Maxwell", "Syracuse University")
   apply_rule("Georgetown", "Georgetown University")
-  apply_rule("George Washington", "George Washington University (GWU)")
   apply_rule("Georgia State", "Georgia State University")
-  apply_rule("Georgia.*Athens|[^a-z]UGA[^a-z]|^UGA$|^University of Georgia$", "University of Georgia (UGA)")
-  apply_rule("Georiga", "University of Georgia (UGA)")
+  apply_rule("Georgia.*Athens|[^a-z]UGA[^a-z]|^UGA$|^University of Georgia$|Georiga", "University of Georgia (UGA)")
   apply_rule("Rutgers", "Rutgers University")
   apply_rule("^American U|American University", "American University (AU)")
   apply_rule("McGill", "McGill University")
@@ -187,7 +215,6 @@ normalize_institution <- function(school) {
   apply_rule("St\\.? Andrews|University of St Andrews", "University of St Andrews")
   apply_rule("Fletcher School|^Tufts", "Tufts University (Fletcher)")
   apply_rule("Texas Tech", "Texas Tech University")
-  apply_rule("^Texas A$|Texas A\\s*$", "Texas A&M University (TAMU)")
   apply_rule("Washington State", "Washington State University (WSU)")
   apply_rule("New School", "The New School")
   apply_rule("Central European University", "Central European University (CEU)")
@@ -205,29 +232,10 @@ normalize_institution <- function(school) {
   apply_rule("Tulane", "Tulane University")
   apply_rule("Tennessee", "University of Tennessee (UTK)")
   apply_rule("South Carolina", "University of South Carolina (USC)")
-  apply_rule("Massachusetts.*Amherst|UMass", "University of Massachusetts Amherst (UMass)")
-  apply_rule("^U Mass|University of Massachusetts$", "University of Massachusetts Amherst (UMass)")
+  apply_rule("^U Mass|University of Massachusetts$|Massachusetts.*Amherst|UMass", "University of Massachusetts Amherst (UMass)")
   apply_rule("Notre Dame", "University of Notre Dame")
   apply_rule("Université De Montréal|University of Montreal", "Université de Montréal")
   apply_rule("ีUniversity of Florida|University of Florida|UFL|^UF$", "University of Florida (UF)")
 
-  institution <- stringr::str_replace_all(institution, "\\((.*?)\\)", function(match) toupper(match))
-  institution <- stringr::str_replace_all(
-    institution,
-    "\\b(?i)(Uiuc|Ucla|Mit|Nyu|Suny|Cuny|Psu|Ubc|Lse|Usc|Tamu|Wustl|Umich|Uga|Sais)\\b",
-    function(match) toupper(match)
-  )
-  institution <- stringr::str_replace_all(institution, "\\(UOFT\\)", "(UofT)")
-  institution <- stringr::str_replace_all(institution, "\\(UT AUSTIN\\)", "(UT Austin)")
-  institution <- stringr::str_replace_all(institution, "\\(UW-MADISON\\)", "(UW-Madison)")
-  institution <- stringr::str_replace_all(institution, "\\(CU BOULDER\\)", "(CU Boulder)")
-  institution <- stringr::str_replace_all(institution, "\\(UCONN\\)", "(UConn)")
-  institution <- stringr::str_replace_all(institution, "\\(UMASS\\)", "(UMass)")
-  institution <- stringr::str_replace_all(institution, "\\(UPENN\\)", "(UPenn)")
-  institution <- stringr::str_replace_all(institution, "\\(FLETCHER\\)", "(Fletcher)")
-  institution <- stringr::str_replace_all(institution, "\\(KORBEL\\)", "(Korbel)")
-  institution <- stringr::str_replace_all(institution, "\\(UFL OR UF\\)", "(UF)")
-  institution <- stringr::str_replace_all(institution, "\\(UNSPECIFIED\\)", "(Unspecified)")
-  institution <- stringr::str_replace_all(institution, "Â|\\s+$", "")
-  stringr::str_squish(institution)
+  fix_institution_case(institution)
 }

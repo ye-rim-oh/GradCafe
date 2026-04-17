@@ -66,7 +66,7 @@ export function DataView({ records, showSchool, query, onQueryChange }) {
                   <td>${row.subfield}</td>
                   <td>${row.gpa}</td>
                   <td>${row.gre}</td>
-                  <td>${row.notes.length > 48 ? `${row.notes.slice(0, 48)}...` : row.notes}</td>
+                  <td className="notes-cell">${row.notes}</td>
                 </tr>
               `
             )}

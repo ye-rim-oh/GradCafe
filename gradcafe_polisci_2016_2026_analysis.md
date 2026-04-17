@@ -149,7 +149,7 @@ The timeline table uses January-April decision dates only, because later dates o
 
 ## 8. Takeaways
 
-1. The full 2016-2026 sample contains 4,746 cleaned posts across 171 canonical institutions.
+1. The full 2016-2026 sample contains 4,746 cleaned posts across 173 canonical institutions.
 2. Acceptance rates range from 30.9% in 2026 to 60.9% in 2023; 2026 sits at 30.9%.
 3. In 2026, American and international acceptance rates are 34.8% and 26.5%, a gap of 8.3 percentage points.
 4. Subfield information is sparse: 81.1% of all rows and 74.5% of 2026 rows are tagged Unknown.

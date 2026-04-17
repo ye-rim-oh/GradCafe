@@ -24,7 +24,7 @@ const renderError = (message) => {
   `);
 };
 
-fetch("./data/gradcafe.json")
+fetch(`./data/gradcafe.json?v=${Date.now()}`)
   .then((response) => {
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
