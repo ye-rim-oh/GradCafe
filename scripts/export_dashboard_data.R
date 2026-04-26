@@ -78,6 +78,7 @@ decision_month_day <- as.Date(paste0("2020-", format(decision_date, "%m-%d")))
 decision_month_day[is.na(decision_date) | decision_month >= 5] <- NA
 
 records <- data.frame(
+  normalizedInstitution = df$institution,
   institution = df$institution,
   decision = ifelse(
     df$decision_type %in% c("Accepted", "Rejected", "Interview", "Wait listed", "Other"),
@@ -96,6 +97,7 @@ records <- data.frame(
 )
 
 record_fields <- c(
+  "normalizedInstitution",
   "institution",
   "decision",
   "decisionYear",

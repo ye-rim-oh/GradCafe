@@ -29,6 +29,9 @@ const byYear = (left, right) => left.decisionYear - right.decisionYear;
 const byYearAndSubfield = (left, right) =>
   left.decisionYear - right.decisionYear || left.subfield.localeCompare(right.subfield);
 
+export const getInstitutionLabel = (record) =>
+  record.normalizedInstitution ?? record.institution;
+
 const formatMonthDay = (value) => {
   if (!value) {
     return "N/A";
@@ -52,7 +55,7 @@ const recordsForInstitution = (records, institution) => {
     return [...records];
   }
 
-  return records.filter((record) => record.institution === institution);
+  return records.filter((record) => getInstitutionLabel(record) === institution);
 };
 
 const acceptedRejectedOnly = (records) =>
@@ -63,7 +66,7 @@ export const applyFilters = (records, filters) =>
     const institutionMatch =
       !filters.institution ||
       filters.institution === OVERALL_LABEL ||
-      record.institution === filters.institution;
+      getInstitutionLabel(record) === filters.institution;
     const yearMatch = !filters.years?.length || filters.years.includes(record.decisionYear);
     const decisionMatch =
       !filters.decisions?.length || filters.decisions.includes(record.decision);
@@ -80,6 +83,7 @@ export const matchesSearchQuery = (record, query) => {
 
   return [
     record.institution,
+    record.normalizedInstitution ?? "",
     record.decision,
     String(record.decisionYear),
     record.decisionMonthDay ?? "",
@@ -251,7 +255,7 @@ export const buildTimelinePoints = (records, institution) =>
   applyFilters(recordsForInstitution(records, institution), { decisions: [], years: [] })
     .map((record, index) => ({
       ...record,
-      timelineKey: `${record.institution}-${record.decisionYear}-${record.decisionMonthDay ?? "na"}-${index}`,
+      timelineKey: `${getInstitutionLabel(record)}-${record.decisionYear}-${record.decisionMonthDay ?? "na"}-${index}`,
       sourceIndex: index
     }))
     .filter((record) => record.decisionMonthDay)
@@ -288,8 +292,8 @@ export const buildTableRows = (records, showSchool) =>
       (left.decisionMonthDay ?? "").localeCompare(right.decisionMonthDay ?? "")
     )
     .map((record, index) => ({
-      id: `${record.institution}-${record.decisionYear}-${record.decisionMonthDay ?? "na"}-${index}`,
-      school: record.institution,
+      id: `${getInstitutionLabel(record)}-${record.decisionYear}-${record.decisionMonthDay ?? "na"}-${index}`,
+      school: getInstitutionLabel(record),
       decision: record.decision,
       year: String(record.decisionYear),
       date: record.decisionMonthDay ? formatMonthDay(record.decisionMonthDay) : "-",
@@ -302,7 +306,7 @@ export const buildTableRows = (records, showSchool) =>
     }));
 
 export const getInstitutions = (records) =>
-  [...new Set(records.map((record) => record.institution).sort((left, right) => left.localeCompare(right)))];
+  [...new Set(records.map(getInstitutionLabel).sort((left, right) => left.localeCompare(right)))];
 
 export const getYears = (records) =>
   [...new Set(records.map((record) => record.decisionYear))].sort((left, right) => right - left);

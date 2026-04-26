@@ -1,5 +1,5 @@
 import { html } from "../../lib/html.js";
-import { buildTimelinePoints, DECISION_COLORS, DECISION_ORDER } from "../../lib/dashboard.js";
+import { buildTimelinePoints, DECISION_COLORS, DECISION_ORDER, getInstitutionLabel } from "../../lib/dashboard.js";
 
 const WIDTH = 920;
 const HEIGHT = 620;
@@ -85,7 +85,7 @@ export function TimelineView({ records, points: providedPoints }) {
               >
                 <title>
                   ${`${point.decision} | ${point.monthDayLabel}, ${point.decisionYear}
-${point.institution}
+${getInstitutionLabel(point)}
 ${point.status !== "Unknown" ? point.status : "Nationality not reported"}
 ${point.subfield !== "Unknown" ? point.subfield : "Subfield not reported"}
 ${point.gpa ? `GPA ${point.gpa}` : "GPA not reported"}`}
