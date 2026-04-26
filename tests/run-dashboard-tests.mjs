@@ -24,7 +24,7 @@ assert.equal(years[years.length - 1], 2016);
 
 const institutions = getInstitutions(payload.records);
 assert.equal(OVERALL_LABEL, "");
-assert.equal(institutions.length, 173);
+assert.equal(institutions.length, 172);
 assert.equal(institutions.includes(OVERALL_LABEL), false);
 assert.equal(institutions.filter((institution) => /^(all|overall|overall \(all schools\))$/i.test(institution)).length, 0);
 assert.ok(institutions.includes("University of Toronto (UofT)"));
@@ -33,6 +33,7 @@ assert.ok(institutions.includes("University of California, Berkeley (UCB)"));
 assert.ok(institutions.includes("University of Massachusetts Amherst (UMass)"));
 assert.ok(institutions.includes("Arizona State University (ASU)"));
 assert.ok(institutions.includes("Michigan State University (MSU)"));
+assert.equal(institutions.includes("University of Mary"), false);
 assert.equal(
   payload.records.filter((record) => /the university of toront/i.test(record.institution)).length,
   0

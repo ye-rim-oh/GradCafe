@@ -153,7 +153,7 @@ normalize_institution <- function(school) {
   apply_rule("Max Plank|Max Planck|IMPRS", "International Max Planck Research School (IMPRS)")
   apply_rule("Pennsylvania.*State|Penn State|PSU|Penns$|Penn s", "Pennsylvania State University (PSU)")
   apply_rule("Pennsylvania|UPenn|U Penn", "University of Pennsylvania (UPenn)")
-  apply_rule("Maryland.*College Park|[^a-z]UMD|^University of Maryland$|^University of maryland", "University of Maryland, College Park (UMD)")
+  apply_rule("Maryland.*College Park|[^a-z]UMD|^University of Maryland$|^University of maryland|^University of Mary$", "University of Maryland, College Park (UMD)")
   apply_rule("North Carolina.*Chapel|^UNC[- ]|[^a-z]UNC[^a-z]|^UNC$|^University of North Carolina$", "University of North Carolina at Chapel Hill (UNC)")
   apply_rule("City University of New York|CUNY|Graduate Center", "City University of New York (CUNY)")
   apply_rule("British Columbia|UBC", "University of British Columbia (UBC)")
