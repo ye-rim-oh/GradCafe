@@ -40,10 +40,11 @@ export default function App({ payload }) {
   return html`
     <div className="page-shell">
       <div className="app-grid">
-        <aside className="panel sidebar">
+        <aside className="sidebar">
           <div className="brand-block">
-            <p className="eyebrow">Search index</p>
-            <h2>Find a school</h2>
+            <p className="eyebrow">Archive controls</p>
+            <h2>Filter the records</h2>
+            <p>Self-reported political science PhD outcomes collected from GradCafe.</p>
           </div>
 
           <${FilterPanel}
@@ -77,18 +78,21 @@ export default function App({ payload }) {
           />
         </aside>
 
-        <main className="panel main-panel">
+        <main className="main-panel">
           <section className="hero-header">
             <div>
               <h1 className="hero-title">Political Science PhD Results (2016-2026)</h1>
+              <p className="hero-copy">
+                Self-reported PhD outcomes.
+              </p>
             </div>
           </section>
 
           <div className="stats-inline">
-            <span className="stats-pill">${showSchool ? "No school filter" : filters.institution}</span>
-            <span className="stats-pill">${searchedRecords.length} filtered rows</span>
-            <span className="stats-pill">${timelinePoints.length} timeline dots</span>
-            <span className="stats-pill">${filters.years.length} years selected</span>
+            <span className="stats-pill">${showSchool ? "All schools" : filters.institution}</span>
+            <span className="stats-pill">${searchedRecords.length} records in view</span>
+            <span className="stats-pill">${timelinePoints.length} dated outcomes</span>
+            <span className="stats-pill">${filters.years.length} cycles selected</span>
           </div>
 
           <div className="view-stack">
@@ -106,7 +110,7 @@ export default function App({ payload }) {
             </section>
 
             <details className="analysis-details">
-              <summary>Additional analysis</summary>
+              <summary>Acceptance-rate summaries</summary>
               <div className="analysis-grid">
                 <${TrendsView} records=${searchedRecords} />
                 <${SubfieldsView} records=${searchedRecords} />

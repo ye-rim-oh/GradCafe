@@ -23,7 +23,7 @@ export function FilterPanel({
 
   return html`
     <section className="section-card">
-      <span className="section-label">Filters</span>
+      <span className="section-label">Narrow the archive</span>
 
       <div className="control-group">
         <h3>School</h3>
@@ -39,7 +39,7 @@ export function FilterPanel({
           value=${filters.institution}
           onChange=${(event) => onInstitutionChange(event.target.value)}
         >
-          <option value="">No school filter</option>
+          <option value="">All schools</option>
           ${selectInstitutions.map(
             (institution) => html`
               <option key=${institution} value=${institution}>${institution}</option>
@@ -85,7 +85,7 @@ export function FilterPanel({
       </div>
 
       <button className="reset-button" type="button" onClick=${onReset}>
-        Reset Filters
+        Reset filters
       </button>
     </section>
   `;
