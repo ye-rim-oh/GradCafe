@@ -44,7 +44,6 @@ export default function App({ payload }) {
           <div className="brand-block">
             <p className="eyebrow">Archive controls</p>
             <h2>Filter the records</h2>
-            <p>Self-reported political science PhD outcomes collected from GradCafe.</p>
           </div>
 
           <${FilterPanel}
@@ -82,9 +81,6 @@ export default function App({ payload }) {
           <section className="hero-header">
             <div>
               <h1 className="hero-title">Political Science PhD Results (2016-2026)</h1>
-              <p className="hero-copy">
-                Self-reported PhD outcomes.
-              </p>
             </div>
           </section>
 
