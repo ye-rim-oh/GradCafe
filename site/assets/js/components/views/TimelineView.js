@@ -1,5 +1,7 @@
-import { html } from "../../lib/html.js";
-import { buildTimelinePoints, DECISION_COLORS, DECISION_ORDER } from "../../lib/dashboard.js";
+import { html, React } from "../../lib/html.js";
+import { buildTimelinePoints, DECISION_COLORS, DECISION_ORDER, formatGre } from "../../lib/dashboard.js";
+
+const { useEffect, useState } = React;
 
 const WIDTH = 920;
 const HEIGHT = 620;
@@ -20,11 +22,17 @@ const yScale = (decisionIndex) =>
   MARGIN.top + decisionIndex * ((HEIGHT - MARGIN.top - MARGIN.bottom) / (DECISION_ORDER.length - 1));
 
 export function TimelineView({ records, points: providedPoints }) {
+  const [selectedKey, setSelectedKey] = useState(null);
   const points = (providedPoints ?? buildTimelinePoints(records)).map((record, index) => ({
     ...record,
     cx: xScale(new Date(record.decisionMonthDay).getTime()),
     cy: yScale(DECISION_ORDER.indexOf(record.decision)) + ((index % 5) - 2) * 5
   }));
+  const selectedPoint = points.find((point) => point.timelineKey === selectedKey);
+
+  useEffect(() => {
+    setSelectedKey(null);
+  }, [records]);
 
   if (!points.length) {
     return html`
@@ -77,11 +85,21 @@ export function TimelineView({ records, points: providedPoints }) {
             (point) => html`
               <circle
                 key=${point.timelineKey}
+                className=${`timeline-dot ${selectedKey === point.timelineKey ? "timeline-dot-selected" : ""}`}
                 cx=${point.cx}
                 cy=${point.cy}
                 r="5.5"
                 fill=${DECISION_COLORS[point.decision] ?? DECISION_COLORS.Other}
                 fill-opacity="0.8"
+                role="button"
+                tabIndex="0"
+                onClick=${() => setSelectedKey(point.timelineKey)}
+                onKeyDown=${(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setSelectedKey(point.timelineKey);
+                  }
+                }}
               >
                 <title>
                   ${`${point.decision} | ${point.monthDayLabel}, ${point.decisionYear}
@@ -95,6 +113,27 @@ ${point.gpa ? `GPA ${point.gpa}` : "GPA not reported"}`}
           )}
         </svg>
       </div>
+      ${selectedPoint
+        ? html`
+            <div className="timeline-detail">
+              <div>
+                <span className="section-label">Selected applicant</span>
+                <h3>${selectedPoint.institution}</h3>
+              </div>
+              <div className="timeline-detail-grid">
+                <span><strong>Decision</strong>${selectedPoint.decision}</span>
+                <span><strong>Year</strong>${selectedPoint.decisionYear}</span>
+                <span><strong>Date</strong>${selectedPoint.monthDayLabel}</span>
+                <span><strong>Status</strong>${selectedPoint.status !== "Unknown" ? selectedPoint.status : "N/A"}</span>
+                <span><strong>GPA</strong>${selectedPoint.gpa ?? "N/A"}</span>
+                <span><strong>GRE</strong>${formatGre(selectedPoint)}</span>
+              </div>
+              ${selectedPoint.notes?.trim()
+                ? html`<p className="timeline-detail-notes">${selectedPoint.notes}</p>`
+                : null}
+            </div>
+          `
+        : null}
       <div className="stats-inline">
         ${DECISION_ORDER.map(
           (decision) => html`

@@ -1,5 +1,5 @@
 export const OVERALL_LABEL = "";
-export const DEFAULT_DECISIONS = ["Accepted", "Rejected", "Interview", "Wait listed", "Other"];
+export const DEFAULT_DECISIONS = ["Accepted", "Rejected"];
 export const DECISION_ORDER = ["Accepted", "Interview", "Wait listed", "Rejected", "Other"];
 export const DECISION_COLORS = {
   Accepted: "#234d73",
@@ -57,6 +57,25 @@ const recordsForInstitution = (records, institution) => {
 
 const acceptedRejectedOnly = (records) =>
   records.filter((record) => ACCEPT_REJECT_DECISIONS.has(record.decision));
+
+const mean = (values) => {
+  const numericValues = values
+    .filter((value) => value !== null && value !== undefined && value !== "")
+    .map((value) => Number(value))
+    .filter((value) => Number.isFinite(value));
+
+  if (!numericValues.length) {
+    return null;
+  }
+
+  return numericValues.reduce((sum, value) => sum + value, 0) / numericValues.length;
+};
+
+const numericCount = (values) =>
+  values
+    .filter((value) => value !== null && value !== undefined && value !== "")
+    .map((value) => Number(value))
+    .filter((value) => Number.isFinite(value)).length;
 
 export const applyFilters = (records, filters) =>
   records.filter((record) => {
@@ -279,6 +298,32 @@ export const formatGre = (record) => {
   }
 
   return "-";
+};
+
+export const buildSchoolAverages = (records) => {
+  const gpaValues = records.map((record) => record.gpa);
+  const greVValues = records.map((record) => record.greV);
+  const greQValues = records.map((record) => record.greQ);
+  const greTotalValues = records
+    .filter((record) => record.greV && record.greQ)
+    .map((record) => Number(record.greV) + Number(record.greQ));
+
+  const gpaMean = mean(gpaValues);
+  const greVMean = mean(greVValues);
+  const greQMean = mean(greQValues);
+  const greTotalMean = mean(greTotalValues);
+
+  return {
+    gpa: gpaMean === null ? "GPA N/A" : `Avg GPA ${gpaMean.toFixed(2)}`,
+    gre:
+      greVMean === null && greQMean === null
+        ? "GRE N/A"
+        : `Avg GRE ${greTotalMean === null ? "" : `${Math.round(greTotalMean)} `}(${
+            greVMean === null ? "V N/A" : `V${Math.round(greVMean)}`
+          }/${greQMean === null ? "Q N/A" : `Q${Math.round(greQMean)}`})`,
+    gpaCount: numericCount(gpaValues),
+    greCount: records.filter((record) => record.greV || record.greQ).length
+  };
 };
 
 export const buildTableRows = (records, showSchool) =>
