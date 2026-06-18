@@ -421,6 +421,7 @@ button, select, input {
 }
 
 .chart-shell {
+  position: relative;
   width: 100%;
   height: 400px;
   margin-top: 16px;
@@ -434,6 +435,47 @@ button, select, input {
 
 .chart-shell svg {
   display: block;
+}
+
+.timeline-shell {
+  overflow: hidden;
+}
+
+.timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.timeline-legend .stats-pill {
+  font-size: 0.8rem;
+}
+
+.timeline-tooltip {
+  position: absolute;
+  z-index: 2;
+  max-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid rgba(32, 32, 29, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 30px rgba(32, 32, 29, 0.14);
+  color: var(--ink);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  pointer-events: none;
+}
+
+.timeline-tooltip-left {
+  transform: translate(calc(-100% - 14px), -50%);
+}
+
+.timeline-tooltip-right {
+  transform: translate(14px, -50%);
 }
 
 .timeline-dot {
@@ -495,7 +537,7 @@ button, select, input {
 
 .results-table {
   min-width: 980px;
-  font-size: 0.91rem;
+  font-size: 0.96rem;
 }
 
 .results-table th {
@@ -511,7 +553,7 @@ button, select, input {
 
 .results-table .notes-cell {
   min-width: 300px;
-  max-width: 520px;
+  max-width: 560px;
   color: var(--muted);
   line-height: 1.45;
 }
@@ -703,10 +745,6 @@ button, select, input {
     height: 480px;
   }
 
-  .timeline-detail-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .stats-row {
     display: grid;
     gap: 6px;
@@ -718,6 +756,10 @@ button, select, input {
 
   .stats-pill-school {
     font-size: 0.98rem;
+  }
+
+  .timeline-tooltip {
+    max-width: 190px;
   }
 
   .pager {
