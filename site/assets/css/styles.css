@@ -482,6 +482,10 @@ button, select, input {
   transform: translate(14px, -50%);
 }
 
+.timeline-tooltip-below {
+  transform: translate(14px, 12px);
+}
+
 .timeline-tooltip-above {
   transform: translate(14px, calc(-100% - 10px));
 }
