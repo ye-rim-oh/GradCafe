@@ -22,16 +22,19 @@ const yScale = (decisionIndex) =>
   MARGIN.top + decisionIndex * ((HEIGHT - MARGIN.top - MARGIN.bottom) / (DECISION_ORDER.length - 1));
 
 export function TimelineView({ records, points: providedPoints }) {
-  const [selectedKey, setSelectedKey] = useState(null);
+  const [hoverKey, setHoverKey] = useState(null);
+  const [pinnedKey, setPinnedKey] = useState(null);
   const points = (providedPoints ?? buildTimelinePoints(records)).map((record, index) => ({
     ...record,
     cx: xScale(new Date(record.decisionMonthDay).getTime()),
     cy: yScale(DECISION_ORDER.indexOf(record.decision)) + ((index % 5) - 2) * 5
   }));
-  const selectedPoint = points.find((point) => point.timelineKey === selectedKey);
+  const activeKey = hoverKey ?? pinnedKey;
+  const selectedPoint = points.find((point) => point.timelineKey === activeKey);
 
   useEffect(() => {
-    setSelectedKey(null);
+    setHoverKey(null);
+    setPinnedKey(null);
   }, [records]);
 
   if (!points.length) {
@@ -85,7 +88,7 @@ export function TimelineView({ records, points: providedPoints }) {
             (point) => html`
               <circle
                 key=${point.timelineKey}
-                className=${`timeline-dot ${selectedKey === point.timelineKey ? "timeline-dot-selected" : ""}`}
+                className=${`timeline-dot ${activeKey === point.timelineKey ? "timeline-dot-selected" : ""}`}
                 cx=${point.cx}
                 cy=${point.cy}
                 r="5.5"
@@ -93,11 +96,17 @@ export function TimelineView({ records, points: providedPoints }) {
                 fill-opacity="0.8"
                 role="button"
                 tabIndex="0"
-                onClick=${() => setSelectedKey(point.timelineKey)}
+                onMouseEnter=${() => setHoverKey(point.timelineKey)}
+                onMouseLeave=${() => setHoverKey(null)}
+                onFocus=${() => setHoverKey(point.timelineKey)}
+                onBlur=${() => setHoverKey(null)}
+                onClick=${() =>
+                  setPinnedKey((current) => (current === point.timelineKey ? null : point.timelineKey))
+                }
                 onKeyDown=${(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    setSelectedKey(point.timelineKey);
+                    setPinnedKey((current) => (current === point.timelineKey ? null : point.timelineKey));
                   }
                 }}
               >

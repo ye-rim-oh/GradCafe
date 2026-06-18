@@ -91,7 +91,7 @@ export default function App({ payload }) {
 
           <div className="stats-stack">
             <div className="stats-row">
-              <span className=${`stats-pill ${showSchool ? "" : "stats-pill-strong"}`}>${showSchool ? "All schools" : filters.institution}</span>
+              <span className=${`stats-pill ${showSchool ? "" : "stats-pill-school"}`}>${showSchool ? "All schools" : filters.institution}</span>
               <span className="stats-pill">${filters.years.length} cycles selected</span>
             </div>
             ${schoolAverages

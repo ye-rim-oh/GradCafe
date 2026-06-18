@@ -142,14 +142,10 @@ button, select, input {
   font-size: 0.88rem;
 }
 
-.stats-pill-strong {
+.stats-pill-school {
   color: var(--ink);
   font-size: 1.02rem;
   font-weight: 650;
-}
-
-.stats-pill:first-child {
-  color: var(--blue);
 }
 
 .brand-link {
@@ -720,7 +716,7 @@ button, select, input {
     display: block;
   }
 
-  .stats-pill-strong {
+  .stats-pill-school {
     font-size: 0.98rem;
   }
 
