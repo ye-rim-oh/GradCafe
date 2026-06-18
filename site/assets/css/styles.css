@@ -508,7 +508,7 @@ button, select, input {
 }
 
 .chart-shell.chart-tall {
-  height: 600px;
+  height: 680px;
 }
 
 .empty-state {
@@ -750,7 +750,7 @@ button, select, input {
   }
 
   .chart-shell.chart-tall {
-    height: 480px;
+    height: 520px;
   }
 
   .stats-row {

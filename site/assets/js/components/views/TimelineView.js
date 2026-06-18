@@ -3,8 +3,8 @@ import { buildTimelinePoints, DECISION_COLORS, DECISION_ORDER, formatGre } from 
 
 const { useEffect, useState } = React;
 
-const WIDTH = 920;
-const HEIGHT = 620;
+const WIDTH = 1160;
+const HEIGHT = 700;
 const MARGIN = { top: 36, right: 28, bottom: 42, left: 170 };
 const START = new Date("2020-01-01").getTime();
 const END = new Date("2020-04-30").getTime();
