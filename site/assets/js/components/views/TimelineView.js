@@ -34,7 +34,11 @@ export function TimelineView({ records, points: providedPoints }) {
   const tooltipPlacement = activePoint
     ? [
         activePoint.cx > WIDTH * 0.72 ? "timeline-tooltip-left" : "timeline-tooltip-right",
-        activePoint.cy > HEIGHT * 0.72 ? "timeline-tooltip-above" : "timeline-tooltip-middle"
+        activePoint.cy < HEIGHT * 0.25
+          ? "timeline-tooltip-below"
+          : activePoint.cy > HEIGHT * 0.72
+            ? "timeline-tooltip-above"
+            : "timeline-tooltip-middle"
       ].join(" ")
     : "";
   const tooltipText = activePoint
