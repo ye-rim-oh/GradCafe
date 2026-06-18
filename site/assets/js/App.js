@@ -91,13 +91,11 @@ export default function App({ payload }) {
 
           <div className="stats-inline">
             <span className="stats-pill">${showSchool ? "All schools" : filters.institution}</span>
-            <span className="stats-pill">${searchedRecords.length} records in view</span>
-            <span className="stats-pill">${timelinePoints.length} dated outcomes</span>
-            <span className="stats-pill">${filters.years.length} cycles selected</span>
+            <span className="stats-pill stats-pill-strong">${filters.years.length} cycles selected</span>
             ${schoolAverages
               ? html`
-                  <span className="stats-pill">${schoolAverages.gpa} (${schoolAverages.gpaCount} reports)</span>
-                  <span className="stats-pill">${schoolAverages.gre} (${schoolAverages.greCount} reports)</span>
+                  <span className="stats-pill stats-pill-strong">${schoolAverages.gpa} (${schoolAverages.gpaCount} reports)</span>
+                  <span className="stats-pill stats-pill-strong">${schoolAverages.gre} (${schoolAverages.greCount} reports)</span>
                 `
               : null}
           </div>
