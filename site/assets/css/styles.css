@@ -478,6 +478,14 @@ button, select, input {
   transform: translate(14px, -50%);
 }
 
+.timeline-tooltip-middle {
+  transform: translate(14px, -50%);
+}
+
+.timeline-tooltip-above {
+  transform: translate(14px, calc(-100% - 10px));
+}
+
 .timeline-dot {
   cursor: pointer;
   transition: r 150ms ease, fill-opacity 150ms ease, stroke-width 150ms ease;
