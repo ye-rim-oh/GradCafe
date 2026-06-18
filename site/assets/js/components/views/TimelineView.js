@@ -31,14 +31,18 @@ export function TimelineView({ records, points: providedPoints }) {
   }));
   const activeKey = hoverKey ?? pinnedKey;
   const activePoint = points.find((point) => point.timelineKey === activeKey);
-  const tooltipPlacement =
-    activePoint && activePoint.cx > WIDTH * 0.72 ? "timeline-tooltip-left" : "timeline-tooltip-right";
+  const tooltipPlacement = activePoint
+    ? [
+        activePoint.cx > WIDTH * 0.72 ? "timeline-tooltip-left" : "timeline-tooltip-right",
+        activePoint.cy > HEIGHT * 0.72 ? "timeline-tooltip-above" : "timeline-tooltip-middle"
+      ].join(" ")
+    : "";
   const tooltipText = activePoint
-    ? `${activePoint.institution}
-${activePoint.decision} | ${activePoint.monthDayLabel}, ${activePoint.decisionYear}
-${activePoint.status !== "Unknown" ? activePoint.status : "Nationality not reported"}
-${activePoint.gpa ? `GPA ${activePoint.gpa}` : "GPA not reported"}
-${formatGre(activePoint)}`
+    ? `Date: ${activePoint.monthDayLabel}, ${activePoint.decisionYear}
+Status: ${activePoint.status !== "Unknown" ? activePoint.status : "Nationality not reported"}
+GPA: ${activePoint.gpa ?? "N/A"}
+GRE: ${formatGre(activePoint)}
+Notes: ${activePoint.notes?.trim() ? activePoint.notes : "N/A"}`
     : "";
 
   useEffect(() => {
