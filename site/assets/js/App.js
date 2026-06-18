@@ -1,6 +1,7 @@
 import { html, React } from "./lib/html.js";
 import {
   applyFilters,
+  buildSchoolAverages,
   buildTimelinePoints,
   DEFAULT_DECISIONS,
   getInstitutions,
@@ -19,16 +20,19 @@ const { useState } = React;
 const toggleValue = (values, value) =>
   values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
 
+const getDefaultYears = (years) => (years.includes(2026) ? [2026] : years.slice(0, 1));
+
 export default function App({ payload }) {
   const records = payload.records;
   const institutions = getInstitutions(records);
   const years = getYears(records);
+  const defaultYears = getDefaultYears(years);
   const [searchQuery, setSearchQuery] = useState("");
   const [schoolQuery, setSchoolQuery] = useState("");
 
   const [filters, setFilters] = useState({
     institution: OVERALL_LABEL,
-    years,
+    years: defaultYears,
     decisions: DEFAULT_DECISIONS
   });
 
@@ -36,6 +40,7 @@ export default function App({ payload }) {
   const searchedRecords = filteredRecords.filter((record) => matchesSearchQuery(record, searchQuery));
   const timelinePoints = buildTimelinePoints(searchedRecords);
   const showSchool = filters.institution === OVERALL_LABEL;
+  const schoolAverages = showSchool ? null : buildSchoolAverages(filteredRecords);
 
   return html`
     <div className="page-shell">
@@ -70,7 +75,7 @@ export default function App({ payload }) {
               setSchoolQuery("");
               setFilters({
                 institution: OVERALL_LABEL,
-                years,
+                years: defaultYears,
                 decisions: DEFAULT_DECISIONS
               });
             }}
@@ -89,6 +94,12 @@ export default function App({ payload }) {
             <span className="stats-pill">${searchedRecords.length} records in view</span>
             <span className="stats-pill">${timelinePoints.length} dated outcomes</span>
             <span className="stats-pill">${filters.years.length} cycles selected</span>
+            ${schoolAverages
+              ? html`
+                  <span className="stats-pill">${schoolAverages.gpa} (${schoolAverages.gpaCount} reports)</span>
+                  <span className="stats-pill">${schoolAverages.gre} (${schoolAverages.greCount} reports)</span>
+                `
+              : null}
           </div>
 
           <div className="view-stack">
