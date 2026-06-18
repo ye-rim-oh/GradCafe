@@ -30,7 +30,16 @@ export function TimelineView({ records, points: providedPoints }) {
     cy: yScale(DECISION_ORDER.indexOf(record.decision)) + ((index % 5) - 2) * 5
   }));
   const activeKey = hoverKey ?? pinnedKey;
-  const selectedPoint = points.find((point) => point.timelineKey === activeKey);
+  const activePoint = points.find((point) => point.timelineKey === activeKey);
+  const tooltipPlacement =
+    activePoint && activePoint.cx > WIDTH * 0.72 ? "timeline-tooltip-left" : "timeline-tooltip-right";
+  const tooltipText = activePoint
+    ? `${activePoint.institution}
+${activePoint.decision} | ${activePoint.monthDayLabel}, ${activePoint.decisionYear}
+${activePoint.status !== "Unknown" ? activePoint.status : "Nationality not reported"}
+${activePoint.gpa ? `GPA ${activePoint.gpa}` : "GPA not reported"}
+${formatGre(activePoint)}`
+    : "";
 
   useEffect(() => {
     setHoverKey(null);
@@ -49,7 +58,7 @@ export function TimelineView({ records, points: providedPoints }) {
   return html`
     <section className="content-card">
       <h2>Decision Timeline</h2>
-      <div className="chart-shell chart-tall">
+      <div className="chart-shell chart-tall timeline-shell">
         <svg viewBox="0 0 ${WIDTH} ${HEIGHT}" width="100%" height="100%" role="img" aria-label="Decision timeline">
           ${MONTHS.map(
             ([label, value]) => html`
@@ -110,40 +119,26 @@ export function TimelineView({ records, points: providedPoints }) {
                   }
                 }}
               >
-                <title>
-                  ${`${point.decision} | ${point.monthDayLabel}, ${point.decisionYear}
-${point.institution}
-${point.status !== "Unknown" ? point.status : "Nationality not reported"}
-${point.subfield !== "Unknown" ? point.subfield : "Subfield not reported"}
-${point.gpa ? `GPA ${point.gpa}` : "GPA not reported"}`}
-                </title>
+                <title>${point.institution}</title>
               </circle>
             `
           )}
         </svg>
+        ${activePoint
+          ? html`
+              <div
+                className=${`timeline-tooltip ${tooltipPlacement}`}
+                style=${{
+                  left: `${(activePoint.cx / WIDTH) * 100}%`,
+                  top: `${Math.max(10, Math.min((activePoint.cy / HEIGHT) * 100, 90))}%`
+                }}
+              >
+                ${tooltipText}
+              </div>
+            `
+          : null}
       </div>
-      ${selectedPoint
-        ? html`
-            <div className="timeline-detail">
-              <div>
-                <span className="section-label">Selected applicant</span>
-                <h3>${selectedPoint.institution}</h3>
-              </div>
-              <div className="timeline-detail-grid">
-                <span><strong>Decision</strong>${selectedPoint.decision}</span>
-                <span><strong>Year</strong>${selectedPoint.decisionYear}</span>
-                <span><strong>Date</strong>${selectedPoint.monthDayLabel}</span>
-                <span><strong>Status</strong>${selectedPoint.status !== "Unknown" ? selectedPoint.status : "N/A"}</span>
-                <span><strong>GPA</strong>${selectedPoint.gpa ?? "N/A"}</span>
-                <span><strong>GRE</strong>${formatGre(selectedPoint)}</span>
-              </div>
-              ${selectedPoint.notes?.trim()
-                ? html`<p className="timeline-detail-notes">${selectedPoint.notes}</p>`
-                : null}
-            </div>
-          `
-        : null}
-      <div className="stats-inline">
+      <div className="timeline-legend">
         ${DECISION_ORDER.map(
           (decision) => html`
             <span key=${decision} className="stats-pill">

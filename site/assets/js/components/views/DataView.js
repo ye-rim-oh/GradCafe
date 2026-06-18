@@ -2,7 +2,7 @@ import { html, React } from "../../lib/html.js";
 import { buildTableRows } from "../../lib/dashboard.js";
 
 const { useEffect, useState } = React;
-const pageSize = 10;
+const pageSize = 15;
 
 const decisionClass = (decision) => {
   if (decision === "Accepted") return "decision-tag decision-accepted";
