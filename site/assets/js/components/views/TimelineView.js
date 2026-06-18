@@ -79,7 +79,7 @@ Notes: ${activePoint.notes?.trim() ? activePoint.notes : "N/A"}`
                   stroke="rgba(32,32,29,0.14)"
                   strokeDasharray="4 6"
                 />
-                <text x=${xScale(value)} y=${HEIGHT - 16} text-anchor="middle" fill="#6e6b63" font-size="14">
+                <text x=${xScale(value)} y=${HEIGHT - 16} text-anchor="middle" fill="#6e6b63" font-size="16">
                   ${label}
                 </text>
               </g>
@@ -95,7 +95,7 @@ Notes: ${activePoint.notes?.trim() ? activePoint.notes : "N/A"}`
                   y2=${yScale(index)}
                   stroke="rgba(32,32,29,0.1)"
                 />
-                <text x=${MARGIN.left - 14} y=${yScale(index) + 5} text-anchor="end" fill="#20201d" font-size="14">
+                <text x=${MARGIN.left - 14} y=${yScale(index) + 5} text-anchor="end" fill="#20201d" font-size="16">
                   ${decision}
                 </text>
               </g>

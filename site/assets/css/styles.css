@@ -458,13 +458,13 @@ button, select, input {
   position: absolute;
   z-index: 2;
   max-width: 240px;
-  padding: 10px 12px;
+  padding: 11px 13px;
   border: 1px solid rgba(32, 32, 29, 0.14);
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 12px 30px rgba(32, 32, 29, 0.14);
   color: var(--ink);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   line-height: 1.45;
   white-space: pre-wrap;
   pointer-events: none;
@@ -772,6 +772,7 @@ button, select, input {
 
   .timeline-tooltip {
     max-width: 190px;
+    font-size: 0.86rem;
   }
 
   .pager {
