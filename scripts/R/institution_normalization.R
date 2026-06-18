@@ -227,6 +227,7 @@ normalize_institution <- function(school) {
   apply_rule("ETH Zurich", "ETH Zurich")
   apply_rule("Geneva Graduate Institute", "Geneva Graduate Institute")
   apply_rule("Vanderbilt", "Vanderbilt University")
+  apply_rule("^University of Nevada$", "University of Nevada, Reno")
   apply_rule("Nebraska", "University of Nebraska-Lincoln")
   apply_rule("Delaware|UDEL", "University of Delaware")
   apply_rule("Tulane", "Tulane University")
