@@ -121,6 +121,24 @@ button, select, input {
   line-height: 1.2;
 }
 
+.stats-inline {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.stats-pill {
+  font-size: 0.88rem;
+}
+
+.stats-pill-strong {
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 650;
+}
+
 .stats-pill:first-child {
   color: var(--blue);
 }
@@ -335,13 +353,6 @@ button, select, input {
   color: var(--muted);
   font-size: 1.04rem;
   line-height: 1.6;
-}
-
-.stats-inline {
-  display: flex;
-  gap: 14px;
-  margin-top: 14px;
-  flex-wrap: wrap;
 }
 
 .view-stack {
@@ -698,6 +709,10 @@ button, select, input {
 
   .stats-pill {
     display: block;
+  }
+
+  .stats-pill-strong {
+    font-size: 0.98rem;
   }
 
   .pager {
