@@ -89,13 +89,17 @@ export default function App({ payload }) {
             </div>
           </section>
 
-          <div className="stats-inline">
-            <span className="stats-pill">${showSchool ? "All schools" : filters.institution}</span>
-            <span className="stats-pill stats-pill-strong">${filters.years.length} cycles selected</span>
+          <div className="stats-stack">
+            <div className="stats-row">
+              <span className=${`stats-pill ${showSchool ? "" : "stats-pill-strong"}`}>${showSchool ? "All schools" : filters.institution}</span>
+              <span className="stats-pill">${filters.years.length} cycles selected</span>
+            </div>
             ${schoolAverages
               ? html`
-                  <span className="stats-pill stats-pill-strong">${schoolAverages.gpa} (${schoolAverages.gpaCount} reports)</span>
-                  <span className="stats-pill stats-pill-strong">${schoolAverages.gre} (${schoolAverages.greCount} reports)</span>
+                  <div className="stats-row stats-row-secondary">
+                    <span className="stats-pill">${schoolAverages.gpa} (${schoolAverages.gpaCount} reports)</span>
+                    <span className="stats-pill">${schoolAverages.gre} (${schoolAverages.greCount} reports)</span>
+                  </div>
                 `
               : null}
           </div>
