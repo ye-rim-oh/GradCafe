@@ -122,9 +122,8 @@ Notes: ${activePoint.notes?.trim() ? activePoint.notes : "N/A"}`
                     setPinnedKey((current) => (current === point.timelineKey ? null : point.timelineKey));
                   }
                 }}
-              >
-                <title>${point.institution}</title>
-              </circle>
+                aria-label=${`${point.decision} on ${point.monthDayLabel}, ${point.decisionYear}`}
+              />
             `
           )}
         </svg>
