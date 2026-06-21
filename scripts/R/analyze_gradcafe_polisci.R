@@ -32,7 +32,7 @@ df <- readRDS(data_path) %>%
     gre_aw_clean = ifelse(!is.na(gre_aw) & gre_aw >= 0 & gre_aw <= 6, gre_aw, NA_real_)
   )
 
-target_year <- 2025
+target_year <- 2026
 
 pct_num <- function(num, den) {
   ifelse(den > 0, 100 * num / den, NA_real_)
