@@ -1,11 +1,14 @@
-# 2026 GradCafe Political Science PhD Snapshot
+# 2026 GradCafe Political Science PhD Admission Analysis
 
 **Report Date**: 2026-04-17
+
 **Data Source**: GradCafe survey data exported on 2026-04-17
+
 **Analysis Scope**: Fall 2026 Political Science PhD entries only
+
 **Total Sample**: **1,030** cleaned posts
 
-This note summarizes the 2026 application-cycle snapshot only. It is descriptive, not causal.
+This note summarizes the 2026 application-cycle only. It is descriptive, not causal.
 
 ## 1. Decision Mix and Acceptance Rate
 
@@ -27,7 +30,7 @@ Quick read:
 | American | 438 | 128 | 240 | 19 | 51 | 0 | 34.8% |
 | International | 577 | 124 | 344 | 24 | 85 | 0 | 26.5% |
 
-In 2026, the American-International acceptance-rate gap is **8.3 percentage points**. This is a reporting snapshot, not an estimate of admission odds.
+In 2026, the American-International acceptance-rate gap is **8.3 percentage points**. 
 
 ## 3. Subfield Snapshot
 
@@ -76,7 +79,7 @@ Accepted is coded as 1 and Rejected as 0. Pearson r is therefore a point-biseria
 | GRE V | 251 | 164.5 | 163.6 | 0.8 | 0.089 | 0.1616 | Very weak linear relationship |
 | GRE Q | 97 | 165.0 | 165.0 | 0.0 | 0.003 | 0.9744 | No meaningful linear relationship |
 
-The 2026 snapshot shows a very weak positive GPA-outcome correlation, a very weak positive GRE V correlation, and no meaningful GRE Q correlation. These are descriptive associations from self-reported posts, not causal estimates or individual-level prediction rules.
+The result shows a very weak positive GPA-outcome correlation, a very weak positive GRE V correlation, and no meaningful GRE Q correlation. These are descriptive associations from self-reported posts, not causal estimates or individual-level prediction rules.
 
 ## 6. Decision Timeline Markers
 
