@@ -32,7 +32,7 @@ df <- readRDS(data_path) %>%
     gre_aw_clean = ifelse(!is.na(gre_aw) & gre_aw >= 0 & gre_aw <= 6, gre_aw, NA_real_)
   )
 
-target_year <- max(df$scrape_year, na.rm = TRUE)
+target_year <- 2025
 
 pct_num <- function(num, den) {
   ifelse(den > 0, 100 * num / den, NA_real_)
@@ -99,6 +99,7 @@ year_summary <- df %>%
   arrange(Year)
 
 year_display <- year_summary %>%
+  filter(Year == target_year) %>%
   select(-scrape_year, -accept_rate_num)
 
 status_summary <- df %>%
@@ -132,7 +133,7 @@ make_status_wide <- function(status_summary) {
   out
 }
 
-status_wide <- make_status_wide(status_summary)
+status_wide <- make_status_wide(status_summary %>% filter(Year == target_year))
 
 target_status <- status_summary %>%
   filter(Year == target_year) %>%
@@ -143,6 +144,7 @@ subfield_counts <- df %>%
   arrange(scrape_year, desc(n))
 
 subfield_volume_wide <- subfield_counts %>%
+  filter(scrape_year == target_year) %>%
   rename(Year = scrape_year, Subfield = subfield) %>%
   wide_count_table("Year", "Subfield", "n")
 
@@ -176,7 +178,7 @@ make_subfield_rate_wide <- function(subfield_rate) {
   out
 }
 
-subfield_rate_wide <- make_subfield_rate_wide(subfield_rate)
+subfield_rate_wide <- make_subfield_rate_wide(subfield_rate %>% filter(Year == target_year))
 
 institution_summary <- df %>%
   group_by(institution) %>%
@@ -212,6 +214,7 @@ gre_summary <- df %>%
 
 correlation_for <- function(metric) {
   sample <- df %>%
+    filter(scrape_year == target_year) %>%
     filter(decision_group %in% c("Accepted", "Rejected")) %>%
     mutate(outcome = ifelse(decision_group == "Accepted", 1, 0)) %>%
     filter(!is.na(.data[[metric]]))
@@ -246,6 +249,7 @@ correlation_summary <- bind_rows(lapply(c("gpa", "gre_v_clean", "gre_q_clean", "
   ))
 
 timeline_summary <- df %>%
+  filter(scrape_year == target_year) %>%
   mutate(
     decision_month = month(decision_date),
     dmd = as.Date(paste0("2020-", format(decision_date, "%m-%d"))),
@@ -266,6 +270,7 @@ timeline_summary <- df %>%
   arrange(Year)
 
 master_summary <- year_summary %>%
+  filter(Year == target_year) %>%
   select(Year, `Total Cases`, `Overall Accept Rate` = `Accept Rate`) %>%
   left_join(
     status_summary %>%
@@ -305,32 +310,29 @@ latest_rows <- df %>%
   rename(decision_type = decision_group) %>%
   head(25)
 
-top_year <- year_summary$Year[which.max(year_summary$accept_rate_num)]
-low_year <- year_summary$Year[which.min(year_summary$accept_rate_num)]
-top_rate <- max(year_summary$accept_rate_num, na.rm = TRUE)
-low_rate <- min(year_summary$accept_rate_num, na.rm = TRUE)
+target_df <- df %>% filter(scrape_year == target_year)
 target_row <- year_summary %>% filter(Year == target_year)
 target_american <- target_status %>% filter(Status == "American")
 target_international <- target_status %>% filter(Status == "International")
 nationality_gap <- target_american$accept_rate_num - target_international$accept_rate_num
-unknown_subfield_share <- pct(sum(df$subfield == "Unknown", na.rm = TRUE), nrow(df))
+unknown_subfield_share <- pct(sum(target_df$subfield == "Unknown", na.rm = TRUE), nrow(target_df))
 target_unknown_subfield_share <- pct(
   sum(df$scrape_year == target_year & df$subfield == "Unknown", na.rm = TRUE),
   sum(df$scrape_year == target_year, na.rm = TRUE)
 )
-source_supplement_n <- sum(df$source_mode == "no-season-supplement", na.rm = TRUE)
+source_supplement_n <- sum(target_df$source_mode == "no-season-supplement", na.rm = TRUE)
 
 takeaways <- c(
-  paste0("1. The full 2016-", target_year, " sample contains ", format(nrow(df), big.mark = ","), " cleaned posts across ", length(unique(df$institution)), " canonical institutions."),
-  paste0("2. Acceptance rates range from ", sprintf("%.1f%%", low_rate), " in ", low_year, " to ", sprintf("%.1f%%", top_rate), " in ", top_year, "; ", target_year, " sits at ", target_row$`Accept Rate`, "."),
+  paste0("1. The ", target_year, " sample contains ", format(nrow(target_df), big.mark = ","), " cleaned posts across ", length(unique(target_df$institution)), " canonical institutions."),
+  paste0("2. The overall acceptance rate is ", target_row$`Accept Rate`, ", based only on accepted and rejected posts."),
   paste0("3. In ", target_year, ", American and international acceptance rates are ", target_american$`Accept Rate`, " and ", target_international$`Accept Rate`, ", a gap of ", sprintf("%.1f", nationality_gap), " percentage points."),
-  paste0("4. Subfield information is sparse: ", unknown_subfield_share, " of all rows and ", target_unknown_subfield_share, " of ", target_year, " rows are tagged Unknown."),
+  paste0("4. Subfield information is sparse: ", target_unknown_subfield_share, " of ", target_year, " rows are tagged Unknown."),
   paste0("5. GRE/GPA fields are optional and self-reported, so their correlations with outcomes remain descriptive rather than predictive.")
 )
 
 tables <- list(
   year_summary = year_display,
-  status_summary = status_summary,
+  status_summary = target_status,
   status_wide = status_wide,
   target_status = target_status,
   subfield_volume_wide = subfield_volume_wide,
@@ -343,28 +345,29 @@ tables <- list(
 saveRDS(tables, file.path(out_dir, "analysis_tables.rds"))
 
 report <- c(
-  paste0("# 2016-", target_year, " GradCafe Political Science PhD Trend Report"),
+  paste0("# ", target_year, " GradCafe Political Science PhD Snapshot"),
   "",
   paste0("**Report Date**: ", Sys.Date()),
-  paste0("**Data Source**: GradCafe survey data refreshed through ", max(df$decision_date, na.rm = TRUE)),
-  paste0("**Total Sample**: **", format(nrow(df), big.mark = ","), "** cleaned posts"),
+  paste0("**Data Source**: GradCafe survey data refreshed through ", max(target_df$decision_date, na.rm = TRUE)),
+  paste0("**Analysis Scope**: Fall ", target_year, " Political Science PhD entries only"),
+  paste0("**Total Sample**: **", format(nrow(target_df), big.mark = ","), "** cleaned posts"),
   "",
-  "This note summarizes what the current snapshot shows. It is descriptive, not causal.",
+  paste0("This note summarizes the ", target_year, " application-cycle snapshot only. It is descriptive, not causal."),
   "",
-  "## 1. Yearly Decision Mix and Acceptance Rate",
+  "## 1. Decision Mix and Acceptance Rate",
   "",
   md_table(year_display),
   "",
   "Accept rate is calculated as `Accepted / (Accepted + Rejected)`. Interview, waitlist, and other rows are excluded from the denominator.",
   "",
   "Quick read:",
-  paste0("- Across 2016-", target_year, ", rates range from **", sprintf("%.1f%%", low_rate), "** to **", sprintf("%.1f%%", top_rate), "**."),
-  paste0("- In this snapshot, ", top_year, " is the highest-rate year and ", low_year, " is the lowest-rate year."),
-  paste0("- As of ", max(df$decision_date, na.rm = TRUE), ", the ", target_year, " sample has **", target_row$`Total Cases`, "** posts with a **", target_row$`Accept Rate`, "** acceptance rate."),
+  paste0("- The ", target_year, " sample has **", target_row$`Total Cases`, "** posts."),
+  paste0("- The overall ", target_year, " acceptance rate is **", target_row$`Accept Rate`, "** among accepted/rejected posts."),
+  paste0("- The latest decision date in the exported dataset is **", max(target_df$decision_date, na.rm = TRUE), "**."),
   "",
   "## 2. Nationality Split",
   "",
-  "### 2.1 Yearly Acceptance Rate by Nationality",
+  paste0("### 2.1 ", target_year, " Acceptance Rate by Nationality"),
   "",
   md_table(status_wide),
   "",
@@ -376,15 +379,15 @@ report <- c(
   "",
   "## 3. Subfield Snapshot",
   "",
-  "### 3.1 Subfield Volume by Year",
+  "### 3.1 Subfield Volume",
   "",
   md_table(subfield_volume_wide),
   "",
-  "### 3.2 Subfield Acceptance Rate by Year",
+  "### 3.2 Subfield Acceptance Rate",
   "",
   md_table(subfield_rate_wide),
   "",
-  paste0("Most rows are still tagged as Unknown (**", unknown_subfield_share, "** of the full sample), so subfield tables are useful for direction but not for strict ranking."),
+  paste0("Most rows are still tagged as Unknown (**", target_unknown_subfield_share, "** of ", target_year, " rows), so subfield tables are useful for direction but not for strict ranking."),
   "",
   paste0("## 4. GRE/GPA Summary (", target_year, ", Accepted vs Rejected)"),
   "",
@@ -392,7 +395,7 @@ report <- c(
   "",
   "GRE and GPA fields are self-reported and optional, so these means come from a selective subset.",
   "",
-  paste0("## 5. GRE/GPA vs Outcome Correlation (2016-", target_year, ")"),
+  paste0("## 5. GRE/GPA vs Outcome Correlation (", target_year, ")"),
   "",
   "Accepted is coded as 1, Rejected as 0, and Pearson correlation is used.",
   "",
@@ -419,12 +422,12 @@ report <- c(
   paste0("- Total posts: **", target_row$`Total Cases`, "**"),
   paste0("- Overall acceptance rate: **", target_row$`Accept Rate`, "**"),
   paste0("- American vs International: **", target_american$`Accept Rate`, " vs ", target_international$`Accept Rate`, "**"),
-  paste0("- Latest decision date in the dataset: **", max(df$decision_date, na.rm = TRUE), "**"),
+  paste0("- Latest decision date in the dataset: **", max(target_df$decision_date, na.rm = TRUE), "**"),
   "",
   "## Method Notes",
   "",
   "- Source: user-reported GradCafe posts.",
-  "- Scope: PhD entries filtered to Political Science, International Relations, Politics, Government, and direct combinations.",
+  paste0("- Scope: Fall ", target_year, " PhD entries filtered to Political Science, International Relations, Politics, Government, and direct combinations."),
   "- Cleaning: program labels and school names are rule-normalized; obvious junk or truncated school labels are filtered or repaired.",
   paste0("- Collection: season-filtered pages are supplemented with recent no-season pages; **", source_supplement_n, "** clean rows currently come from that supplement path."),
   "- Unit of observation: each row is a reported school-level outcome, not a distinct applicant. One applicant may apply to multiple schools and report multiple outcomes, so 12 reported cases do not necessarily mean 12 distinct people. It could just as easily mean 6 people reporting 2 schools each, or 3 people reporting 4 schools each.",
@@ -433,4 +436,4 @@ report <- c(
 
 writeLines(report, file.path(out_dir, "gradcafe_polisci_2016_2026_analysis.md"), useBytes = TRUE)
 writeLines(report, "gradcafe_polisci_2016_2026_analysis.md", useBytes = TRUE)
-cat("Wrote analysis report with", nrow(df), "rows.\n")
+cat("Wrote analysis report with", nrow(target_df), "rows.\n")
