@@ -1,9 +1,9 @@
 # 2026 GradCafe Political Science PhD Admission Analysis
 
-**Report Date**: 2026-06-23
-**Data Source**: GradCafe survey data refreshed through 2026-05-19
-**Analysis Scope**: Fall 2026 Political Science PhD entries only
-**Total Sample**: **1,033** cleaned posts
+- **Report Date**: 2026-06-23
+- **Data Source**: GradCafe survey data refreshed through 2026-05-19
+- **Analysis Scope**: Fall 2026 PhD entries in Political Science, International Relations, Politics, Government, and direct combinations
+- **Total Sample**: **1,033** cleaned posts
 
 This note summarizes the 2026 application-cycle snapshot only. It is descriptive, not causal.
 
