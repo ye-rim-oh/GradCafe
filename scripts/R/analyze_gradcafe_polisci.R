@@ -3,7 +3,7 @@
 # Purpose: Produce a descriptive analysis report for the current
 #          political science admissions dataset.
 # Inputs:  output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds
-# Outputs: output/polisci_analysis/gradcafe_polisci_2016_2026_analysis.md
+# Outputs: output/polisci_analysis/gradcafe_polisci_2026_analysis.md
 #          output/polisci_analysis/analysis_tables.rds
 # ============================================================
 
@@ -345,7 +345,7 @@ tables <- list(
 saveRDS(tables, file.path(out_dir, "analysis_tables.rds"))
 
 report <- c(
-  paste0("# ", target_year, " GradCafe Political Science PhD Snapshot"),
+  paste0("# ", target_year, " GradCafe Political Science PhD Admission Analysis"),
   "",
   paste0("**Report Date**: ", Sys.Date()),
   paste0("**Data Source**: GradCafe survey data refreshed through ", max(target_df$decision_date, na.rm = TRUE)),
@@ -434,6 +434,6 @@ report <- c(
   "- Interpretation: use these numbers as a directional snapshot, not a full census."
 )
 
-writeLines(report, file.path(out_dir, "gradcafe_polisci_2016_2026_analysis.md"), useBytes = TRUE)
-writeLines(report, "gradcafe_polisci_2016_2026_analysis.md", useBytes = TRUE)
+writeLines(report, file.path(out_dir, "gradcafe_polisci_2026_analysis.md"), useBytes = TRUE)
+writeLines(report, "gradcafe_polisci_2026_analysis.md", useBytes = TRUE)
 cat("Wrote analysis report with", nrow(target_df), "rows.\n")

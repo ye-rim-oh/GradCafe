@@ -17,6 +17,7 @@ source(file.path("scripts", "R", "institution_normalization.R"), encoding = "UTF
 
 out_dir <- "output/polisci_analysis"
 raw_path <- file.path(out_dir, "gradcafe_polisci_2016_2026_raw.rds")
+raw_csv_path <- file.path(out_dir, "gradcafe_polisci_2016_2026_raw.csv")
 clean_path <- file.path(out_dir, "gradcafe_polisci_2016_2026_clean.rds")
 
 queries <- c("political science", "international relations", "politics", "government")
@@ -67,7 +68,19 @@ is_target_major <- function(program) {
   })
 }
 
-raw_data <- readRDS(raw_path)
+use_raw_csv <- file.exists(raw_csv_path) && (
+  !file.exists(raw_path) || file.info(raw_csv_path)$mtime >= file.info(raw_path)$mtime
+)
+
+raw_data <- if (use_raw_csv) {
+  read.csv(raw_csv_path, stringsAsFactors = FALSE, fileEncoding = "UTF-8", na.strings = c("", "NA"))
+} else if (file.exists(raw_path)) {
+  readRDS(raw_path)
+} else {
+  stop("No raw GradCafe data found at ", raw_path, " or ", raw_csv_path, call. = FALSE)
+}
+
+saveRDS(raw_data, raw_path)
 
 clean_data <- raw_data %>%
   mutate(
@@ -76,7 +89,10 @@ clean_data <- raw_data %>%
     school = clean_institution_text(school),
     decision_year = year(decision_date),
     scrape_year = as.integer(str_extract(season, "\\d{4}$")),
-    normalized_program = normalize_major_program(program)
+    normalized_program = normalize_major_program(program),
+    gre_total_from_q = !is.na(gre_q) & gre_q > 170 & !is.na(gre_v) & gre_v >= 130 & gre_v <= 170,
+    gre_total = ifelse(gre_total_from_q & is.na(gre_total), gre_q, gre_total),
+    gre_q = ifelse(gre_total_from_q & (gre_total - gre_v) >= 130 & (gre_total - gre_v) <= 170, gre_total - gre_v, gre_q)
   ) %>%
   filter(
     degree == "PhD",
@@ -92,6 +108,7 @@ clean_data <- raw_data %>%
     institution = normalize_institution(school),
     subfield = classify_subfield(notes)
   ) %>%
+  select(-gre_total_from_q) %>%
   arrange(desc(decision_date), institution, program)
 
 saveRDS(clean_data, clean_path)

@@ -18,23 +18,26 @@ The Shiny app uses the same cleaned data.
 
 | Step | Script | Input | Output |
 | ---: | --- | --- | --- |
-| 1 | `scripts/R/scrape_gradcafe_polisci.R` | GradCafe survey data | `output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds` |
-| 2 | `scripts/R/analyze_gradcafe_polisci.R` | Cleaned data | `gradcafe_polisci_2016_2026_analysis.md` |
-| 3 | `scripts/export_dashboard_data.R` + `site/` | Cleaned data | `site/data/gradcafe.json` for GitHub Pages |
-| 4 | `app_functions.R` + `app.R` | Same cleaned data | Local or deployed Shiny dashboard |
+| 1 | `scripts/scrape_gradcafe_polisci_fast.mjs` | GradCafe survey data | `output/polisci_analysis/gradcafe_polisci_2016_2026_raw.csv` |
+| 2 | `scripts/R/refresh_polisci_outputs.R` | Raw scrape data | `output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds` |
+| 3 | `scripts/R/analyze_gradcafe_polisci.R` | Cleaned data | `gradcafe_polisci_2026_analysis.md` |
+| 4 | `scripts/export_dashboard_data.R` + `site/` | Cleaned data | `site/data/gradcafe.json` for GitHub Pages |
+| 5 | `app_functions.R` + `app.R` | Same cleaned data | Local or deployed Shiny dashboard |
 
 ### Main files
 
 | File | Description |
 | --- | --- |
-| `scripts/R/scrape_gradcafe_polisci.R` | Scrapes 2016-2026 data against the current GradCafe survey structure |
+| `scripts/scrape_gradcafe_polisci_fast.mjs` | Fast GradCafe scraper used by the update pipeline |
+| `scripts/R/scrape_gradcafe_polisci.R` | Original R scraper kept as a compatible fallback |
+| `scripts/R/refresh_polisci_outputs.R` | Rebuilds cleaned RDS/CSV outputs from raw scrape data |
 | `scripts/R/update_polisci_data.R` | Runs scrape, analysis, and Pages data export together |
 | `app_functions.R` | Data loading, cleanup, normalization, and helper functions |
 | `app.R` | Shiny UI and server logic |
 | `scripts/export_dashboard_data.R` | Exports the cleaned dataset to `site/data/gradcafe.json` |
 | `site/` | Static React dashboard deployed to GitHub Pages |
 | `legacy_code/html_version/` | Archived HTML-table parser and 2020-2026 Shiny version |
-| `gradcafe_polisci_2016_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
+| `gradcafe_polisci_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
 | `legacy_code/` | Older scripts and the previous project structure |
 
 ### How the scraper works
