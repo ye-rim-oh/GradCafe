@@ -1,4 +1,4 @@
-# 2026 GradCafe Political Science PhD Snapshot
+# 2026 GradCafe Political Science PhD Admission Analysis
 
 **Report Date**: 2026-06-23
 **Data Source**: GradCafe survey data refreshed through 2026-05-19

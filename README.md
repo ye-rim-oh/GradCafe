@@ -20,7 +20,7 @@ The Shiny app uses the same cleaned data.
 | ---: | --- | --- | --- |
 | 1 | `scripts/scrape_gradcafe_polisci_fast.mjs` | GradCafe survey data | `output/polisci_analysis/gradcafe_polisci_2016_2026_raw.csv` |
 | 2 | `scripts/R/refresh_polisci_outputs.R` | Raw scrape data | `output/polisci_analysis/gradcafe_polisci_2016_2026_clean.rds` |
-| 3 | `scripts/R/analyze_gradcafe_polisci.R` | Cleaned data | `gradcafe_polisci_2016_2026_analysis.md` |
+| 3 | `scripts/R/analyze_gradcafe_polisci.R` | Cleaned data | `gradcafe_polisci_2026_analysis.md` |
 | 4 | `scripts/export_dashboard_data.R` + `site/` | Cleaned data | `site/data/gradcafe.json` for GitHub Pages |
 | 5 | `app_functions.R` + `app.R` | Same cleaned data | Local or deployed Shiny dashboard |
 
@@ -37,7 +37,7 @@ The Shiny app uses the same cleaned data.
 | `scripts/export_dashboard_data.R` | Exports the cleaned dataset to `site/data/gradcafe.json` |
 | `site/` | Static React dashboard deployed to GitHub Pages |
 | `legacy_code/html_version/` | Archived HTML-table parser and 2020-2026 Shiny version |
-| `gradcafe_polisci_2016_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
+| `gradcafe_polisci_2026_analysis.md` | Current analysis report generated from the cleaned dataset |
 | `legacy_code/` | Older scripts and the previous project structure |
 
 ### How the scraper works
