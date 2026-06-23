@@ -79,33 +79,55 @@ decision_month_day[is.na(decision_date) | decision_month >= 5] <- NA
 
 records <- data.frame(
   institution = df$institution,
+  institutionRaw = ifelse(is.na(df$institution_raw) | df$institution_raw == "", df$school, df$institution_raw),
+  programRaw = ifelse(is.na(df$program), "", df$program),
   decision = ifelse(
     df$decision_type %in% c("Accepted", "Rejected", "Interview", "Wait listed", "Other"),
     df$decision_type,
     "Other"
   ),
   decisionYear = as.integer(ifelse(!is.na(df$scrape_year), df$scrape_year, df$decision_year)),
+  decisionDate = ifelse(is.na(decision_date), NA_character_, format(decision_date, "%Y-%m-%d")),
   decisionMonthDay = ifelse(is.na(decision_month_day), NA_character_, format(decision_month_day, "%Y-%m-%d")),
+  addedDate = ifelse(is.na(as.Date(df$added_date)), NA_character_, format(as.Date(df$added_date), "%Y-%m-%d")),
   status = ifelse(is.na(df$status) | df$status == "", "Unknown", df$status),
   subfield = ifelse(is.na(df$subfield) | df$subfield == "", "Unknown", df$subfield),
   gpa = round(clean_number(df$gpa), 2),
   greV = clean_number(df$gre_v, 130, 170),
   greQ = clean_number(df$gre_q, 130, 170),
+  greTotal = clean_number(df$gre_total),
+  greAw = clean_number(df$gre_aw, 0, 6),
   notes = ifelse(is.na(df$notes), "", df$notes),
+  sourceResultId = ifelse(is.na(df$result_id) | df$result_id == "", NA_character_, as.character(df$result_id)),
+  sourceUrl = ifelse(is.na(df$source_url) | df$source_url == "", NA_character_, df$source_url),
+  sourceQuery = ifelse(is.na(df$query_term) | df$query_term == "", NA_character_, df$query_term),
+  sourcePage = suppressWarnings(as.integer(df$source_page)),
+  sourceMode = ifelse(is.na(df$source_mode) | df$source_mode == "", NA_character_, df$source_mode),
   stringsAsFactors = FALSE
 )
 
 record_fields <- c(
   "institution",
+  "institutionRaw",
+  "programRaw",
   "decision",
   "decisionYear",
+  "decisionDate",
   "decisionMonthDay",
+  "addedDate",
   "status",
   "subfield",
   "gpa",
   "greV",
   "greQ",
-  "notes"
+  "greTotal",
+  "greAw",
+  "notes",
+  "sourceResultId",
+  "sourceUrl",
+  "sourceQuery",
+  "sourcePage",
+  "sourceMode"
 )
 
 write_record <- function(row) {

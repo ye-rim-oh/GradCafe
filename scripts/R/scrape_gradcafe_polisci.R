@@ -10,8 +10,7 @@
 # ============================================================
 
 suppressPackageStartupMessages({
-  library(rvest)
-  library(httr)
+  library(curl)
   library(jsonlite)
   library(dplyr)
   library(stringr)
@@ -40,10 +39,17 @@ supplement_pages_per_query <- as.integer(Sys.getenv("GRADCAFE_SUPPLEMENT_PAGES",
 sleep_min <- as.numeric(Sys.getenv("GRADCAFE_SLEEP_MIN", "0.15"))
 sleep_max <- as.numeric(Sys.getenv("GRADCAFE_SLEEP_MAX", "0.35"))
 
-ua <- user_agent(
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " %+%
-    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-)
+ua_string <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " %+%
+  "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+decode_html_entities <- function(x) {
+  x <- as.character(x)
+  x <- gsub("&quot;", '"', x, fixed = TRUE)
+  x <- gsub("&#039;", "'", x, fixed = TRUE)
+  x <- gsub("&#x27;", "'", x, fixed = TRUE)
+  x <- gsub("&amp;", "&", x, fixed = TRUE)
+  x
+}
 
 null_to_na <- function(x) {
   if (is.null(x) || length(x) == 0) NA else x
@@ -51,7 +57,7 @@ null_to_na <- function(x) {
 
 scalar_chr <- function(x) {
   x <- null_to_na(x)
-  if (is.na(x)) NA_character_ else as.character(x)
+  if (is.na(x)) NA_character_ else decode_html_entities(x)
 }
 
 scalar_num <- function(x) {
@@ -82,12 +88,12 @@ survey_url <- function(query, page, extra = list()) {
 }
 
 extract_payload <- function(html_text) {
-  page <- read_html(html_text)
-  node <- html_node(page, "[data-page]")
-  if (is.null(node) || length(node) == 0) {
+  matches <- regmatches(html_text, regexec('data-page="([^"]+)"', html_text, perl = TRUE))[[1]]
+  if (length(matches) < 2) {
     stop("No data-page JSON payload found.")
   }
-  fromJSON(html_attr(node, "data-page"), simplifyVector = FALSE)
+  payload_text <- decode_html_entities(matches[[2]])
+  fromJSON(payload_text, simplifyVector = FALSE)
 }
 
 record_to_row <- function(record, query_term, source_url, source_page, source_mode) {
@@ -129,11 +135,12 @@ record_to_row <- function(record, query_term, source_url, source_page, source_mo
 
 fetch_page <- function(query, page, extra = list(), source_mode = "query") {
   url <- survey_url(query, page, extra)
-  resp <- GET(url, ua)
-  if (status_code(resp) != 200) {
-    stop("HTTP ", status_code(resp), " for ", url)
+  handle <- new_handle(useragent = ua_string, timeout = 60)
+  resp <- curl_fetch_memory(url, handle = handle)
+  if (resp$status_code != 200) {
+    stop("HTTP ", resp$status_code, " for ", url)
   }
-  payload <- extract_payload(content(resp, "text", encoding = "UTF-8"))
+  payload <- extract_payload(rawToChar(resp$content))
   rows <- payload$props$results$data
   meta <- payload$props$results$meta
   data <- if (length(rows) == 0) {
@@ -273,7 +280,10 @@ clean_data <- raw_data %>%
     school = clean_institution_text(school),
     decision_year = year(decision_date),
     scrape_year = as.integer(str_extract(season, "\\d{4}$")),
-    normalized_program = normalize_major_program(program)
+    normalized_program = normalize_major_program(program),
+    gre_total_from_q = !is.na(gre_q) & gre_q > 170 & !is.na(gre_v) & gre_v >= 130 & gre_v <= 170,
+    gre_total = ifelse(gre_total_from_q & is.na(gre_total), gre_q, gre_total),
+    gre_q = ifelse(gre_total_from_q & (gre_total - gre_v) >= 130 & (gre_total - gre_v) <= 170, gre_total - gre_v, gre_q)
   ) %>%
   filter(
     degree == "PhD",
@@ -289,6 +299,7 @@ clean_data <- raw_data %>%
     institution = normalize_institution(school),
     subfield = classify_subfield(notes)
   ) %>%
+  select(-gre_total_from_q) %>%
   arrange(desc(decision_date), school, program)
 
 saveRDS(clean_data, file.path(out_dir, "gradcafe_polisci_2016_2026_clean.rds"))
