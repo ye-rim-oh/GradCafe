@@ -8,6 +8,12 @@ The repository now also includes a **GitHub Pages-ready static React dashboard**
 
 Static site: <https://ye-rim-oh.github.io/GradCafe/>
 
+### Visitor analytics
+
+The static site uses GoatCounter for private visitor analytics. It loads the tracking script only; no visible visitor counter is rendered on the page.
+
+To exclude your own browser from counts, open the deployed site once with `#toggle-goatcounter` appended to the URL and confirm the GoatCounter popup. Repeat this on each browser/device you use.
+
 ### Data and Site
 
 The JSON scraper produces cleaned data, exports it to `site/data/gradcafe.json`, and the GitHub Pages homepage reads that file to build the filters and visualizations.
